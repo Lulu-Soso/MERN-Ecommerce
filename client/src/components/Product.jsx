@@ -85,9 +85,21 @@ const Item = ({ item, width }) => {
             .replace(/([A-Z])/g, " $1")
             .replace(/^./, (str) => str.toUpperCase())}
         </Typography>
-        <Typography>{item.name}</Typography>
-        
-        <Rating value={item.rating} text={`${item.numReviews} reviews`}/>
+
+        <Box sx={{ height: "1.5rem", overflow: "hidden" }}>
+          <Typography
+            sx={{
+              textOverflow: "ellipsis",
+              whiteSpace: "nowrap",
+              overflow: "hidden",
+              width: "100%",
+            }}
+          >
+            {item.name}
+          </Typography>
+        </Box>
+
+        <Rating value={item.rating} text={`${item.numReviews} reviews`} />
 
         <Typography fontWeight="bold">${item.price}</Typography>
       </Box>
