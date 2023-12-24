@@ -8,6 +8,10 @@ import useMediaQuery from "@mui/material/useMediaQuery";
 import { useDispatch, useSelector } from "react-redux";
 import { setItems } from "../../state";
 
+////////////////////////
+import products from "../../products.js"
+////////////////////////
+
 const ShoppingList = () => {
   const dispatch = useDispatch();
   const [value, setValue] = useState("all");
@@ -76,6 +80,11 @@ const ShoppingList = () => {
         rowGap="20px"
         columnGap="1.33%"
       >
+
+        {products.map((item) => (
+          <Item item={item} key={`${item.name}-${item.id}`} />
+        ))}
+
         {value === "all" &&
           items.map((item) => (
             <Item item={item} key={`${item.name}-${item.id}`} />
