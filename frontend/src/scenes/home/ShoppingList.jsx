@@ -1,49 +1,58 @@
 import React, { useEffect, useState } from "react";
+import axios from "axios";
 import Tabs from "@mui/material/Tabs";
 import Tab from "@mui/material/Tab";
 import Box from "@mui/material/Box";
-import Product from "../../components/Product.jsx";
+import Product from "../../components/Product";
 import { Typography } from "@mui/material";
 import useMediaQuery from "@mui/material/useMediaQuery";
-import { useDispatch, useSelector } from "react-redux";
-import { setItems } from "../../state";
+// import { useDispatch, useSelector } from "react-redux";
+// import { setItems } from "../../state";
 
-////////////////////////
-import products from "../../products.js";
-////////////////////////
 
 const ShoppingList = () => {
-  const dispatch = useDispatch();
+  const [products, setProducts] = useState([]);
+
+  useEffect(() => {
+    const fetchProducts = async () => {
+      const { data } = await axios.get("/api/products");
+      setProducts(data);
+    };
+
+    fetchProducts();
+  }, []);
+
+
+
+  // const dispatch = useDispatch();
   const [value, setValue] = useState("all");
-  const items = useSelector((state) => state.cart.items);
+  // const items = useSelector((state) => state.cart.items);
   const breakPoint = useMediaQuery("(min-width:600px)");
 
-  console.log("items", items);
+  // console.log("items", items);
 
   const handleChange = (event, newValue) => {
     setValue(newValue);
   };
 
-  async function getItems() {
-    const items = await fetch(
-      "http://localhost:1337/api/items?populate=image",
-      { method: "GET" }
-    );
-    const itemsJson = await items.json();
-    dispatch(setItems(itemsJson.data));
-  }
+  // async function getItems() {
+  //   const items = await fetch(
+  //     "http://localhost:1337/api/items?populate=image",
+  //     { method: "GET" }
+  //   );
+  //   const itemsJson = await items.json();
+  //   dispatch(setItems(itemsJson.data));
+  // }
 
-  useEffect(() => {
-    getItems();
-  }, []); // eslint-disable-line react-hooks/exhaustive-deps
+  // useEffect(() => {
+  //   getItems();
+  // }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
-  const topRatedItems = items.filter(
-    (item) => item.category === "topRated"
-  );
-  const newArrivalsItems = items.filter(
+  const topRatedItems = products.filter((item) => item.category === "topRated");
+  const newArrivalsItems = products.filter(
     (item) => item.category === "newArrivals"
   );
-  const bestSellersItems = items.filter(
+  const bestSellersItems = products.filter(
     (item) => item.category === "bestSellers"
   );
 

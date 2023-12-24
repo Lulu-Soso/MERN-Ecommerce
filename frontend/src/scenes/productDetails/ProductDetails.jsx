@@ -1,8 +1,9 @@
+import { useEffect, useState } from "react";
+import axios from "axios";
+import { useParams } from "react-router-dom";
 import { Box, Button, IconButton, Typography } from "@mui/material";
 import Tabs from "@mui/material/Tabs";
 import Tab from "@mui/material/Tab";
-import { useParams } from "react-router-dom";
-import { useEffect, useState } from "react";
 import Product from "../../components/Product.jsx";
 import FavoriteBorderOutlinedIcon from "@mui/icons-material/FavoriteBorderOutlined";
 import AddIcon from "@mui/icons-material/Add";
@@ -10,20 +11,38 @@ import RemoveIcon from "@mui/icons-material/Remove";
 import { shades } from "../../theme.js";
 import { addToCart } from "../../state/index.js";
 import { useDispatch } from "react-redux";
-import products from "../../products.js";
+// import products from "../../products.js";
 import Rating from "../../components/Rating.jsx";
 import React from "react";
 
 const ProductDetails = () => {
-  const dispatch = useDispatch();
+  const [product, setProduct] = useState({});
+  const [products, setProducts] = useState([]);
+
   const { id: productId } = useParams();
+
+  useEffect(() => {
+    const fetchProduct = async () => {
+      const { data } = await axios.get(`/api/products/${productId}`);
+      setProduct(data);
+    };
+
+    const fetchProducts = async () => {
+      const { data } = await axios.get(`/api/products`);
+      setProducts(data);
+    };
+
+    fetchProduct();
+    fetchProducts();
+  }, [productId]);
+
+  const dispatch = useDispatch();
   const [value, setValue] = useState("description");
   const [count, setCount] = useState(1);
-  const [item, setItem] = useState(null);
-  const [items, setItems] = useState([]);
+  // const [item, setItem] = useState(null);
+  // const [items, setItems] = useState([]);
 
-  const product = products.find((p) => p.id === productId);
-  console.log(product);
+  // const product = products.find((p) => p.id === productId);
 
   const handleChange = (event, newValue) => {
     setValue(newValue);
