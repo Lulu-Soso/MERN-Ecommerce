@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import axios from "axios";
+// import axios from "axios";
 import { useParams } from "react-router-dom";
 import { Box, Button, IconButton, Typography } from "@mui/material";
 import Tabs from "@mui/material/Tabs";
@@ -14,67 +14,53 @@ import { useDispatch } from "react-redux";
 // import products from "../../products.js";
 import Rating from "../../components/Rating.jsx";
 import React from "react";
+import {
+  useGetProductDetailsQuery,
+  useGetProductsQuery,
+} from "../../slices/productsApiSlice.js";
 
 const ProductDetails = () => {
-  const [product, setProduct] = useState({});
-  const [products, setProducts] = useState([]);
-
   const { id: productId } = useParams();
-
-  useEffect(() => {
-    const fetchProduct = async () => {
-      const { data } = await axios.get(`/api/products/${productId}`);
-      setProduct(data);
-    };
-
-    const fetchProducts = async () => {
-      const { data } = await axios.get(`/api/products`);
-      setProducts(data);
-    };
-
-    fetchProduct();
-    fetchProducts();
-  }, [productId]);
 
   const dispatch = useDispatch();
   const [value, setValue] = useState("description");
   const [count, setCount] = useState(1);
-  // const [item, setItem] = useState(null);
-  // const [items, setItems] = useState([]);
 
-  // const product = products.find((p) => p.id === productId);
+  const {
+    data: product,
+    isLoading: isProductLoading,
+    error: productError,
+  } = useGetProductDetailsQuery(productId);
+
+  const {
+    data: products,
+    isLoading: isProductsLoading,
+    error: productsError,
+  } = useGetProductsQuery();
 
   const handleChange = (event, newValue) => {
     setValue(newValue);
   };
 
-  // async function getItem() {
-  //   const item = await fetch(
-  //     `http://localhost:1337/api/items/${itemId}?populate=image`,
-  //     {
-  //       method: "GET",
-  //     }
-  //   );
-  //   const itemJson = await item.json();
-  //   setItem(itemJson.data);
-  // }
+  if (isProductLoading || isProductsLoading) {
+    return <Typography>Loading...</Typography>;
+  }
 
-  // async function getItems() {
-  //   const items = await fetch(
-  //     `http://localhost:1337/api/items?populate=image`,
-  //     {
-  //       method: "GET",
-  //     }
-  //   );
-  //   const itemsJson = await items.json();
-  //   setItems(itemsJson.data);
-  //   console.log(itemsJson);
-  // }
+  if (productError) {
+    return (
+      <Typography>
+        Error: {productError?.data.message || productError.error}
+      </Typography>
+    );
+  }
 
-  // useEffect(() => {
-  //   getItem();
-  //   getItems();
-  // }, [itemId]); // eslint-disable-line react-hooks/exhaustive-deps
+  if (productsError) {
+    return (
+      <Typography>
+        Error: {productsError?.data.message || productsError.error}
+      </Typography>
+    );
+  }
 
   return (
     <Box width="80%" m="80px auto">
