@@ -5,6 +5,8 @@ import { Box, Button, IconButton, Typography } from "@mui/material";
 import Tabs from "@mui/material/Tabs";
 import Tab from "@mui/material/Tab";
 import Product from "../../components/Product.jsx";
+import Loader from "../../components/Loader.jsx";
+import Message from "../../components/Message.jsx";
 import FavoriteBorderOutlinedIcon from "@mui/icons-material/FavoriteBorderOutlined";
 import AddIcon from "@mui/icons-material/Add";
 import RemoveIcon from "@mui/icons-material/Remove";
@@ -43,22 +45,26 @@ const ProductDetails = () => {
   };
 
   if (isProductLoading || isProductsLoading) {
-    return <Typography>Loading...</Typography>;
+    return <Loader />;
   }
 
   if (productError) {
     return (
-      <Typography>
-        Error: {productError?.data.message || productError.error}
-      </Typography>
+      <Box width="80%" m="20px auto">
+        <Message severity="error">
+          {productError?.data.message || productError.error}
+        </Message>
+      </Box>
     );
   }
 
   if (productsError) {
     return (
-      <Typography>
-        Error: {productsError?.data.message || productsError.error}
-      </Typography>
+      <Box width="80%" m="20px auto">
+        <Message severity="error">
+          {productsError?.data.message || productsError.error}
+        </Message>
+      </Box>
     );
   }
 

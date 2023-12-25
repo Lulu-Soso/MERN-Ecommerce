@@ -4,6 +4,8 @@ import Tabs from "@mui/material/Tabs";
 import Tab from "@mui/material/Tab";
 import Box from "@mui/material/Box";
 import Product from "../../components/Product";
+import Loader from "../../components/Loader";
+import Message from "../../components/Message";
 import { Typography } from "@mui/material";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import { useGetProductsQuery } from "../../slices/productsApiSlice";
@@ -37,9 +39,13 @@ const ShoppingList = () => {
   return (
     <>
       {isLoading ? (
-        <h2>Loading...</h2>
+        <Loader />
       ) : error ? (
-        <div>{error?.data?.message || error.error}</div>
+        <Box width="80%" margin="20px auto">
+          <Message severity="error">
+            {error?.data?.message || error.error}
+          </Message>
+        </Box>
       ) : (
         <Box width="80%" margin="80px auto">
           <Typography variant="h3" textAlign="center">
@@ -80,19 +86,31 @@ const ShoppingList = () => {
 
             {value === "all" &&
               products.map((product) => (
-                <Product product={product} key={`${product.name}-${product._id}`} />
+                <Product
+                  product={product}
+                  key={`${product.name}-${product._id}`}
+                />
               ))}
             {value === "newArrivals" &&
               newArrivalsItems.map((product) => (
-                <Product product={product} key={`${product.name}-${product._id}`} />
+                <Product
+                  product={product}
+                  key={`${product.name}-${product._id}`}
+                />
               ))}
             {value === "bestSellers" &&
               bestSellersItems.map((product) => (
-                <Product product={product} key={`${product.name}-${product._id}`} />
+                <Product
+                  product={product}
+                  key={`${product.name}-${product._id}`}
+                />
               ))}
             {value === "topRated" &&
               topRatedItems.map((product) => (
-                <Product product={product} key={`${product.name}-${product._id}`} />
+                <Product
+                  product={product}
+                  key={`${product.name}-${product._id}`}
+                />
               ))}
           </Box>
         </Box>
