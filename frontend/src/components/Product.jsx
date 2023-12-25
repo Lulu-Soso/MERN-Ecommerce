@@ -4,11 +4,11 @@ import { IconButton, Box, Typography, useTheme, Button } from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
 import RemoveIcon from "@mui/icons-material/Remove";
 import { shades } from "../theme";
-import { addToCart } from "../state";
+// import { addToCart } from "../state";
 import { useNavigate } from "react-router-dom";
 import Rating from "./Rating";
 
-const Product = ({ item, width }) => {
+const Product = ({ product, width }) => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const [count, setCount] = useState(1);
@@ -25,12 +25,12 @@ const Product = ({ item, width }) => {
         onMouseOut={() => setIsHovered(false)}
       >
         <img
-          alt={item.name}
+          alt={product.name}
           width="300px"
           height="400px"
           // src={`http://localhost:1337${url}`}
-          src={item.image}
-          onClick={() => navigate(`/product/${item._id}`)}
+          src={product.image}
+          onClick={() => navigate(`/product/${product._id}`)}
           style={{ cursor: "pointer" }}
         />
         <Box
@@ -57,9 +57,9 @@ const Product = ({ item, width }) => {
               </IconButton>
             </Box>
             <Button
-              onClick={() => {
-                dispatch(addToCart({ item: { ...item, count } }));
-              }}
+              // onClick={() => {
+              //   dispatch(addToCart({ item: { ...item, count } }));
+              // }}
               sx={{ backgroundColor: shades.primary[300], color: "white" }}
             >
               Add to Cart
@@ -70,7 +70,7 @@ const Product = ({ item, width }) => {
 
       <Box mt="3px">
         <Typography variant="subtitle2" color={neutral.dark}>
-          {item.category
+          {product.category
             .replace(/([A-Z])/g, " $1")
             .replace(/^./, (str) => str.toUpperCase())}
         </Typography>
@@ -84,13 +84,13 @@ const Product = ({ item, width }) => {
               width: "100%",
             }}
           >
-            {item.name}
+            {product.name}
           </Typography>
         </Box>
 
-        <Rating value={item.rating} text={`${item.numReviews} reviews`} />
+        <Rating value={product.rating} text={`${product.numReviews} reviews`} />
 
-        <Typography fontWeight="bold">${item.price}</Typography>
+        <Typography fontWeight="bold">${product.price}</Typography>
       </Box>
     </Box>
   );

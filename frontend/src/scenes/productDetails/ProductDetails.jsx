@@ -9,7 +9,7 @@ import FavoriteBorderOutlinedIcon from "@mui/icons-material/FavoriteBorderOutlin
 import AddIcon from "@mui/icons-material/Add";
 import RemoveIcon from "@mui/icons-material/Remove";
 import { shades } from "../../theme.js";
-import { addToCart } from "../../state/index.js";
+// import { addToCart } from "../../state/index.js";
 import { useDispatch } from "react-redux";
 // import products from "../../products.js";
 import Rating from "../../components/Rating.jsx";
@@ -131,9 +131,9 @@ const ProductDetails = () => {
                     minWidth: "150px",
                     padding: "10px 40px",
                   }}
-                  onClick={() =>
-                    dispatch(addToCart({ item: { ...product, count } }))
-                  }
+                  // onClick={() =>
+                  //   dispatch(addToCart({ item: { ...product, count } }))
+                  // }
                 >
                   ADD TO CART
                 </Button>
@@ -185,7 +185,7 @@ const ProductDetails = () => {
           justifyContent="space-between"
         >
           {products.slice(0, 4).map((product, i) => (
-            <Product key={`${product.name}-${i}`} item={product} />
+            <Product key={`${product.name}-${i}`} product={product} />
           ))}
         </Box>
       </Box>
