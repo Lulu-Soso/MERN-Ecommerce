@@ -2,7 +2,11 @@ import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = localStorage.getItem("cart")
   ? JSON.parse(localStorage.getItem("cart"))
-  : { cartItems: [] };
+  : { isCartOpen: false, cartItems: [] };
+
+// const initialState = {
+//   isCartOpen: false,
+// }
 
 const addDecimals = (num) => {
   return (Math.round(num * 100) / 100).toFixed(2);
@@ -44,6 +48,7 @@ const cartSlice = createSlice({
       ).toFixed(2);
 
       localStorage.setItem("cart", JSON.stringify(state));
+      
     },
 
     setIsCartOpen: (state) => {

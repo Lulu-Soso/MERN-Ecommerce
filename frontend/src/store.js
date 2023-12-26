@@ -7,9 +7,6 @@ const store = configureStore({
     [apiSlice.reducerPath]: apiSlice.reducer,
     cart: cartSliceReducer
   },
-  setIsCartOpen: (state) => {
-    state.isCartOpen = !state.isCartOpen;
-  },
 
   middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(apiSlice.middleware),
   devTools: true,

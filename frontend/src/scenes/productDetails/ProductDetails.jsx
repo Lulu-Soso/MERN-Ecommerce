@@ -1,7 +1,15 @@
 import { useEffect, useState } from "react";
 // import axios from "axios";
-import { useParams } from "react-router-dom";
-import { Box, Button, IconButton, Typography } from "@mui/material";
+import { useParams, useNavigate } from "react-router-dom";
+import {
+  Box,
+  Button,
+  // IconButton,
+  Typography,
+  FormControl,
+  Select,
+  MenuItem,
+} from "@mui/material";
 import Tabs from "@mui/material/Tabs";
 import Tab from "@mui/material/Tab";
 import Product from "../../components/Product.jsx";
@@ -20,11 +28,16 @@ import {
   useGetProductDetailsQuery,
   useGetProductsQuery,
 } from "../../slices/productsApiSlice.js";
+import { addToCart } from "../../slices/cartSlice.js";
 
 const ProductDetails = () => {
   const { id: productId } = useParams();
 
   const dispatch = useDispatch();
+  const navigate = useNavigate();
+
+  const [qty, setQty] = useState(1);
+
   const [value, setValue] = useState("description");
   const [count, setCount] = useState(1);
 
@@ -33,6 +46,11 @@ const ProductDetails = () => {
     isLoading: isProductLoading,
     error: productError,
   } = useGetProductDetailsQuery(productId);
+
+  const addToCartHandler = () => {
+    dispatch(addToCart({ ...product, qty }));
+    navigate("/cart")
+  };
 
   const {
     data: products,
@@ -96,23 +114,50 @@ const ProductDetails = () => {
             <Typography sx={{ mt: "20px" }}>{product?.description}</Typography>
           </Box>
 
+          <Box m="20px 0">
+            <Typography>
+              {product.countInStock > 0 ? "En Stock" : "Rupture de Stock"}
+            </Typography>
+          </Box>
+
           <Box display="flex" alignItems="center" minHeight="50px">
             {product.countInStock > 0 && (
               <React.Fragment>
-                <Box
+                {/* <Box
                   display="flex"
                   alignItems="center"
                   border={`1.5px solid ${shades.neutral[300]}`}
                   mr="20px"
                   p="2px 5px"
                 >
-                  <IconButton onClick={() => setCount(Math.max(count - 1, 0))}>
+                  <IconButton onClick={() => setQty(Math.max(qty - 1, 0))}>
                     <RemoveIcon />
                   </IconButton>
-                  <Typography sx={{ p: "0 5px" }}>{count}</Typography>
-                  <IconButton onClick={() => setCount(count + 1)}>
+                  <Typography sx={{ p: "0 5px" }}>{qty}</Typography>
+                  <IconButton onClick={() => setQty(qty + 1)}>
                     <AddIcon />
                   </IconButton>
+                </Box> */}
+
+                <Box mr="20px">
+                  <FormControl
+                    display="flex"
+                    alignItems="center"
+                    border={`1.5px solid ${shades.neutral[300]}`}
+                    height="60px"
+                    p="2px 5px"
+                  >
+                    <Select
+                      value={qty}
+                      onChange={(e) => setQty(Number(e.target.value))}
+                    >
+                      {[...Array(product.countInStock).keys()].map((x) => (
+                        <MenuItem key={x + 1} value={x + 1}>
+                          {x + 1}
+                        </MenuItem>
+                      ))}
+                    </Select>
+                  </FormControl>
                 </Box>
 
                 <Button
@@ -123,6 +168,8 @@ const ProductDetails = () => {
                     minWidth: "150px",
                     padding: "10px 40px",
                   }}
+                  disabled={product.countInStock === 0}
+                  onClick={addToCartHandler}
                   // onClick={() =>
                   //   dispatch(addToCart({ item: { ...product, count } }))
                   // }
@@ -131,10 +178,6 @@ const ProductDetails = () => {
                 </Button>
               </React.Fragment>
             )}
-
-            <Typography sx={{ ml: product.countInStock > 0 ? "20px" : "0" }}>
-              {product.countInStock > 0 ? "In Stock" : "Out Of Stock"}
-            </Typography>
           </Box>
 
           <Rating
