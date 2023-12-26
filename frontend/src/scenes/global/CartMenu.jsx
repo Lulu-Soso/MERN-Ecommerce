@@ -28,6 +28,9 @@ const CartMenu = () => {
 
   console.log(isCartOpen);
 
+  const { cartItems } = useSelector((state) => state.cart);
+  console.log(cartItems);
+
   const totalPrice = cart.reduce((total, item) => {
     return total + item.countInStock * item.price;
   }, 0);
