@@ -13,7 +13,6 @@ import { setIsCartOpen } from "../../slices/cartSlice.js";
 const Navbar = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  // const cart = useSelector((state) => state.cart.cart);
   const { cartItems } = useSelector((state) => state.cart);
   console.log(cartItems);
 
@@ -58,31 +57,7 @@ const Navbar = () => {
             <PersonOutline />
           </IconButton>
 
-          {cartItems.length > 0 && (
-            <Badge
-              badgeContent={cartItems.reduce((a, c) => a + c.qty, 0)}
-              color="secondary"
-              sx={{
-                "& .MuiBadge-badge": {
-                  right: 5,
-                  top: 5,
-                  padding: "0 4px",
-                  height: "14px",
-                  minWidth: "13px",
-                },
-              }}
-            >
-              <IconButton
-                onClick={() => dispatch(setIsCartOpen(true))}
-                sx={{ color: "black" }}
-              >
-                <ShoppingBagOutlined />
-              </IconButton>
-            </Badge>
-          )}
-
-          {/* <Badge
-            // badgeContent={cartItems.length}
+          <Badge
             badgeContent={cartItems.reduce((a, c) => a + c.qty, 0)}
             color="secondary"
             invisible={cartItems.length === 0}
@@ -102,7 +77,7 @@ const Navbar = () => {
             >
               <ShoppingBagOutlined />
             </IconButton>
-          </Badge> */}
+          </Badge>
           <IconButton sx={{ color: "black" }}>
             <MenuOutlined />
           </IconButton>
