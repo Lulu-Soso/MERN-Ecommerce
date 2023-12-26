@@ -1,10 +1,8 @@
-import { useEffect, useState } from "react";
-// import axios from "axios";
-import { useParams, useNavigate } from "react-router-dom";
+import { useState } from "react";
+import { useParams } from "react-router-dom";
 import {
   Box,
   Button,
-  // IconButton,
   Typography,
   FormControl,
   Select,
@@ -16,12 +14,8 @@ import Product from "../../components/Product.jsx";
 import Loader from "../../components/Loader.jsx";
 import Message from "../../components/Message.jsx";
 import FavoriteBorderOutlinedIcon from "@mui/icons-material/FavoriteBorderOutlined";
-import AddIcon from "@mui/icons-material/Add";
-import RemoveIcon from "@mui/icons-material/Remove";
 import { shades } from "../../theme.js";
-// import { addToCart } from "../../state/index.js";
 import { useDispatch } from "react-redux";
-// import products from "../../products.js";
 import Rating from "../../components/Rating.jsx";
 import React from "react";
 import {
@@ -34,12 +28,10 @@ const ProductDetails = () => {
   const { id: productId } = useParams();
 
   const dispatch = useDispatch();
-  const navigate = useNavigate();
 
   const [qty, setQty] = useState(1);
 
   const [value, setValue] = useState("description");
-  const [count, setCount] = useState(1);
 
   const {
     data: product,
@@ -49,7 +41,6 @@ const ProductDetails = () => {
 
   const addToCartHandler = () => {
     dispatch(addToCart({ ...product, qty }));
-    navigate("/cart")
   };
 
   const {
@@ -92,7 +83,6 @@ const ProductDetails = () => {
         {/* IMAGES */}
         <Box flex="1 1 40%" mb="40px">
           <img
-            // alt={item?.name}
             alt={product.name}
             width="100%"
             height="100%"
@@ -123,22 +113,6 @@ const ProductDetails = () => {
           <Box display="flex" alignItems="center" minHeight="50px">
             {product.countInStock > 0 && (
               <React.Fragment>
-                {/* <Box
-                  display="flex"
-                  alignItems="center"
-                  border={`1.5px solid ${shades.neutral[300]}`}
-                  mr="20px"
-                  p="2px 5px"
-                >
-                  <IconButton onClick={() => setQty(Math.max(qty - 1, 0))}>
-                    <RemoveIcon />
-                  </IconButton>
-                  <Typography sx={{ p: "0 5px" }}>{qty}</Typography>
-                  <IconButton onClick={() => setQty(qty + 1)}>
-                    <AddIcon />
-                  </IconButton>
-                </Box> */}
-
                 <Box mr="20px">
                   <FormControl
                     display="flex"
@@ -170,9 +144,6 @@ const ProductDetails = () => {
                   }}
                   disabled={product.countInStock === 0}
                   onClick={addToCartHandler}
-                  // onClick={() =>
-                  //   dispatch(addToCart({ item: { ...product, count } }))
-                  // }
                 >
                   ADD TO CART
                 </Button>
