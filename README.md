@@ -14,6 +14,8 @@ npm i colors  // add color in terminal
 
 npm i jsonwebtoken
 
+npm i cookie-parser
+
 
 /--------- Dossier frontend
 npm i axios
