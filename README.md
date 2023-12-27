@@ -12,6 +12,8 @@ npm i bcryptjs
 
 npm i colors  // add color in terminal
 
+npm i jsonwebtoken
+
 
 /--------- Dossier frontend
 npm i axios
