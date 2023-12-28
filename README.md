@@ -19,3 +19,5 @@ npm i cookie-parser
 
 /--------- Dossier frontend
 npm i axios
+
+npm i react-toastify

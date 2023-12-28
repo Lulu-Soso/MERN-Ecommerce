@@ -1,20 +1,46 @@
+import { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { Badge, Box, IconButton } from "@mui/material";
+import { Badge, Box, IconButton, Menu, MenuItem, Button } from "@mui/material";
 import {
   PersonOutline,
   ShoppingBagOutlined,
   MenuOutlined,
   SearchOutlined,
+  ArrowDropDown,
 } from "@mui/icons-material";
-import { useNavigate } from "react-router-dom";
 import { shades } from "../../theme";
 import { setIsCartOpen } from "../../slices/cartSlice.js";
+import { useLogoutMutation } from "../../slices/usersApiSlice.js";
+import { logout } from "../../slices/authSlice.js";
 
 const Navbar = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const { cartItems } = useSelector((state) => state.cart);
-  console.log(cartItems);
+  const { userInfo } = useSelector((state) => state.auth);
+
+  const [anchorEl, setAnchorEl] = useState(null); // État pour l'ancrage du menu
+
+  const handleClick = (event) => {
+    setAnchorEl(event.currentTarget);
+  };
+
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
+
+  const [logoutApiCall] = useLogoutMutation();
+
+  const logoutHandler = async () => {
+    try {
+      await logoutApiCall().unwrap();
+      dispatch(logout());
+      navigate("/login");
+    } catch (err) {
+      console.log(err);
+    }
+  };
 
   return (
     <Box
@@ -53,9 +79,83 @@ const Navbar = () => {
           <IconButton sx={{ color: "black" }}>
             <SearchOutlined />
           </IconButton>
-          <IconButton sx={{ color: "black" }}>
-            <PersonOutline />
-          </IconButton>
+
+          {/* Combined User and Admin Menu */}
+          {userInfo ? (
+            <Box>
+              {/* User Profile Icon and Dropdown */}
+              <IconButton>
+                <PersonOutline />
+              </IconButton>
+              <Button
+                aria-controls="user-admin-menu"
+                aria-haspopup="true"
+                endIcon={<ArrowDropDown />}
+                onClick={handleClick}
+              >
+                <Box>
+                  {userInfo.name}
+                  {userInfo.isAdmin && (
+                    <span style={{ color: "red" }}>{" - admin"}</span>
+                  )}
+                </Box>
+              </Button>
+              <Menu
+                id="user-admin-menu"
+                anchorEl={anchorEl}
+                keepMounted
+                open={Boolean(anchorEl)}
+                onClose={handleClose}
+                anchorOrigin={{
+                  vertical: "bottom",
+                  horizontal: "right",
+                }}
+                transformOrigin={{
+                  vertical: "top",
+                  horizontal: "right",
+                }}
+              >
+                {/* User Profile Link */}
+                <MenuItem onClick={handleClose} component={Link} to="/profile">
+                  Profile
+                </MenuItem>
+
+                {/* Admin Links (only if the user is an admin) */}
+                {userInfo.isAdmin && (
+                  <>
+                    <MenuItem
+                      onClick={handleClose}
+                      component={Link}
+                      to="/admin/productlist"
+                    >
+                      Products
+                    </MenuItem>
+                    <MenuItem
+                      onClick={handleClose}
+                      component={Link}
+                      to="/admin/orderlist"
+                    >
+                      Orders
+                    </MenuItem>
+                    <MenuItem
+                      onClick={handleClose}
+                      component={Link}
+                      to="/admin/userlist"
+                    >
+                      Users
+                    </MenuItem>
+                  </>
+                )}
+
+                {/* Logout Link */}
+                <MenuItem onClick={logoutHandler}>Logout</MenuItem>
+              </Menu>
+            </Box>
+          ) : (
+            <IconButton component={Link} to="/login" sx={{ color: "black" }}>
+              <PersonOutline />
+            </IconButton>
+          )}
 
           <Badge
             badgeContent={cartItems.reduce((a, c) => a + c.qty, 0)}
