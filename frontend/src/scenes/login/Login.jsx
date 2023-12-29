@@ -41,7 +41,7 @@ function Login() {
   };
 
   return (
-    <Box>
+    <Box width="80%" m="80px auto">
       <FormContainer>
         <Typography variant="h4">Se connecter</Typography>
 

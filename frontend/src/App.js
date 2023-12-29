@@ -13,6 +13,7 @@ import CartMenu from "./scenes/global/CartMenu";
 import Login from "./scenes/login/Login";
 import Register from "./scenes/register/Register";
 import Shipping from "./scenes/shipping/Shipping";
+import Payment from "./scenes/payment/Payment";
 
 const ScrollToTop = () => {
   const { pathname } = useLocation();
@@ -40,6 +41,7 @@ function App() {
 
           {/* private Route */}
           <Route path="/shipping" element={<PrivateRoute><Shipping /></PrivateRoute>} />
+          <Route path="/payment" element={<PrivateRoute><Payment /></PrivateRoute>} />
         </Routes>
         <CartMenu />
         <Footer />
