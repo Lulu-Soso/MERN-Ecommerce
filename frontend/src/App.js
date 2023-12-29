@@ -1,5 +1,6 @@
 import { useEffect } from "react";
 import { BrowserRouter, Routes, Route, useLocation } from "react-router-dom";
+import PrivateRoute from "./components/PrivateRoute";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import Home from "./scenes/home/Home";
@@ -34,9 +35,11 @@ function App() {
           <Route path="/product/:id" element={<ProductDetails />} />
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
-          <Route path="/shipping" element={<Shipping />} />
           {/* <Route path="checkout" element={<Checkout />} /> */}
           {/* <Route path="checkout/success" element={<Confirmation />} /> */}
+
+          {/* private Route */}
+          <Route path="/shipping" element={<PrivateRoute><Shipping /></PrivateRoute>} />
         </Routes>
         <CartMenu />
         <Footer />
