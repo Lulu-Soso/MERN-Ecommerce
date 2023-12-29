@@ -15,6 +15,7 @@ import Register from "./scenes/register/Register";
 import Shipping from "./scenes/shipping/Shipping";
 import Payment from "./scenes/payment/Payment";
 import PlaceOrder from "./scenes/placeOrder/PlaceOrder";
+import Order from "./scenes/order/Order";
 
 const ScrollToTop = () => {
   const { pathname } = useLocation();
@@ -44,6 +45,7 @@ function App() {
           <Route path="/shipping" element={<PrivateRoute><Shipping /></PrivateRoute>} />
           <Route path="/payment" element={<PrivateRoute><Payment /></PrivateRoute>} />
           <Route path="/placeorder" element={<PrivateRoute><PlaceOrder /></PrivateRoute>} />
+          <Route path="/order/:id" element={<PrivateRoute><Order /></PrivateRoute>} />
         </Routes>
         <CartMenu />
         <Footer />

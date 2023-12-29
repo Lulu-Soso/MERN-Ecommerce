@@ -44,6 +44,7 @@ const Payment = () => {
           Payment Method
         </Typography>
         <form onSubmit={submitHandler}>
+          <Box>
           <FormControl component="fieldset" className="my-3">
             <FormLabel component="legend">Select Method</FormLabel>
             <RadioGroup
@@ -59,11 +60,14 @@ const Payment = () => {
               />
             </RadioGroup>
           </FormControl>
+          </Box>
 
-        </form>
+          <Box>
           <Button type="submit" variant="contained" color="primary">
             Continue
           </Button>
+          </Box>
+        </form>
       </FormContainer>
     </Box>
   );
