@@ -21,3 +21,5 @@ npm i cookie-parser
 npm i axios
 
 npm i react-toastify
+
+npm i @paypal/react-paypal-js
