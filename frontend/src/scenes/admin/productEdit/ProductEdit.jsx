@@ -7,7 +7,7 @@ import { toast } from "react-toastify";
 import {
   useGetProductDetailsQuery,
   useUpdateProductMutation,
-//   useUploadProductImageMutation,
+  useUploadProductImageMutation,
 } from "../../../slices/productsApiSlice";
 
 const ProductEdit = () => {
@@ -30,12 +30,11 @@ const ProductEdit = () => {
 
   const [updateProduct, { isLoading: loadingUpdate }] =
     useUpdateProductMutation();
-//   const [uploadProductImage, { isLoading: loadingUpload }] =
-//     useUploadProductImageMutation();
+  const [uploadProductImage, { isLoading: loadingUpload }] =
+    useUploadProductImageMutation();
   const navigate = useNavigate();
 
-//   const isAnyLoading = isLoading || loadingUpdate || loadingUpload;
-  const isAnyLoading = isLoading || loadingUpdate;
+  const isAnyLoading = isLoading || loadingUpdate || loadingUpload;
 
   useEffect(() => {
     if (product) {
@@ -70,17 +69,17 @@ const ProductEdit = () => {
     }
   };
 
-//   const uploadFileHandler = async (e) => {
-//     const formData = new FormData();
-//     formData.append("image", e.target.files[0]);
-//     try {
-//       const res = await uploadProductImage(formData).unwrap();
-//       toast.success(res.message);
-//       setImage(res.image);
-//     } catch (err) {
-//       toast.error(err?.data?.message || err.error);
-//     }
-//   };
+  const uploadFileHandler = async (e) => {
+    const formData = new FormData();
+    formData.append("image", e.target.files[0]);
+    try {
+      const res = await uploadProductImage(formData).unwrap();
+      toast.success(res.message);
+      setImage(res.image);
+    } catch (err) {
+      toast.error(err?.data?.message || err.error);
+    }
+  };
 
   return (
     <Box width="80%" m="80px auto">
@@ -118,9 +117,10 @@ const ProductEdit = () => {
               <input
                 accept="image/*"
                 style={{ display: "none" }}
+                id="raised-button-file"
                 multiple
                 type="file"
-                // onChange={uploadFileHandler}
+                onChange={uploadFileHandler}
               />
               <label htmlFor="raised-button-file">
                 <Button
