@@ -21,6 +21,7 @@ import Profile from "./scenes/profile/Profile";
 import OrderList from "./scenes/admin/orderList/OrderList";
 import ProductList from "./scenes/admin/productList/ProductList";
 import ProductEdit from "./scenes/admin/productEdit/ProductEdit";
+import UserList from "./scenes/admin/userList/UserList";
 
 const ScrollToTop = () => {
   const { pathname } = useLocation();
@@ -57,6 +58,7 @@ function App() {
           <Route path="/admin/orderlist" element={<AdminRoute><OrderList /></AdminRoute>} />
           <Route path="/admin/productlist" element={<AdminRoute><ProductList /></AdminRoute>} />
           <Route path="/admin/product/:id/edit" element={<AdminRoute><ProductEdit /></AdminRoute>} />
+          <Route path="/admin/userlist" element={<AdminRoute><UserList /></AdminRoute>} />
         </Routes>
         <CartMenu />
         <Footer />

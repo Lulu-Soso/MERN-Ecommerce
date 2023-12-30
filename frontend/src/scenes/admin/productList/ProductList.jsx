@@ -85,7 +85,7 @@ const ProductList = () => {
         <Message severity="error">{error}</Message>
       ) : ( */}
 
-{/* {loadingCreate && <Loader />}
+      {/* {loadingCreate && <Loader />}
 {loadingDelete && <Loader />} */}
 
       {isAnyLoading ? (
@@ -115,13 +115,18 @@ const ProductList = () => {
                     <TableCell>{product.category}</TableCell>
                     <TableCell>{product.brand}</TableCell>
                     <TableCell>
-                      <Link to={`/admin/product/${product._id}/edit`}>
-                        <Button startIcon={<EditIcon />} />
+                      <Link to={`/admin/product/${product._id}/edit`} style={{ marginRight: '10px' }}>
+                        <Button variant="outlined">
+                          <EditIcon />
+                        </Button>
                       </Link>
                       <Button
-                        startIcon={<DeleteIcon />}
+                        variant="outlined"
+                        color="error"
                         onClick={() => deleteHandler(product._id)}
-                      />
+                      >
+                        <DeleteIcon />
+                      </Button>
                     </TableCell>
                   </TableRow>
                 ))}
