@@ -21,8 +21,8 @@ import Loader from "../../../components/Loader";
 // import Paginate from '../../../components/Paginate';
 import {
   useGetProductsQuery,
-    useCreateProductMutation,
-  //   useDeleteProductMutation,
+  useCreateProductMutation,
+  useDeleteProductMutation,
 } from "../../../slices/productsApiSlice";
 import { toast } from "react-toastify";
 
@@ -31,11 +31,14 @@ const ProductList = () => {
 
   const [createProduct, { isLoading: loadingCreate }] =
     useCreateProductMutation();
-    
-  const isAnyLoading = isLoading || loadingCreate
+
+  const [deleteProduct, { isLoading: loadingDelete }] =
+    useDeleteProductMutation();
+
+  const isAnyLoading = isLoading || loadingCreate || loadingDelete;
 
   const createProductHandler = async () => {
-    if (window.confirm('Êtes-vous sûr de vouloir créer un nouveau produit ?')) {
+    if (window.confirm("Êtes-vous sûr de vouloir créer un nouveau produit ?")) {
       try {
         await createProduct();
         refetch();
@@ -45,9 +48,17 @@ const ProductList = () => {
     }
   };
 
-  const deleteHandler = (id) => {
-    console.log('delete', id);
-  }
+  const deleteHandler = async (id) => {
+    if (window.confirm("Êtes-vous sûr ?")) {
+      try {
+        await deleteProduct(id);
+        toast.success("Product deleted");
+        refetch();
+      } catch (err) {
+        toast.error(err?.data?.message || err.error);
+      }
+    }
+  };
 
   return (
     <Box width="80%" m="80px auto">
@@ -73,6 +84,9 @@ const ProductList = () => {
       ) : error ? (
         <Message severity="error">{error}</Message>
       ) : ( */}
+
+{/* {loadingCreate && <Loader />}
+{loadingDelete && <Loader />} */}
 
       {isAnyLoading ? (
         <Loader />
