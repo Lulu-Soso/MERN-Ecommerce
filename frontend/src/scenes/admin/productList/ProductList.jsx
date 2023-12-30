@@ -21,15 +21,29 @@ import Loader from "../../../components/Loader";
 // import Paginate from '../../../components/Paginate';
 import {
   useGetProductsQuery,
+    useCreateProductMutation,
   //   useDeleteProductMutation,
-  //   useCreateProductMutation,
 } from "../../../slices/productsApiSlice";
 import { toast } from "react-toastify";
 
 const ProductList = () => {
-  const { data: products, isLoading, error } = useGetProductsQuery();
+  const { data: products, isLoading, error, refetch } = useGetProductsQuery();
 
-  const isAnyLoading = isLoading 
+  const [createProduct, { isLoading: loadingCreate }] =
+    useCreateProductMutation();
+    
+  const isAnyLoading = isLoading || loadingCreate
+
+  const createProductHandler = async () => {
+    if (window.confirm('Êtes-vous sûr de vouloir créer un nouveau produit ?')) {
+      try {
+        await createProduct();
+        refetch();
+      } catch (err) {
+        toast.error(err?.data?.message || err.error);
+      }
+    }
+  };
 
   const deleteHandler = (id) => {
     console.log('delete', id);
@@ -46,12 +60,19 @@ const ProductList = () => {
             startIcon={<AddIcon />}
             variant="contained"
             color="primary"
-            // onClick={createProductHandler}
+            onClick={createProductHandler}
           >
             Créer un Produit
           </Button>
         </Grid>
       </Grid>
+
+      {/* {loadingCreate && <Loader />}
+      {isLoading ? (
+        <Loader />
+      ) : error ? (
+        <Message severity="error">{error}</Message>
+      ) : ( */}
 
       {isAnyLoading ? (
         <Loader />
