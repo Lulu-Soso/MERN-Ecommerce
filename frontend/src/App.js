@@ -1,6 +1,7 @@
 import { useEffect } from "react";
 import { BrowserRouter, Routes, Route, useLocation } from "react-router-dom";
 import PrivateRoute from "./components/PrivateRoute";
+import AdminRoute from "./components/AdminRoute";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import Home from "./scenes/home/Home";
@@ -17,6 +18,7 @@ import Payment from "./scenes/payment/Payment";
 import PlaceOrder from "./scenes/placeOrder/PlaceOrder";
 import Order from "./scenes/order/Order";
 import Profile from "./scenes/profile/Profile";
+import OrderList from "./scenes/admin/orderList/OrderList";
 
 const ScrollToTop = () => {
   const { pathname } = useLocation();
@@ -48,6 +50,9 @@ function App() {
           <Route path="/placeorder" element={<PrivateRoute><PlaceOrder /></PrivateRoute>} />
           <Route path="/order/:id" element={<PrivateRoute><Order /></PrivateRoute>} />
           <Route path="/profile" element={<PrivateRoute><Profile /></PrivateRoute>} />
+
+          {/* admin Route */}
+          <Route path="/admin/orderlist" element={<AdminRoute><OrderList /></AdminRoute>} />
         </Routes>
         <CartMenu />
         <Footer />

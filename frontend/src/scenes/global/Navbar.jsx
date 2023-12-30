@@ -80,13 +80,31 @@ const Navbar = () => {
             <SearchOutlined />
           </IconButton>
 
+          <Badge
+            badgeContent={cartItems.reduce((a, c) => a + c.qty, 0)}
+            color="secondary"
+            invisible={cartItems.length === 0}
+            sx={{
+              "& .MuiBadge-badge": {
+                right: 5,
+                top: 5,
+                padding: "0 4px",
+                height: "14px",
+                minWidth: "13px",
+              },
+            }}
+          >
+            <IconButton
+              onClick={() => dispatch(setIsCartOpen(true))}
+              sx={{ color: "black" }}
+            >
+              <ShoppingBagOutlined />
+            </IconButton>
+          </Badge>
+          
           {/* Combined User and Admin Menu */}
           {userInfo ? (
             <Box>
-              {/* User Profile Icon and Dropdown */}
-              <IconButton>
-                <PersonOutline />
-              </IconButton>
               <Button
                 aria-controls="user-admin-menu"
                 aria-haspopup="true"
@@ -96,7 +114,7 @@ const Navbar = () => {
                 <Box>
                   {userInfo.name}
                   {userInfo.isAdmin && (
-                    <span style={{ color: "red" }}>{" - admin"}</span>
+                    <span style={{ color: "red" }}>{" ***admin*** "}</span>
                   )}
                 </Box>
               </Button>
@@ -119,11 +137,15 @@ const Navbar = () => {
                 <MenuItem onClick={handleClose} component={Link} to="/profile">
                   Profile
                 </MenuItem>
+                {/* Logout Link */}
+                <MenuItem onClick={logoutHandler}>Logout</MenuItem>
 
                 {/* Admin Links (only if the user is an admin) */}
                 {userInfo.isAdmin && (
                   <>
+                    <MenuItem>*** ADMIN ***</MenuItem>
                     <MenuItem
+                      style={{ color: "red" }}
                       onClick={handleClose}
                       component={Link}
                       to="/admin/productlist"
@@ -131,6 +153,7 @@ const Navbar = () => {
                       Products
                     </MenuItem>
                     <MenuItem
+                      style={{ color: "red" }}
                       onClick={handleClose}
                       component={Link}
                       to="/admin/orderlist"
@@ -138,6 +161,7 @@ const Navbar = () => {
                       Orders
                     </MenuItem>
                     <MenuItem
+                      style={{ color: "red" }}
                       onClick={handleClose}
                       component={Link}
                       to="/admin/userlist"
@@ -146,9 +170,6 @@ const Navbar = () => {
                     </MenuItem>
                   </>
                 )}
-
-                {/* Logout Link */}
-                <MenuItem onClick={logoutHandler}>Logout</MenuItem>
               </Menu>
             </Box>
           ) : (
@@ -157,27 +178,6 @@ const Navbar = () => {
             </IconButton>
           )}
 
-          <Badge
-            badgeContent={cartItems.reduce((a, c) => a + c.qty, 0)}
-            color="secondary"
-            invisible={cartItems.length === 0}
-            sx={{
-              "& .MuiBadge-badge": {
-                right: 5,
-                top: 5,
-                padding: "0 4px",
-                height: "14px",
-                minWidth: "13px",
-              },
-            }}
-          >
-            <IconButton
-              onClick={() => dispatch(setIsCartOpen(true))}
-              sx={{ color: "black" }}
-            >
-              <ShoppingBagOutlined />
-            </IconButton>
-          </Badge>
           <IconButton sx={{ color: "black" }}>
             <MenuOutlined />
           </IconButton>
