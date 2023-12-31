@@ -91,7 +91,7 @@ const PlaceOrder = () => {
                         <Grid container spacing={1}>
                           <Grid item md={1}>
                             <img
-                              src={item.image}
+                              src={item.mainImage}
                               alt={item.name}
                               style={{ width: "100%" }}
                             />

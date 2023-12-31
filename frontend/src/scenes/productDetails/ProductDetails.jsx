@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useParams } from "react-router-dom";
 import {
   Box,
@@ -23,6 +23,8 @@ import {
   useGetProductsQuery,
 } from "../../slices/productsApiSlice.js";
 import { addToCart } from "../../slices/cartSlice.js";
+import { useTheme } from '@mui/material/styles';
+import useMediaQuery from '@mui/material/useMediaQuery';
 
 const ProductDetails = () => {
   const { id: productId } = useParams();
@@ -31,6 +33,10 @@ const ProductDetails = () => {
 
   const [qty, setQty] = useState(1);
   const [selectedImage, setSelectedImage] = useState("");
+  const [thumbnails, setThumbnails] = useState([]);
+  const infoRef = useRef(null);
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
 
   const [value, setValue] = useState("description");
 
@@ -54,12 +60,29 @@ const ProductDetails = () => {
     setValue(newValue);
   };
 
-  // Si le produit est chargé, définir l'image sélectionnée
-  useState(() => {
+  useEffect(() => {
     if (product) {
-      setSelectedImage(product.image);
+      setSelectedImage(product.mainImage);
+      // Filtrer pour exclure l'image principale et s'assurer qu'il y a maximum 3 vignettes
+      const thumbnailImages = product.thumbnailImages.filter(img => img !== product.mainImage).slice(0, 3);
+      setThumbnails(thumbnailImages);
     }
   }, [product]);
+
+  const handleThumbnailClick = (clickedImage) => {
+    // Trouver l'index de l'image vignette cliquée dans le tableau
+    const clickedIndex = thumbnails.findIndex((img) => img === clickedImage);
+
+    // Construire un nouveau tableau de vignettes
+    let updatedThumbnails = [...thumbnails];
+
+    // Remplacer la vignette cliquée par l'ancienne image principale
+    updatedThumbnails[clickedIndex] = selectedImage;
+
+    // Mettre à jour l'image principale et le tableau des vignettes
+    setSelectedImage(clickedImage);
+    setThumbnails(updatedThumbnails);
+  };
 
   if (isProductLoading || isProductsLoading) {
     return <Loader />;
@@ -89,54 +112,39 @@ const ProductDetails = () => {
     <Box width="80%" m="80px auto">
       <Box display="flex" flexWrap="wrap" columnGap="40px">
         {/* IMAGES */}
-        {/* <Box flex="1 1 40%" mb="40px">
-          <img
-            alt={product.name}
-            width="100%"
-            height="100%"
-            src={product.image}
-            style={{ objectFit: "contain" }}
-          />
-        </Box> */}
-        {/* <Box flex="1 1 40%" mb="40px"> */}
-        <Box flex="1 1 40%">
-          <Box>
-          <img
-            alt={product.name}
-            width="100%"
-            height="100%"
-            src={product.image}
-            // src={selectedImage}
-            style={{ objectFit: "contain" }}
-          />
-          </Box>
-          {/* Mini Images pour la sélection */}
-          <Box display="flex" justifyContent="space-between">
-            {[
-              product.image,
-              product.image,
-              product.image,
-            ].map((imgSrc, index) => (
-              <img
-              key={`mini-image-${index}`}
-              alt={`Variante ${index + 1} de ${product.name}`}
-              src={imgSrc}
-              style={{
-                width: "30%", 
-                height: "auto",
-                objectFit: "cover",
-                cursor: "pointer",
-                // margin: "0 1%", 
-              }}
-              onClick={() => setSelectedImage(imgSrc)}
-            />
-            ))}
-          </Box>
+        <Box flex="1 1 40%" sx={{
+            position: isMobile ? 'static' : 'sticky',  // `static` pour mobile, `sticky` pour les autres
+            top: 80,
+            alignSelf: 'flex-start',
+            maxHeight: isMobile ? 'none' : '100vh', // `none` pour mobile, `100vh` pour les autres
+            overflowY: 'auto'
+          }}>
+    <img
+      alt={product.name}
+      src={selectedImage}
+      style={{ width: "100%", height: "auto", objectFit: "contain" }}
+    />
+    <Box display="flex" justifyContent="space-around" mt="10px">
+      {thumbnails.map((imgSrc, index) => (
+        <img
+          key={`thumbnail-${index}`}
+          alt={`Thumbnail ${index + 1}`}
+          src={imgSrc}
+          style={{
+            width: "30%", // Chaque image occupe 30% de l'espace
+            height: "auto",
+            objectFit: "cover",
+            cursor: "pointer"
+          }}
+          onClick={() => handleThumbnailClick(imgSrc)}
+        />
+      ))}
+    </Box>
         </Box>
 
         {/* ACTIONS */}
-        <Box flex="1 1 50%" mb="40px">
-          <Box display="flex" justifyContent="space-between">
+        <Box flex="1 1 50%" mb="40px" ref={infoRef}>
+          <Box display="flex" mb="40px" justifyContent="space-between">
             <Box>Home/Item</Box>
             <Box>Prev Next</Box>
           </Box>
@@ -145,6 +153,15 @@ const ProductDetails = () => {
             <Typography variant="h3">{product.name}</Typography>
             <Typography>${product.price}</Typography>
             <Typography sx={{ mt: "20px" }}>{product?.description}</Typography>
+          </Box>
+
+          <Box>
+            <Typography sx={{ my: "50px" }}>{product?.description}</Typography>
+            <Typography sx={{ my: "50px" }}>{product?.description}</Typography>
+            <Typography sx={{ my: "50px" }}>{product?.description}</Typography>
+            <Typography sx={{ my: "50px" }}>{product?.description}</Typography>
+            <Typography sx={{ my: "50px" }}>{product?.description}</Typography>
+            <Typography sx={{ my: "50px" }}>{product?.description}</Typography>
           </Box>
 
           <Box m="20px 0">

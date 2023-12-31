@@ -29,7 +29,7 @@ const Product = ({ product, width }) => {
           width="300px"
           height="400px"
           // src={`http://localhost:1337${url}`}
-          src={product.image}
+          src={product.mainImage}
           onClick={() => navigate(`/product/${product._id}`)}
           style={{ cursor: "pointer" }}
         />
