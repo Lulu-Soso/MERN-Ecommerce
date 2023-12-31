@@ -1,24 +1,35 @@
-import React from 'react';
-import { Link } from 'react-router-dom';
-import { Box, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, Button, Typography } from '@mui/material';
-import EditIcon from '@mui/icons-material/Edit';
-import DeleteIcon from '@mui/icons-material/Delete';
-import CheckIcon from '@mui/icons-material/Check';
-import CloseIcon from '@mui/icons-material/Close';
-import Message from '../../../components/Message'; // Update or replace this component
-import Loader from '../../../components/Loader'; // Update or replace this component
+import React from "react";
+import { Link } from "react-router-dom";
+import {
+  Box,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
+  Paper,
+  Button,
+  Typography,
+} from "@mui/material";
+import EditIcon from "@mui/icons-material/Edit";
+import DeleteIcon from "@mui/icons-material/Delete";
+import CheckIcon from "@mui/icons-material/Check";
+import CloseIcon from "@mui/icons-material/Close";
+import Message from "../../../components/Message";
+import Loader from "../../../components/Loader";
 import {
   useDeleteUserMutation,
   useGetUsersQuery,
-} from '../../../slices/usersApiSlice';
-import { toast } from 'react-toastify';
+} from "../../../slices/usersApiSlice";
+import { toast } from "react-toastify";
 
 const UserList = () => {
   const { data: users, refetch, isLoading, error } = useGetUsersQuery();
   const [deleteUser] = useDeleteUserMutation();
 
   const deleteHandler = async (id) => {
-    if (window.confirm('Are you sure')) {
+    if (window.confirm("Are you sure")) {
       try {
         await deleteUser(id);
         toast.success("User deleted");
@@ -31,11 +42,15 @@ const UserList = () => {
 
   return (
     <Box width="80%" m="80px auto">
-      <Typography variant='h4' sx={{ mb: 2 }}>Utilisateurs</Typography>
+      <Typography variant="h4" sx={{ mb: 2 }}>
+        Utilisateurs
+      </Typography>
       {isLoading ? (
-        <Loader /> // Update or replace this component
+        <Loader />
       ) : error ? (
-        <Message variant='danger'>{error?.data?.message || error.error}</Message> // Update or replace this component
+        <Message severity="error">
+          {error?.data?.message || error.error}
+        </Message>
       ) : (
         <TableContainer component={Paper}>
           <Table aria-label="simple table">
@@ -58,9 +73,9 @@ const UserList = () => {
                   </TableCell>
                   <TableCell>
                     {user.isAdmin ? (
-                      <CheckIcon style={{ color: 'green' }} />
+                      <CheckIcon style={{ color: "green" }} />
                     ) : (
-                      <CloseIcon style={{ color: 'red' }} />
+                      <CloseIcon style={{ color: "red" }} />
                     )}
                   </TableCell>
                   <TableCell>
