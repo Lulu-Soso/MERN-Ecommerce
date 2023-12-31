@@ -20,7 +20,7 @@ import Order from "./scenes/order/Order";
 import Profile from "./scenes/profile/Profile";
 import OrderList from "./scenes/admin/orderList/OrderList";
 import ProductList from "./scenes/admin/productList/ProductList";
-import ProductEdit from "./scenes/admin/productEdit/ProductEdit";
+import ProductEdit from "./scenes/admin/productEdit/ProductEdit"
 import UserList from "./scenes/admin/userList/UserList";
 import UserEdit from "./scenes/admin/userEdit/UserEdit";
 
