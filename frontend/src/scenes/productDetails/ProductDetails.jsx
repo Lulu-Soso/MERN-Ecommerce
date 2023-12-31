@@ -30,6 +30,7 @@ const ProductDetails = () => {
   const dispatch = useDispatch();
 
   const [qty, setQty] = useState(1);
+  const [selectedImage, setSelectedImage] = useState("");
 
   const [value, setValue] = useState("description");
 
@@ -52,6 +53,13 @@ const ProductDetails = () => {
   const handleChange = (event, newValue) => {
     setValue(newValue);
   };
+
+  // Si le produit est chargé, définir l'image sélectionnée
+  useState(() => {
+    if (product) {
+      setSelectedImage(product.image);
+    }
+  }, [product]);
 
   if (isProductLoading || isProductsLoading) {
     return <Loader />;
@@ -81,7 +89,7 @@ const ProductDetails = () => {
     <Box width="80%" m="80px auto">
       <Box display="flex" flexWrap="wrap" columnGap="40px">
         {/* IMAGES */}
-        <Box flex="1 1 40%" mb="40px">
+        {/* <Box flex="1 1 40%" mb="40px">
           <img
             alt={product.name}
             width="100%"
@@ -89,6 +97,41 @@ const ProductDetails = () => {
             src={product.image}
             style={{ objectFit: "contain" }}
           />
+        </Box> */}
+        {/* <Box flex="1 1 40%" mb="40px"> */}
+        <Box flex="1 1 40%">
+          <Box>
+          <img
+            alt={product.name}
+            width="100%"
+            height="100%"
+            src={product.image}
+            // src={selectedImage}
+            style={{ objectFit: "contain" }}
+          />
+          </Box>
+          {/* Mini Images pour la sélection */}
+          <Box display="flex" justifyContent="space-between">
+            {[
+              product.image,
+              product.image,
+              product.image,
+            ].map((imgSrc, index) => (
+              <img
+              key={`mini-image-${index}`}
+              alt={`Variante ${index + 1} de ${product.name}`}
+              src={imgSrc}
+              style={{
+                width: "30%", 
+                height: "auto",
+                objectFit: "cover",
+                cursor: "pointer",
+                // margin: "0 1%", 
+              }}
+              onClick={() => setSelectedImage(imgSrc)}
+            />
+            ))}
+          </Box>
         </Box>
 
         {/* ACTIONS */}

@@ -15,7 +15,6 @@ import {
 import EditIcon from "@mui/icons-material/Edit";
 import AddIcon from "@mui/icons-material/Add";
 import DeleteIcon from "@mui/icons-material/Delete";
-import { useParams } from "react-router-dom";
 import Message from "../../../components/Message";
 import Loader from "../../../components/Loader";
 // import Paginate from '../../../components/Paginate';

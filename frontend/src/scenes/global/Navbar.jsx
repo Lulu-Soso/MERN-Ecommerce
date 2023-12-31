@@ -70,6 +70,14 @@ const Navbar = () => {
           MERN ECOMMERCE
         </Box>
 
+        <Box display="flex">
+          <Button component={Link} to="/menu1">Menu1</Button>
+          <Button component={Link} to="/menu2">Menu2</Button>
+          <Button component={Link} to="/menu3">Menu3</Button>
+          <Button component={Link} to="/menu4">Menu4</Button>
+          <Button component={Link} to="/menu5">Menu5</Button>
+        </Box>
+
         <Box
           display="flex"
           justifyContent="space-between"
