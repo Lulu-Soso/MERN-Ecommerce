@@ -8,7 +8,7 @@ export const productsApiSlice = apiSlice.injectEndpoints({
         url: PRODUCTS_URL,
       }),
       keepUnusedDataFor: 5,
-      providesTags: ['Products'],
+      providesTags: ["Products"],
     }),
     getProductDetails: builder.query({
       query: (productId) => ({
@@ -19,35 +19,50 @@ export const productsApiSlice = apiSlice.injectEndpoints({
     createProduct: builder.mutation({
       query: () => ({
         url: `${PRODUCTS_URL}`,
-        method: 'POST',
+        method: "POST",
       }),
-      invalidatesTags: ['Product'],
+      invalidatesTags: ["Product"],
     }),
     updateProduct: builder.mutation({
       query: (data) => ({
         url: `${PRODUCTS_URL}/${data.productId}`,
-        method: 'PUT',
+        method: "PUT",
         body: data,
       }),
-      invalidatesTags: ['Products'],
+      invalidatesTags: ["Products"],
     }),
     uploadProductImage: builder.mutation({
       query: (data) => ({
         url: `${UPLOAD_URL}`,
         // url: `/api/upload`,
-        method: 'POST',
+        method: "POST",
         body: data,
       }),
     }),
     deleteProduct: builder.mutation({
       query: (productId) => ({
         url: `${PRODUCTS_URL}/${productId}`,
-        method: 'DELETE',
+        method: "DELETE",
       }),
-      providesTags: ['Product'],
+      providesTags: ["Product"],
+    }),
+    createReview: builder.mutation({
+      query: (data) => ({
+        url: `${PRODUCTS_URL}/${data.productId}/reviews`,
+        method: "POST",
+        body: data,
+      }),
+      invalidatesTags: ["Product"],
     }),
   }),
 });
 
-export const { useGetProductsQuery, useGetProductDetailsQuery, useCreateProductMutation, useUpdateProductMutation, useUploadProductImageMutation, useDeleteProductMutation } =
-  productsApiSlice;
+export const {
+  useGetProductsQuery,
+  useGetProductDetailsQuery,
+  useCreateProductMutation,
+  useUpdateProductMutation,
+  useUploadProductImageMutation,
+  useDeleteProductMutation,
+  useCreateReviewMutation,
+} = productsApiSlice;

@@ -1,4 +1,4 @@
-import mongoose from 'mongoose';
+import mongoose from "mongoose";
 
 const reviewSchema = mongoose.Schema(
   {
@@ -8,7 +8,7 @@ const reviewSchema = mongoose.Schema(
     user: {
       type: mongoose.Schema.Types.ObjectId,
       required: true,
-      ref: 'User',
+      ref: "User",
     },
   },
   {
@@ -21,7 +21,7 @@ const productSchema = mongoose.Schema(
     user: {
       type: mongoose.Schema.Types.ObjectId,
       required: true,
-      ref: 'User',
+      ref: "User",
     },
     name: {
       type: String,
@@ -37,7 +37,7 @@ const productSchema = mongoose.Schema(
     },
     thumbnailImages: {
       type: [String],
-      validate: [arrayLimit, '{PATH} exceeds the limit of 3']
+      validate: [arrayLimit, "{PATH} exceeds the limit of 3"],
     },
     brand: {
       type: String,
@@ -82,6 +82,6 @@ function arrayLimit(val) {
   return val.length <= 3;
 }
 
-const Product = mongoose.model('Product', productSchema);
+const Product = mongoose.model("Product", productSchema);
 
 export default Product;

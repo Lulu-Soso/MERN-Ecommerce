@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, Link } from "react-router-dom";
 import {
   Box,
   Button,
@@ -7,6 +7,11 @@ import {
   FormControl,
   Select,
   MenuItem,
+  Grid,
+  List,
+  ListItem,
+  TextField,
+  InputLabel,
 } from "@mui/material";
 import Tabs from "@mui/material/Tabs";
 import Tab from "@mui/material/Tab";
@@ -15,13 +20,15 @@ import Loader from "../../components/Loader.jsx";
 import Message from "../../components/Message.jsx";
 import FavoriteBorderOutlinedIcon from "@mui/icons-material/FavoriteBorderOutlined";
 import { shades } from "../../theme.js";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import Rating from "../../components/Rating.jsx";
 import React from "react";
 import {
   useGetProductDetailsQuery,
   useGetProductsQuery,
+  useCreateReviewMutation
 } from "../../slices/productsApiSlice.js";
+import { toast } from "react-toastify";
 import { addToCart } from "../../slices/cartSlice.js";
 import { useTheme } from '@mui/material/styles';
 import useMediaQuery from '@mui/material/useMediaQuery';
@@ -32,6 +39,9 @@ const ProductDetails = () => {
   const dispatch = useDispatch();
 
   const [qty, setQty] = useState(1);
+  const [rating, setRating] = useState(0)
+  const [comment, setComment] = useState("")
+
   const [selectedImage, setSelectedImage] = useState("");
   const [thumbnails, setThumbnails] = useState([]);
   const infoRef = useRef(null);
@@ -43,8 +53,13 @@ const ProductDetails = () => {
   const {
     data: product,
     isLoading: isProductLoading,
+    refetch,
     error: productError,
   } = useGetProductDetailsQuery(productId);
+
+  const [createReview, {isLoading: loadingProductReview }] = useCreateReviewMutation();
+
+  const { userInfo } = useSelector((state) => state.auth)
 
   const addToCartHandler = () => {
     dispatch(addToCart({ ...product, qty }));
@@ -107,6 +122,24 @@ const ProductDetails = () => {
       </Box>
     );
   }
+
+  const submitHandler = async (e) => {
+    e.preventDefault();
+
+    try {
+      await createReview({
+        productId,
+        rating,
+        comment,
+      }).unwrap();
+      refetch();
+      toast.success('Review created successfully');
+      setRating(0);
+      setComment("");
+    } catch (err) {
+      toast.error(err?.data?.message || err.error);
+    }
+  };
 
   return (
     <Box width="80%" m="80px auto">
@@ -235,7 +268,73 @@ const ProductDetails = () => {
       </Box>
       <Box display="flex" flexWrap="wrap" gap="15px">
         {value === "description" && <div>{product.description}</div>}
-        {value === "reviews" && <div>reviews</div>}
+        {/* {value === "reviews" && <div>reviews</div>} */}
+        {value === "reviews" && (
+        <Box>
+          <Grid container spacing={2}>
+            <Grid item md={6}>
+              {product.reviews.length === 0 && <Message>Pas d'avis</Message>}
+              <List>
+                {product.reviews.map((review) => (
+                  <ListItem key={review._id}>
+                    <strong>{review.name}</strong>
+                    <Rating value={review.rating} readOnly />
+                    <Typography component="p">{review.createdAt.substring(0, 10)}</Typography>
+                    <Typography component="p">{review.comment}</Typography>
+                  </ListItem>
+                ))}
+                <ListItem>
+                  <Typography variant='h6'>Écrire un avis</Typography>
+                  {loadingProductReview && <Loader />}
+                  {userInfo ? (
+                    <form 
+                    onSubmit={submitHandler}
+                    >
+                      <FormControl fullWidth margin='normal'>
+                        <InputLabel>Évaluation</InputLabel>
+                        <Select
+                          required
+                          value={rating}
+                          onChange={(e) => setRating(e.target.value)}
+                        >
+                          <MenuItem value=''>Sélectionner...</MenuItem>
+                          <MenuItem value='1'>1 - Poor</MenuItem>
+                          <MenuItem value='2'>2 - Fair</MenuItem>
+                          <MenuItem value='3'>3 - Good</MenuItem>
+                          <MenuItem value='4'>4 - Very Good</MenuItem>
+                          <MenuItem value='5'>5 - Excellent</MenuItem>
+                        </Select>
+                      </FormControl>
+                      <FormControl fullWidth margin='normal'>
+                        <TextField
+                          label="Commentaire"
+                          required
+                          multiline
+                          rows={3}
+                          value={comment}
+                          onChange={(e) => setComment(e.target.value)}
+                        />
+                      </FormControl>
+                      <Button
+                        disabled={loadingProductReview}
+                        type='submit'
+                        variant='contained'
+                        color='primary'
+                      >
+                        Envoyer
+                      </Button>
+                    </form>
+                  ) : (
+                    <Message>
+                      Veuillez vous <Link to='/login'>connecter</Link> pour écrire un avis.
+                    </Message>
+                  )}
+                </ListItem>
+              </List>
+            </Grid>
+          </Grid>
+        </Box>
+      )}
       </Box>
 
       {/* RELATED ITEMS */}
