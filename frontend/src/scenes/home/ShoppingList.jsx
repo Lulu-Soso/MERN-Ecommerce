@@ -9,9 +9,12 @@ import { useGetProductsQuery } from "../../slices/productsApiSlice";
 import Paginate from "../../components/Paginate";
 
 const ShoppingList = () => {
-  const { pageNumber } = useParams();
+  const { pageNumber, keyword } = useParams();
 
-  const { data, isLoading, error } = useGetProductsQuery({ pageNumber });
+  const { data, isLoading, error } = useGetProductsQuery({
+    keyword,
+    pageNumber,
+  });
 
   const [value, setValue] = useState("all");
   const breakPoint = useMediaQuery("(min-width:600px)");
@@ -103,7 +106,11 @@ const ShoppingList = () => {
                 />
               ))}
           </Box>
-          <Paginate pages={data.pages} page={data.page} />
+          <Paginate
+            pages={data.pages}
+            page={data.page}
+            keyword={keyword ? keyword : ""}
+          />
         </Box>
       )}
     </>
