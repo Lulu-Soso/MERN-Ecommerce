@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { Badge, Box, IconButton, Menu, MenuItem, Button } from "@mui/material";
+import { Badge, Box, IconButton, Menu, MenuItem, Button, Typography } from "@mui/material";
 import {
   PersonOutline,
   ShoppingBagOutlined,
@@ -64,31 +64,36 @@ const Navbar = () => {
         alignItems="center"
       >
         <Box
+        width="30%"
           onClick={() => navigate("/")}
           sx={{ "&:hover": { cursor: "pointer" } }}
           color={shades.secondary[500]}
         >
-          MERN ECOMMERCE
+          PREA
         </Box>
 
-        <Box display="flex">
+        {/* <Box display="flex">
           <Button component={Link} to="/menu1">Menu1</Button>
           <Button component={Link} to="/menu2">Menu2</Button>
           <Button component={Link} to="/menu3">Menu3</Button>
           <Button component={Link} to="/menu4">Menu4</Button>
           <Button component={Link} to="/menu5">Menu5</Button>
+        </Box> */}
+        <Box width="40%">
+          <SearchBox />
         </Box>
 
         <Box
+        width="30%"
           display="flex"
-          justifyContent="space-between"
+          justifyContent="end"
           columnGap="20px"
           zIndex="2"
         >
-          <IconButton sx={{ color: "black" }}>
-            <SearchBox />
+            
+          {/* <IconButton sx={{ color: "black" }}>
             <SearchOutlined />
-          </IconButton>
+          </IconButton> */}
 
           <Badge
             badgeContent={cartItems.reduce((a, c) => a + c.qty, 0)}
@@ -109,6 +114,9 @@ const Navbar = () => {
               sx={{ color: "black" }}
             >
               <ShoppingBagOutlined />
+              <Typography>
+                Panier
+              </Typography>
             </IconButton>
           </Badge>
           
@@ -185,6 +193,9 @@ const Navbar = () => {
           ) : (
             <IconButton component={Link} to="/login" sx={{ color: "black" }}>
               <PersonOutline />
+              <Typography>
+                Identifiez-vous
+              </Typography>
             </IconButton>
           )}
 

@@ -378,12 +378,20 @@ const ProductDetails = () => {
             <Typography variant="h3" fontWeight="bold">
               Related Products
             </Typography>
-            <Box
+            {/* <Box
               mt="20px"
               display="flex"
               flexWrap="wrap"
               columnGap="1.33%"
               justifyContent="space-between"
+            > */}
+            <Box
+              mt="20px"
+              display="grid"
+              // gridTemplateColumns="repeat(auto-fill, 24%)"
+              gridTemplateColumns="repeat(auto-fill, minmax(300px, 1fr))"
+              justifyContent="space-between"
+              gap="20px"
             >
               {data?.products.slice(0, 4).map((product, i) => (
                 <Product key={`${product.name}-${i}`} product={product} />

@@ -4,13 +4,11 @@ import { IconButton, Box, Typography, useTheme, Button } from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
 import RemoveIcon from "@mui/icons-material/Remove";
 import { shades } from "../theme";
-// import { addToCart } from "../state";
 import { useNavigate } from "react-router-dom";
 import Rating from "./Rating";
 
 const Product = ({ product, width }) => {
   const navigate = useNavigate();
-  // const dispatch = useDispatch();
   const [count, setCount] = useState(1);
   const [isHovered, setIsHovered] = useState(false);
   const {
@@ -18,7 +16,13 @@ const Product = ({ product, width }) => {
   } = useTheme();
 
   return (
-    <Box width={width}>
+    // <Box width={width}>
+    <Box 
+      width={width} 
+      border="1px solid #f0f0f0"
+      borderRadius="5px"
+      overflow="hidden"
+    >
       <Box
         position="relative"
         onMouseOver={() => setIsHovered(true)}
@@ -26,8 +30,9 @@ const Product = ({ product, width }) => {
       >
         <img
           alt={product.name}
-          width="300px"
-          height="400px"
+          width="100%"
+          // height="400px"
+          height="320px"
           // src={`http://localhost:1337${url}`}
           src={product.mainImage}
           onClick={() => navigate(`/product/${product._id}`)}
@@ -68,7 +73,7 @@ const Product = ({ product, width }) => {
         </Box>
       </Box>
 
-      <Box mt="3px">
+      <Box mt="3px" p="10px 5px">
         <Typography variant="subtitle2" color={neutral.dark}>
           {product.category
             .replace(/([A-Z])/g, " $1")

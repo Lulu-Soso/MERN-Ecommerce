@@ -26,7 +26,7 @@ function Footer() {
             mb="30px"
             color={shades.secondary[500]}
           >
-            ECOMMERCE
+            PREA
           </Typography>
           <div>
             Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
@@ -34,7 +34,7 @@ function Footer() {
             ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut
             aliquip ex ea commodo consequat
           </div>
-          <p>MERN Ecommerce &copy; {currentYear}</p>
+          <p>PREA &copy; {currentYear}</p>
         </Box>
 
         <Box>

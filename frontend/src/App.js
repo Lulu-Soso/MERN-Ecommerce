@@ -23,6 +23,7 @@ import ProductList from "./scenes/admin/productList/ProductList";
 import ProductEdit from "./scenes/admin/productEdit/ProductEdit"
 import UserList from "./scenes/admin/userList/UserList";
 import UserEdit from "./scenes/admin/userEdit/UserEdit";
+import ProductSearch from "./scenes/productSearch/ProductSearch";
 
 const ScrollToTop = () => {
   const { pathname } = useLocation();
@@ -42,14 +43,13 @@ function App() {
         <ScrollToTop />
         <Routes>
           <Route path="/" element={<Home />} />
-          <Route path="/search/:keyword" element={<Home />} />
+          {/* <Route path="/search/:keyword" element={<Home />} /> */}
+          <Route path="/search/:keyword" element={<ProductSearch />} />
           <Route path="/page/:pageNumber" element={<Home />} />
           <Route path="/search/:keyword/page/:pageNumber" element={<Home />} />
           <Route path="/product/:id" element={<ProductDetails />} />
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
-          {/* <Route path="checkout" element={<Checkout />} /> */}
-          {/* <Route path="checkout/success" element={<Confirmation />} /> */}
 
           {/* private Route */}
           <Route path="/shipping" element={<PrivateRoute><Shipping /></PrivateRoute>} />

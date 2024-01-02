@@ -70,14 +70,21 @@ const ShoppingList = () => {
             <Tab label="BEST SELLERS" value="bestSellers" />
             <Tab label="TOP RATED" value="topRated" />
           </Tabs>
-          <Box
+          {/* <Box
             margin="0 auto"
             display="grid"
             gridTemplateColumns="repeat(auto-fill, 300px)"
             justifyContent="space-around"
             rowGap="20px"
             columnGap="1.33%"
-          >
+          > */}
+          <Box
+              mt="20px"
+              display="grid"
+              gridTemplateColumns="repeat(auto-fill, minmax(300px, 1fr))"
+              justifyContent="space-between"
+              gap="20px"
+            >
             {value === "all" &&
               data?.products.map((product) => (
                 <Product
