@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import {
   Grid,
   Box,
@@ -17,7 +17,7 @@ import AddIcon from "@mui/icons-material/Add";
 import DeleteIcon from "@mui/icons-material/Delete";
 import Message from "../../../components/Message";
 import Loader from "../../../components/Loader";
-// import Paginate from '../../../components/Paginate';
+import Paginate from '../../../components/Paginate';
 import {
   useGetProductsQuery,
   useCreateProductMutation,
@@ -26,7 +26,8 @@ import {
 import { toast } from "react-toastify";
 
 const ProductList = () => {
-  const { data: products, isLoading, error, refetch } = useGetProductsQuery();
+  const { pageNumber } = useParams()
+  const { data, isLoading, error, refetch } = useGetProductsQuery({ pageNumber });
 
   const [createProduct, { isLoading: loadingCreate }] =
     useCreateProductMutation();
@@ -106,7 +107,7 @@ const ProductList = () => {
                 </TableRow>
               </TableHead>
               <TableBody>
-                {products.map((product) => (
+                {data?.products.map((product) => (
                   <TableRow key={product._id}>
                     <TableCell>{product._id}</TableCell>
                     <TableCell>{product.name}</TableCell>
@@ -132,7 +133,7 @@ const ProductList = () => {
               </TableBody>
             </Table>
           </TableContainer>
-          {/* <Paginate pages={data.pages} page={data.page} isAdmin={true} /> */}
+          <Paginate pages={data.pages} page={data.page} isAdmin={true} />
         </>
       )}
     </Box>

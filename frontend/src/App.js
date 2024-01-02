@@ -42,6 +42,7 @@ function App() {
         <ScrollToTop />
         <Routes>
           <Route path="/" element={<Home />} />
+          <Route path="/page/:pageNumber" element={<Home />} />
           <Route path="/product/:id" element={<ProductDetails />} />
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
@@ -58,6 +59,7 @@ function App() {
           {/* admin Route */}
           <Route path="/admin/orderlist" element={<AdminRoute><OrderList /></AdminRoute>} />
           <Route path="/admin/productlist" element={<AdminRoute><ProductList /></AdminRoute>} />
+          <Route path="/admin/productlist/:pageNumber" element={<AdminRoute><ProductList /></AdminRoute>} />
           <Route path="/admin/product/:id/edit" element={<AdminRoute><ProductEdit /></AdminRoute>} />
           <Route path="/admin/userlist" element={<AdminRoute><UserList /></AdminRoute>} />
           <Route path="/admin/user/:id/edit" element={<AdminRoute><UserEdit /></AdminRoute>} />

@@ -1,38 +1,32 @@
 import React, { useState } from "react";
-// import axios from "axios";
-import Tabs from "@mui/material/Tabs";
-import Tab from "@mui/material/Tab";
-import Box from "@mui/material/Box";
+import { useParams } from "react-router-dom";
+import { Tabs, Tab, Box, Typography } from "@mui/material";
 import Product from "../../components/Product";
 import Loader from "../../components/Loader";
 import Message from "../../components/Message";
-import { Typography } from "@mui/material";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import { useGetProductsQuery } from "../../slices/productsApiSlice";
-// import { useDispatch, useSelector } from "react-redux";
-// import { setItems } from "../../state";
+import Paginate from "../../components/Paginate";
 
 const ShoppingList = () => {
-  const { data: products, isLoading, error } = useGetProductsQuery();
+  const { pageNumber } = useParams();
 
-  // const dispatch = useDispatch();
+  const { data, isLoading, error } = useGetProductsQuery({ pageNumber });
+
   const [value, setValue] = useState("all");
-  // const items = useSelector((state) => state.cart.items);
   const breakPoint = useMediaQuery("(min-width:600px)");
-
-  // console.log("items", items);
 
   const handleChange = (event, newValue) => {
     setValue(newValue);
   };
 
-  const topRatedItems = products?.filter(
+  const topRatedItems = data?.products.filter(
     (product) => product.category === "topRated"
   );
-  const newArrivalsItems = products?.filter(
+  const newArrivalsItems = data?.products.filter(
     (product) => product.category === "newArrivals"
   );
-  const bestSellersItems = products?.filter(
+  const bestSellersItems = data?.products.filter(
     (product) => product.category === "bestSellers"
   );
 
@@ -80,12 +74,8 @@ const ShoppingList = () => {
             rowGap="20px"
             columnGap="1.33%"
           >
-            {/* {products.map((product) => (
-            <Product item={product} key={`${product.name}-${product._id}`} />
-          ))} */}
-
             {value === "all" &&
-              products.map((product) => (
+              data?.products.map((product) => (
                 <Product
                   product={product}
                   key={`${product.name}-${product._id}`}
@@ -113,6 +103,7 @@ const ShoppingList = () => {
                 />
               ))}
           </Box>
+          <Paginate pages={data.pages} page={data.page} />
         </Box>
       )}
     </>
