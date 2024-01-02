@@ -13,6 +13,7 @@ import { shades } from "../../theme";
 import { setIsCartOpen } from "../../slices/cartSlice.js";
 import { useLogoutMutation } from "../../slices/usersApiSlice.js";
 import { logout } from "../../slices/authSlice.js";
+import SearchBox from "../../components/SearchBox.jsx";
 
 const Navbar = () => {
   const navigate = useNavigate();
@@ -85,6 +86,7 @@ const Navbar = () => {
           zIndex="2"
         >
           <IconButton sx={{ color: "black" }}>
+            <SearchBox />
             <SearchOutlined />
           </IconButton>
 
