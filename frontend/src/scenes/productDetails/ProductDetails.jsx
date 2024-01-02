@@ -66,7 +66,7 @@ const ProductDetails = () => {
   };
 
   const {
-    data: products,
+    data,
     isLoading: isProductsLoading,
     error: productsError,
   } = useGetProductsQuery();
@@ -111,7 +111,7 @@ const ProductDetails = () => {
     return (
       <Box width="80%" m="20px auto">
         <Message severity="error">
-          {productError?.data.message || productError.error}
+          {productError?.data?.message || productError.error}
         </Message>
       </Box>
     );
@@ -121,7 +121,7 @@ const ProductDetails = () => {
     return (
       <Box width="80%" m="20px auto">
         <Message severity="error">
-          {productsError?.data.message || productsError.error}
+          {productsError?.data?.message || productsError.error}
         </Message>
       </Box>
     );
@@ -385,7 +385,7 @@ const ProductDetails = () => {
               columnGap="1.33%"
               justifyContent="space-between"
             >
-              {products.slice(0, 4).map((product, i) => (
+              {data?.products.slice(0, 4).map((product, i) => (
                 <Product key={`${product.name}-${i}`} product={product} />
               ))}
             </Box>
