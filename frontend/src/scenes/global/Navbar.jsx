@@ -1,7 +1,15 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { Badge, Box, IconButton, Menu, MenuItem, Button, Typography } from "@mui/material";
+import {
+  Badge,
+  Box,
+  IconButton,
+  Menu,
+  MenuItem,
+  Button,
+  Typography,
+} from "@mui/material";
 import {
   PersonOutline,
   ShoppingBagOutlined,
@@ -22,6 +30,7 @@ const Navbar = () => {
   const { userInfo } = useSelector((state) => state.auth);
 
   const [anchorEl, setAnchorEl] = useState(null); // État pour l'ancrage du menu
+  const [scrolled, setScrolled] = useState(false);
 
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
@@ -43,6 +52,18 @@ const Navbar = () => {
     }
   };
 
+  useEffect(() => {
+    const handleScroll = () => {
+      const isScrolled = window.scrollY > 0;
+      setScrolled(isScrolled);
+    };
+
+    window.addEventListener("scroll", handleScroll);
+
+    // Nettoyer l'écouteur d'événements
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
   return (
     <Box
       display="flex"
@@ -55,6 +76,9 @@ const Navbar = () => {
       top="0"
       left="0"
       zIndex="1"
+      sx={{
+        boxShadow: scrolled ? "0 2px 4px rgba(0,0,0,0.05)" : "none", // Ajoute une ombre légère quand on scroll
+      }}
     >
       <Box
         width="80%"
@@ -64,33 +88,46 @@ const Navbar = () => {
         alignItems="center"
       >
         <Box
-        width="30%"
-          onClick={() => navigate("/")}
-          sx={{ "&:hover": { cursor: "pointer" } }}
-          color={shades.secondary[500]}
+          width="30%"
+          sx={{
+            display: "flex",
+            alignItems: "center",
+          }}
         >
-          PREA
+          <IconButton sx={{ color: "black" }}>
+            <MenuOutlined />
+          </IconButton>
+          <span
+            style={{
+              height: "24px", // Hauteur de la barre, à ajuster selon vos besoins
+              width: "1px", // Largeur de la barre
+              backgroundColor: "#ddd", // Couleur de la barre
+              margin: "0 10px", // Espace autour de la barre
+            }}
+          ></span>
+          <Box
+            onClick={() => navigate("/")}
+            sx={{
+              "&:hover": { cursor: "pointer" },
+              marginLeft: "10px",
+            }}
+            color={shades.secondary[500]}
+          >
+            PREA
+          </Box>
         </Box>
 
-        {/* <Box display="flex">
-          <Button component={Link} to="/menu1">Menu1</Button>
-          <Button component={Link} to="/menu2">Menu2</Button>
-          <Button component={Link} to="/menu3">Menu3</Button>
-          <Button component={Link} to="/menu4">Menu4</Button>
-          <Button component={Link} to="/menu5">Menu5</Button>
-        </Box> */}
         <Box width="40%">
           <SearchBox />
         </Box>
 
         <Box
-        width="30%"
+          width="30%"
           display="flex"
           justifyContent="end"
           columnGap="20px"
           zIndex="2"
         >
-            
           {/* <IconButton sx={{ color: "black" }}>
             <SearchOutlined />
           </IconButton> */}
@@ -114,12 +151,10 @@ const Navbar = () => {
               sx={{ color: "black" }}
             >
               <ShoppingBagOutlined />
-              <Typography>
-                Panier
-              </Typography>
+              <Typography>Panier</Typography>
             </IconButton>
           </Badge>
-          
+
           {/* Combined User and Admin Menu */}
           {userInfo ? (
             <Box>
@@ -193,15 +228,9 @@ const Navbar = () => {
           ) : (
             <IconButton component={Link} to="/login" sx={{ color: "black" }}>
               <PersonOutline />
-              <Typography>
-                Identifiez-vous
-              </Typography>
+              <Typography>Identifiez-vous</Typography>
             </IconButton>
           )}
-
-          <IconButton sx={{ color: "black" }}>
-            <MenuOutlined />
-          </IconButton>
         </Box>
       </Box>
     </Box>

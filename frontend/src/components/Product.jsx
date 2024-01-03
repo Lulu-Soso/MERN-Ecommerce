@@ -93,7 +93,7 @@ const Product = ({ product, width }) => {
           </Typography>
         </Box>
 
-        <Rating value={product.rating} text={`${product.numReviews} reviews`} />
+        <Rating value={product.rating} text={`${product.numReviews} avis`} />
 
         <Typography fontWeight="bold">${product.price}</Typography>
       </Box>

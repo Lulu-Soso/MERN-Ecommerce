@@ -273,7 +273,7 @@ const ProductDetails = () => {
 
               <Rating
                 value={product.rating}
-                text={`${product.numReviews} reviews`}
+                text={`${product.numReviews} avis`}
               />
 
               <Box>
@@ -290,7 +290,7 @@ const ProductDetails = () => {
           <Box m="20px 0">
             <Tabs value={value} onChange={handleChange}>
               <Tab label="DESCRIPTION" value="description" />
-              <Tab label="REVIEWS" value="reviews" />
+              <Tab label="AVIS" value="reviews" />
             </Tabs>
           </Box>
           <Box display="flex" flexWrap="wrap" gap="15px">

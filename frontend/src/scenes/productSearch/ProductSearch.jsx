@@ -21,8 +21,37 @@ const ProductSearch = () => {
   return (
     <Box width="80%" m="80px auto">
       <Box display="flex" width="100%">
-      <Box width="20%" minWidth="200px" p="10px">
+      <Box width="20%" minWidth="200px" p="10px" sx={{
+                position: "sticky", // `static` pour mobile, `sticky` pour les autres
+                top: 80,
+                alignSelf: "flex-start",
+                overflowY: "auto",
+              }}>
         <Box>
+          <Typography m="10px 0">
+            hello colonne gauche Hello
+          </Typography>
+          <Typography m="10px 0">
+            hello colonne gauche Hello
+          </Typography>
+          <Typography m="10px 0">
+            hello colonne gauche Hello
+          </Typography>
+          <Typography m="10px 0">
+            hello colonne gauche Hello
+          </Typography>
+          <Typography m="10px 0">
+            hello colonne gauche Hello
+          </Typography>
+          <Typography m="10px 0">
+            hello colonne gauche Hello
+          </Typography>
+          <Typography m="10px 0">
+            hello colonne gauche Hello
+          </Typography>
+          <Typography m="10px 0">
+            hello colonne gauche Hello
+          </Typography>
           <Typography m="10px 0">
             hello colonne gauche Hello
           </Typography>

@@ -54,6 +54,9 @@ function Login() {
             margin="normal"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
+            sx={{
+              zIndex: 0,
+            }}
           />
           <TextField
             label="Mot de passe"
@@ -63,6 +66,9 @@ function Login() {
             margin="normal"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
+            sx={{
+              zIndex: 0,
+            }}
           />
           <Button
             disabled={isLoading}

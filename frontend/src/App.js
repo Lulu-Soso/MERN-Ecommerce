@@ -50,6 +50,8 @@ function App() {
           <Route path="/product/:id" element={<ProductDetails />} />
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
+          {/* <Route path="checkout" element={<Checkout />} /> */}
+          {/* <Route path="checkout/success" element={<Confirmation />} /> */}
 
           {/* private Route */}
           <Route path="/shipping" element={<PrivateRoute><Shipping /></PrivateRoute>} />

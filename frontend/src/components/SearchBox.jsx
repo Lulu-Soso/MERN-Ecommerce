@@ -21,7 +21,14 @@ const SearchBox = () => {
     <Box
       component='form'
       onSubmit={submitHandler}
-      sx={{ display: 'flex', alignItems: 'center', ml: 1, mr: 1 }}
+      sx={{ 
+        display: 'flex', 
+        alignItems: 'center', 
+        ml: 1, 
+        mr: 1,
+        zIndex: 5,
+        position: 'relative'
+      }}
     >
       <TextField
         variant='outlined'
@@ -33,14 +40,16 @@ const SearchBox = () => {
         size='small'
         sx={{
           flexGrow: 1,
-          backgroundColor: 'background.paper',
+          // backgroundColor: 'background.paper',
+          // backgroundColor: 'white',
           borderRadius: '5px',
+          zIndex: 5,
         }}
       />
       <Button
         type='submit'
         variant='contained'
-        color='primary'
+        // color='primary'
         sx={{ p: 1, ml: 1 }}
       >
         Rechercher
