@@ -1,10 +1,10 @@
-import React, { useState } from "react";
-import { Link, useParams } from "react-router-dom";
-import { Tabs, Tab, Box, Typography } from "@mui/material";
+import React from "react";
+import { useParams } from "react-router-dom";
+import { Box, Typography } from "@mui/material";
 import Product from "../../components/Product";
 import Loader from "../../components/Loader";
 import Message from "../../components/Message";
-import useMediaQuery from "@mui/material/useMediaQuery";
+// import useMediaQuery from "@mui/material/useMediaQuery";
 import { useGetProductsQuery } from "../../slices/productsApiSlice";
 import Paginate from "../../components/Paginate";
 

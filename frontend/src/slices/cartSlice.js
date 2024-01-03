@@ -5,6 +5,7 @@ const initialState = localStorage.getItem("cart")
   ? JSON.parse(localStorage.getItem("cart"))
   : {
       isCartOpen: false,
+      isSidebarOpen: false,
       cartItems: [],
       shippingAddress: {},
       paymentMethod: "Paypal",
@@ -16,6 +17,9 @@ const cartSlice = createSlice({
   reducers: {
     setIsCartOpen: (state) => {
       state.isCartOpen = !state.isCartOpen;
+    },
+    setIsSidebarOpen: (state) => {
+      state.isSidebarOpen = !state.isSidebarOpen;
     },
     addToCart: (state, action) => {
       const item = action.payload;
@@ -53,6 +57,7 @@ const cartSlice = createSlice({
 
 export const {
   setIsCartOpen,
+  setIsSidebarOpen,
   addToCart,
   removeFromCart,
   saveShippingAddress,

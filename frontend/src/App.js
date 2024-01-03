@@ -8,6 +8,7 @@ import Home from "./scenes/home/Home";
 import Navbar from "./scenes/global/Navbar";
 import Footer from "./scenes/global/Footer";
 import ProductDetails from "./scenes/productDetails/ProductDetails";
+import Sidebar from "./scenes/global/Sidebar";
 import CartMenu from "./scenes/global/CartMenu";
 // import Checkout from "./scenes/checkout/Checkout";
 // import Confirmation from "./scenes/checkout/Confirmation";
@@ -41,6 +42,7 @@ function App() {
       <BrowserRouter>
         <Navbar />
         <ScrollToTop />
+        <Sidebar />
         <Routes>
           <Route path="/" element={<Home />} />
           {/* <Route path="/search/:keyword" element={<Home />} /> */}
