@@ -24,7 +24,6 @@ const CartMenu = () => {
   const isCartOpen = useSelector((state) => state.cart.isCartOpen);
 
   const cartItems = useSelector((state) => state.cart.cartItems);
-  // console.log(cartItems);
 
   const goToProductDetails = (item) => {
     dispatch(setIsCartOpen({}));
@@ -44,10 +43,17 @@ const CartMenu = () => {
     dispatch(setIsCartOpen({}));
   };
 
+  const handleCloseCart = () => {
+    if (isCartOpen) {
+      dispatch(setIsCartOpen(false));
+    }
+  };
+
   return (
     <>
       {isCartOpen && (
         <Box
+        onClick={handleCloseCart}
           backgroundColor="rgba(0, 0, 0, 0.4)"
           position="fixed"
           zIndex={9}
