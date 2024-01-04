@@ -114,7 +114,8 @@ const Order = () => {
   return isLoading ? (
     <Loader />
   ) : error ? (
-    <Message severity="error">{error}</Message>
+    // <Message severity="error">{error}</Message>
+    <Message severity="error">{error?.data?.message || error.error}</Message>
   ) : (
     <Box width="80%" m="80px auto">
       <Typography variant="h4" gutterBottom>
@@ -182,7 +183,7 @@ const Order = () => {
                       <Grid container key={index} spacing={2}>
                         <Grid item xs={1}>
                           <img
-                            src={item.image}
+                            src={item.mainImage}
                             alt={item.name}
                             style={{ width: "100%" }}
                           />

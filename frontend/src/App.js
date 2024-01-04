@@ -10,8 +10,6 @@ import Footer from "./scenes/global/Footer";
 import ProductDetails from "./scenes/productDetails/ProductDetails";
 import Sidebar from "./scenes/global/Sidebar";
 import CartMenu from "./scenes/global/CartMenu";
-// import Checkout from "./scenes/checkout/Checkout";
-// import Confirmation from "./scenes/checkout/Confirmation";
 import Login from "./scenes/login/Login";
 import Register from "./scenes/register/Register";
 import Shipping from "./scenes/shipping/Shipping";
@@ -45,15 +43,12 @@ function App() {
         <Sidebar />
         <Routes>
           <Route path="/" element={<Home />} />
-          {/* <Route path="/search/:keyword" element={<Home />} /> */}
           <Route path="/search/:keyword" element={<ProductSearch />} />
           <Route path="/page/:pageNumber" element={<Home />} />
           <Route path="/search/:keyword/page/:pageNumber" element={<Home />} />
           <Route path="/product/:id" element={<ProductDetails />} />
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
-          {/* <Route path="checkout" element={<Checkout />} /> */}
-          {/* <Route path="checkout/success" element={<Confirmation />} /> */}
 
           {/* private Route */}
           <Route path="/shipping" element={<PrivateRoute><Shipping /></PrivateRoute>} />

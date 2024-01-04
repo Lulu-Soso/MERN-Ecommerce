@@ -37,7 +37,7 @@ const Sidebar = () => {
             width: 'max(200px, 20%)',
             height: '100%',
             backgroundColor: 'white',
-            zIndex: 10,
+            zIndex: 99,
             // boxShadow: '2px 0 3px rgba(0,0,0,0.1)'
           }}
         >

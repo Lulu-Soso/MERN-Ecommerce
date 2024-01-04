@@ -10,9 +10,10 @@ const Subscribe = () => {
       <IconButton>
         <MarkEmailReadOutlinedIcon fontSize="large" />
       </IconButton>
-      <Typography variant="h3">Subscribe To Our Newsletter</Typography>
+      <Typography variant="h3">Abonnez-vous à notre newsletter</Typography>
       <Typography>
-        and receive $20 coupon for your first order when you checkout
+        et recevez un coupon de 20 € pour votre première commande lors du
+        paiement.
       </Typography>
       <Box
         p="2px 4px"
@@ -24,13 +25,13 @@ const Subscribe = () => {
       >
         <InputBase
           sx={{ ml: 1, flex: 1 }}
-          placeholder="Enter email"
+          placeholder="Entrer votre adresse mail"
           onChange={(e) => setEmail(e.target.value)}
           value={email}
         />
         <Divider sx={{ height: 28, m: 0.5 }} orientation="vertical" />
         <Typography sx={{ p: "10px", ":hover": { cursor: "pointer" } }}>
-          Subscribe
+          Souscrire
         </Typography>
       </Box>
     </Box>

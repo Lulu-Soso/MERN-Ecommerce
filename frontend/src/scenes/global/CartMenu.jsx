@@ -24,7 +24,7 @@ const CartMenu = () => {
   const isCartOpen = useSelector((state) => state.cart.isCartOpen);
 
   const cartItems = useSelector((state) => state.cart.cartItems);
-  console.log(cartItems);
+  // console.log(cartItems);
 
   const goToProductDetails = (item) => {
     dispatch(setIsCartOpen({}));
@@ -78,7 +78,7 @@ const CartMenu = () => {
               }}
             >
               <Typography variant="h3">
-                SHOPPING BAG (
+                PANIER d'ACHAT (
                 {cartItems.reduce((acc, item) => acc + item.qty, 0)})
               </Typography>
               <IconButton onClick={() => dispatch(setIsCartOpen(false))}>
@@ -193,9 +193,8 @@ const CartMenu = () => {
                     m: "20px 0",
                   }}
                 >
-                  <Typography fontWeight="bold">SUBTOTAL</Typography>
+                  <Typography fontWeight="bold">SOUS-TOTAL :</Typography>
                   <Typography fontWeight="bold">
-                    TOTAL : $
                     {cartItems
                       .reduce((acc, item) => acc + item.qty * item.price, 0)
                       .toFixed(2)}
@@ -214,7 +213,7 @@ const CartMenu = () => {
                   onClick={checkoutHandler}
                   disabled={cartItems.length === 0}
                 >
-                  PROCEED TO CHECKOUT
+                  PROCEDER AU PAIEMENT
                 </Button>
               </Box>
             )}

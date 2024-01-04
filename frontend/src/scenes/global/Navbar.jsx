@@ -142,8 +142,8 @@ const Navbar = () => {
               "& .MuiBadge-badge": {
                 right: 5,
                 top: 5,
-                padding: "0 4px",
-                height: "14px",
+                padding: "5px",
+                height: "18px",
                 minWidth: "13px",
               },
             }}

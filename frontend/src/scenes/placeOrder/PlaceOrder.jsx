@@ -45,6 +45,7 @@ const PlaceOrder = () => {
         taxPrice: cart.taxPrice,
         totalPrice: cart.totalPrice,
       }).unwrap();
+
       dispatch(clearCartItems());
       navigate(`/order/${res._id}`);
     } catch (err) {
@@ -143,14 +144,16 @@ const PlaceOrder = () => {
                 </Typography>
               </Box>
 
-              {error && <Message variant="danger">{error}</Message>}
+              {/* {error && <Message severity="error">{error}</Message>} */}
+              {error && <Message severity="error">{error.data.message || error.error}</Message>}
+
 
               <Button
                 type="button"
                 variant="contained"
-                // color="primary"
                 disabled={cart.cartItems.length === 0}
                 onClick={placeOrderHandler}
+                // onClick={() => console.log("hello")}
                 fullWidth
               >
                 Passer la Commande
