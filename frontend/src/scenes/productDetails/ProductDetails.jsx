@@ -48,6 +48,11 @@ const ProductDetails = () => {
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
 
   const [value, setValue] = useState("description");
+  const zoomRef = useRef(null);
+
+  const [cadragePos, setCadragePos] = useState({ x: 0, y: 0 });
+  const [cadrageVisible, setCadrageVisible] = useState(false);
+  const cadrageSize = { width: 350, height: 220 };
 
   const {
     data: product,
@@ -95,6 +100,37 @@ const ProductDetails = () => {
   const handleMouseLeaveThumbnails = () => {
     setHoveredImage(selectedImage); // Réinitialiser l'image survolée à l'image sélectionnée
   };
+
+  const handleMouseMove = (e) => {
+    if (zoomRef.current) {
+      const { left, top, width, height } = e.target.getBoundingClientRect();
+      const x = (e.clientX - left) / width * 100;
+      const y = (e.clientY - top) / height * 100;
+      zoomRef.current.style.backgroundPosition = `${x}% ${y}%`;
+  
+      // Utiliser clientX et clientY pour calculer la position du cadrage
+      const cadrageX = Math.min(width - cadrageSize.width, Math.max(0, e.clientX - left - cadrageSize.width / 2));
+      const cadrageY = Math.min(height - cadrageSize.height, Math.max(0, e.clientY - top - cadrageSize.height / 2));
+      setCadragePos({ x: cadrageX, y: cadrageY });
+    }
+  };
+  
+
+  const handleMouseEnter = () => {
+    zoomRef.current.style.display = "block";
+    setCadrageVisible(true);
+  };
+
+  const handleMouseLeave = () => {
+    zoomRef.current.style.display = "none";
+    setCadrageVisible(false);
+  };
+
+  useEffect(() => {
+    if (zoomRef.current && selectedImage) {
+      zoomRef.current.style.backgroundImage = `url(${selectedImage})`;
+    }
+  }, [selectedImage]);
 
   if (isProductLoading || isProductsLoading) {
     return <Loader />;
@@ -149,26 +185,31 @@ const ProductDetails = () => {
           <Box display="flex" flexWrap="wrap" columnGap="40px">
             {/* IMAGES */}
             <Box
-              flex="1 1 40%"
+          flex="1 1 40%"
+          sx={{ position: isMobile ? "static" : "sticky", top: 80, alignSelf: "flex-start", maxHeight: isMobile ? "none" : "100vh", overflowY: "auto" }}
+          onMouseLeave={handleMouseLeaveThumbnails}
+        >
+          <img
+            alt={product.name}
+            src={selectedImage}
+            onMouseEnter={handleMouseEnter}
+            onMouseMove={handleMouseMove}
+            onMouseLeave={handleMouseLeave}
+            style={{ width: "100%", height: "auto", objectFit: "contain", transition: "opacity 0.5s ease" }}
+          />
+          {cadrageVisible && (
+            <Box
               sx={{
-                position: isMobile ? "static" : "sticky",
-                top: 80,
-                alignSelf: "flex-start",
-                maxHeight: isMobile ? "none" : "100vh",
-                overflowY: "auto",
+                position: "absolute",
+                left: `${cadragePos.x}px`,
+                top: `${cadragePos.y}px`,
+                width: `${cadrageSize.width}px`,
+                height: `${cadrageSize.height}px`,
+                border: "2px solid black",
+                pointerEvents: "none",
               }}
-              onMouseLeave={handleMouseLeaveThumbnails}
-            >
-              <img
-                alt={product.name}
-                src={hoveredImage}
-                style={{
-                  width: "100%",
-                  height: "auto",
-                  objectFit: "contain",
-                  transition: "opacity 0.5s ease",
-                }}
-              />
+            />
+          )}
               <Box display="flex" justifyContent="space-around" mt="10px">
                 {thumbnails.map((imgSrc, index) => (
                   <img
@@ -190,8 +231,25 @@ const ProductDetails = () => {
               </Box>
             </Box>
 
+            {/* Zone de loupe */}
+        
+
             {/* ACTIONS */}
             <Box flex="1 1 50%" mb="40px" ref={infoRef}>
+
+            <Box
+          ref={zoomRef}
+          sx={{
+            width: "50%",
+            height: 600,
+            backgroundSize: '200%',
+            display: 'none',
+            position: 'absolute',
+            border: '1px solid black',
+            zIndex: 10
+          }}
+        />
+
               <Box display="flex" mb="40px" justifyContent="space-between">
                 <Box>Home/Item</Box>
                 <Box>Prev Next</Box>
