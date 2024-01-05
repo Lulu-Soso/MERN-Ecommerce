@@ -84,8 +84,7 @@ const CartMenu = () => {
               }}
             >
               <Typography variant="h3">
-                PANIER d'ACHAT (
-                {cartItems.reduce((acc, item) => acc + item.qty, 0)})
+                PANIER d'ACHAT
               </Typography>
               <IconButton onClick={() => dispatch(setIsCartOpen(false))}>
                 <CloseIcon />
@@ -176,7 +175,7 @@ const CartMenu = () => {
                               </FormControl>
                             </Box>
                             <Typography fontWeight="bold">
-                              ${item.price}
+                              {item.price} €
                             </Typography>
                           </Box>
                         </Box>
@@ -203,7 +202,7 @@ const CartMenu = () => {
                   <Typography fontWeight="bold">
                     {cartItems
                       .reduce((acc, item) => acc + item.qty * item.price, 0)
-                      .toFixed(2)}
+                      .toFixed(2)} €
                   </Typography>
                 </Box>
 
@@ -219,7 +218,8 @@ const CartMenu = () => {
                   onClick={checkoutHandler}
                   disabled={cartItems.length === 0}
                 >
-                  PROCEDER AU PAIEMENT
+                  Passer la commande (
+                {cartItems.reduce((acc, item) => acc + item.qty, 0)} articles)
                 </Button>
               </Box>
             )}

@@ -27,17 +27,13 @@ const productSchema = mongoose.Schema(
       type: String,
       required: true,
     },
-    // image: {
-    //   type: String,
-    //   required: true,
-    // },
     mainImage: {
       type: String,
       required: true,
     },
     thumbnailImages: {
       type: [String],
-      validate: [arrayLimit, "{PATH} exceeds the limit of 3"],
+      validate: [arrayLimit, "{PATH} exceeds the limit of 4"],
     },
     brand: {
       type: String,
@@ -79,7 +75,7 @@ const productSchema = mongoose.Schema(
 );
 
 function arrayLimit(val) {
-  return val.length <= 3;
+  return val.length <= 4;
 }
 
 const Product = mongoose.model("Product", productSchema);

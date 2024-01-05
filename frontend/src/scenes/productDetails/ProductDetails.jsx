@@ -77,30 +77,23 @@ const ProductDetails = () => {
 
   // const isAnyLoading = loadingProductReview || isProductsLoading;
 
+  const [hoveredImage, setHoveredImage] = useState("");
+
   useEffect(() => {
     if (product) {
       setSelectedImage(product.mainImage);
-      // Filtrer pour exclure l'image principale et s'assurer qu'il y a maximum 3 vignettes
-      const thumbnailImages = product.thumbnailImages
-        .filter((img) => img !== product.mainImage)
-        .slice(0, 3);
-      setThumbnails(thumbnailImages);
+      setThumbnails([product.mainImage, ...product.thumbnailImages]);
+      setHoveredImage(product.mainImage); // Image principale par défaut pour le survol
     }
   }, [product]);
 
-  const handleThumbnailClick = (clickedImage) => {
-    // Trouver l'index de l'image vignette cliquée dans le tableau
-    const clickedIndex = thumbnails.findIndex((img) => img === clickedImage);
+  const handleThumbnailHover = (imgSrc) => {
+    setHoveredImage(imgSrc); // Mettre à jour l'image survolée
+    setSelectedImage(imgSrc);
+  };
 
-    // Construire un nouveau tableau de vignettes
-    let updatedThumbnails = [...thumbnails];
-
-    // Remplacer la vignette cliquée par l'ancienne image principale
-    updatedThumbnails[clickedIndex] = selectedImage;
-
-    // Mettre à jour l'image principale et le tableau des vignettes
-    setSelectedImage(clickedImage);
-    setThumbnails(updatedThumbnails);
+  const handleMouseLeaveThumbnails = () => {
+    setHoveredImage(selectedImage); // Réinitialiser l'image survolée à l'image sélectionnée
   };
 
   if (isProductLoading || isProductsLoading) {
@@ -158,17 +151,23 @@ const ProductDetails = () => {
             <Box
               flex="1 1 40%"
               sx={{
-                position: isMobile ? "static" : "sticky", // `static` pour mobile, `sticky` pour les autres
+                position: isMobile ? "static" : "sticky",
                 top: 80,
                 alignSelf: "flex-start",
-                maxHeight: isMobile ? "none" : "100vh", // `none` pour mobile, `100vh` pour les autres
+                maxHeight: isMobile ? "none" : "100vh",
                 overflowY: "auto",
               }}
+              onMouseLeave={handleMouseLeaveThumbnails}
             >
               <img
                 alt={product.name}
-                src={selectedImage}
-                style={{ width: "100%", height: "auto", objectFit: "contain" }}
+                src={hoveredImage}
+                style={{
+                  width: "100%",
+                  height: "auto",
+                  objectFit: "contain",
+                  transition: "opacity 0.5s ease",
+                }}
               />
               <Box display="flex" justifyContent="space-around" mt="10px">
                 {thumbnails.map((imgSrc, index) => (
@@ -177,12 +176,15 @@ const ProductDetails = () => {
                     alt={`Thumbnail ${index + 1}`}
                     src={imgSrc}
                     style={{
-                      width: "30%", // Chaque image occupe 30% de l'espace
+                      width: "22%",
                       height: "auto",
                       objectFit: "cover",
                       cursor: "pointer",
+                      margin: "0 1%",
+                      border:
+                        imgSrc === hoveredImage ? "2px solid black" : "none",
                     }}
-                    onClick={() => handleThumbnailClick(imgSrc)}
+                    onMouseEnter={() => handleThumbnailHover(imgSrc)}
                   />
                 ))}
               </Box>
