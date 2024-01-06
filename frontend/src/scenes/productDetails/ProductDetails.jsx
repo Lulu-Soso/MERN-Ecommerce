@@ -52,7 +52,7 @@ const ProductDetails = () => {
 
   const [cadragePos, setCadragePos] = useState({ x: 0, y: 0 });
   const [cadrageVisible, setCadrageVisible] = useState(false);
-  const cadrageSize = { width: 200, height: 200 };
+  const cadrageSize = { width: 250, height: 250 };
 
   // Style pour le cadrage avec des points
   const cadrageStyle = {
@@ -227,6 +227,7 @@ const ProductDetails = () => {
                   height: "auto",
                   objectFit: "contain",
                   transition: "opacity 0.5s ease",
+                  borderRadius: "10px"
                 }}
               />
               {cadrageVisible && <Box sx={cadrageStyle} />}
@@ -244,6 +245,7 @@ const ProductDetails = () => {
                       margin: "0 1%",
                       border:
                         imgSrc === hoveredImage ? "2px solid black" : "none",
+                        borderRadius: "10px"
                     }}
                     onMouseEnter={() => handleThumbnailHover(imgSrc)}
                   />
@@ -255,18 +257,23 @@ const ProductDetails = () => {
 
             {/* ACTIONS */}
             <Box flex="1 1 50%" mb="40px" ref={infoRef}>
-              <Box
-                ref={zoomRef}
-                sx={{
-                  width: "50%",
-                  height: 600,
-                  backgroundSize: "200%",
-                  display: "none",
-                  position: "absolute",
-                  border: "1px solid black",
-                  zIndex: 10,
-                }}
-              />
+              {selectedImage && (
+                <Box
+                  ref={zoomRef}
+                  sx={{
+                    width: "100%",
+                    maxWidth: "42.6vw", // Largeur maximale, vous pouvez ajuster cette valeur
+                    height: 600,
+                    backgroundSize: "200%",
+                    display: "none",
+                    position: "absolute",
+                    // border: "1px solid rgba(128, 128, 128, 0.3) 1px",
+                    zIndex: 0,
+                    backgroundImage: `url(${selectedImage})`,
+                    borderRadius: "10px"
+                  }}
+                />
+              )}
 
               <Box display="flex" mb="40px" justifyContent="space-between">
                 <Box>Home/Item</Box>
@@ -448,8 +455,6 @@ const ProductDetails = () => {
               </Box>
             )}
           </Box>
-          {/* </>
-      )} */}
 
           {/* RELATED ITEMS */}
           <Box mt="50px" width="100%">

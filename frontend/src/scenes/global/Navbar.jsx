@@ -14,7 +14,6 @@ import {
   PersonOutline,
   ShoppingBagOutlined,
   MenuOutlined,
-  SearchOutlined,
   ArrowDropDown,
 } from "@mui/icons-material";
 import { shades } from "../../theme";
@@ -101,10 +100,10 @@ const Navbar = () => {
           </IconButton>
           <span
             style={{
-              height: "24px", // Hauteur de la barre, à ajuster selon vos besoins
-              width: "1px", // Largeur de la barre
-              backgroundColor: "#ddd", // Couleur de la barre
-              margin: "0 10px", // Espace autour de la barre
+              height: "24px",
+              width: "1px", 
+              backgroundColor: "#ddd",
+              margin: "0 10px",
             }}
           ></span>
           <Box
@@ -130,10 +129,6 @@ const Navbar = () => {
           columnGap="20px"
           zIndex="2"
         >
-          {/* <IconButton sx={{ color: "black" }}>
-            <SearchOutlined />
-          </IconButton> */}
-
           <Badge
             badgeContent={cartItems.reduce((a, c) => a + c.qty, 0)}
             color="secondary"
