@@ -28,6 +28,8 @@ const ProductEdit = () => {
     error,
   } = useGetProductDetailsQuery(productId);
 
+  console.log(product);
+
   const [updateProduct, { isLoading: loadingUpdate }] =
     useUpdateProductMutation();
   const [uploadProductImage, { isLoading: loadingUpload }] =

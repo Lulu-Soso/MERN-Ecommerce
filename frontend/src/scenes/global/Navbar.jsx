@@ -198,6 +198,14 @@ const Navbar = () => {
                       style={{ color: "red" }}
                       onClick={handleClose}
                       component={Link}
+                      to="/admin/deliverylist"
+                    >
+                      Livreurs
+                    </MenuItem>
+                    <MenuItem
+                      style={{ color: "red" }}
+                      onClick={handleClose}
+                      component={Link}
                       to="/admin/productlist"
                     >
                       Products

@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import {
@@ -10,13 +10,17 @@ import {
   CardContent,
   Button,
   Typography,
+  FormControl,
+  RadioGroup,
+  FormControlLabel,
+  Radio,
 } from "@mui/material";
 import { useDispatch, useSelector } from "react-redux";
 import Message from "../../components/Message";
 import CheckoutSteps from "../../components/CheckoutSteps";
 import Loader from "../../components/Loader";
 import { useCreateOrderMutation } from "../../slices/ordersApiSlice";
-import { clearCartItems } from "../../slices/cartSlice";
+import { saveShippingPrice, clearCartItems } from "../../slices/cartSlice";
 
 const PlaceOrder = () => {
   const navigate = useNavigate();
@@ -34,24 +38,50 @@ const PlaceOrder = () => {
 
   const dispatch = useDispatch();
 
+  useEffect(() => {
+    // Ici, vous pouvez charger les options de livraison depuis une API si nécessaire
+  }, []);
+
+  const [deliveryMethod, setDeliveryMethod] = useState("");
+  const [deliveryOptions, setDeliveryOptions] = useState([
+    { id: 1, name: "Gratuit", price: 0 },
+    { id: 2, name: "Standard", price: 5 },
+    { id: 3, name: "Express", price: 10 },
+    { id: 4, name: "Overnight", price: 20 },
+  ]);
+
+  const handleDeliveryChange = (event) => {
+    setDeliveryMethod(event.target.value);
+    const selectedOption = deliveryOptions.find(
+      (option) => option.id.toString() === event.target.value
+    );
+    if (selectedOption) {
+      dispatch(saveShippingPrice(selectedOption.price));
+    }
+  };
+  
+
   const placeOrderHandler = async () => {
     try {
-      const res = await createOrder({
+      const totalPrice = cart.itemsPrice + cart.shippingPrice + cart.taxPrice;
+      const orderData = {
         orderItems: cart.cartItems,
         shippingAddress: cart.shippingAddress,
         paymentMethod: cart.paymentMethod,
         itemsPrice: cart.itemsPrice,
         shippingPrice: cart.shippingPrice,
         taxPrice: cart.taxPrice,
-        totalPrice: cart.totalPrice,
-      }).unwrap();
-
+        totalPrice,
+      };
+  
+      const res = await createOrder(orderData).unwrap();
       dispatch(clearCartItems());
       navigate(`/order/${res._id}`);
     } catch (err) {
-      toast.error(err);
+      toast.error(err.data.message || err.error);
     }
   };
+  
 
   return (
     <Box width="80%" m="80px auto">
@@ -60,24 +90,32 @@ const PlaceOrder = () => {
         <Grid item xs={12} md={8}>
           <List>
             <ListItem>
-              <Box>
-                <Typography variant="h6">Shipping</Typography>
-                <Typography>
-                  <strong>Adresse: </strong>
-                  {`${cart.shippingAddress.address}, ${cart.shippingAddress.city} 
+              <Grid container spacing={2}>
+                <Grid item xs={12} md={3}>
+                  <Typography>
+                    <strong>Adresse de livraison : </strong>
+                  </Typography>
+                </Grid>
+                <Grid item xs={12} md={9}>
+                  <Typography>
+                    {`${cart.shippingAddress.address}, ${cart.shippingAddress.city} 
                  ${cart.shippingAddress.postalCode}, ${cart.shippingAddress.country}`}
-                </Typography>
-              </Box>
+                  </Typography>
+                </Grid>
+              </Grid>
             </ListItem>
 
             <ListItem>
-              <Box>
-                <Typography variant="h6">Payment Method</Typography>
-                <Typography>
-                  <strong>Méthode: </strong>
-                  {cart.paymentMethod}
-                </Typography>
-              </Box>
+              <Grid container spacing={2}>
+                <Grid item xs={12} md={3}>
+                  <Typography>
+                    <strong>Mode de paiement : </strong>
+                  </Typography>
+                </Grid>
+                <Grid item xs={12} md={9}>
+                  <Typography>{cart.paymentMethod}</Typography>
+                </Grid>
+              </Grid>
             </ListItem>
 
             <ListItem>
@@ -110,6 +148,29 @@ const PlaceOrder = () => {
                         </Grid>
                       </ListItem>
                     ))}
+
+                    <ListItem>
+                      <Box>
+                        <Typography variant="h6">Delivery Options</Typography>
+                        <FormControl component="fieldset">
+                          <RadioGroup
+                            aria-label="delivery-method"
+                            name="delivery-method"
+                            value={deliveryMethod}
+                            onChange={handleDeliveryChange}
+                          >
+                            {deliveryOptions.map((option) => (
+                              <FormControlLabel
+                                key={option.id}
+                                value={option.id.toString()}
+                                control={<Radio />}
+                                label={`${option.name} - $${option.price}`}
+                              />
+                            ))}
+                          </RadioGroup>
+                        </FormControl>
+                      </Box>
+                    </ListItem>
                   </List>
                 )}
               </Box>
@@ -140,13 +201,17 @@ const PlaceOrder = () => {
               </Box>
               <Box my={2}>
                 <Typography>
-                  <strong>Total: </strong>${cart.totalPrice}
+                  {/* <strong>Total: </strong>${cart.totalPrice} */}
+                  <strong>Total: </strong>${cart.itemsPrice + cart.shippingPrice + cart.taxPrice}
                 </Typography>
               </Box>
 
               {/* {error && <Message severity="error">{error}</Message>} */}
-              {error && <Message severity="error">{error.data.message || error.error}</Message>}
-
+              {error && (
+                <Message severity="error">
+                  {error.data.message || error.error}
+                </Message>
+              )}
 
               <Button
                 type="button"

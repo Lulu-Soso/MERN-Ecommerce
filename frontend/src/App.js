@@ -23,6 +23,9 @@ import ProductEdit from "./scenes/admin/productEdit/ProductEdit"
 import UserList from "./scenes/admin/userList/UserList";
 import UserEdit from "./scenes/admin/userEdit/UserEdit";
 import ProductSearch from "./scenes/productSearch/ProductSearch";
+import DeliveryList from "./scenes/admin/deliveryList/DeliveryList";
+import DeliveryEdit from "./scenes/admin/deliveryEdit/DeliveryEdit";
+
 
 const ScrollToTop = () => {
   const { pathname } = useLocation();
@@ -58,6 +61,8 @@ function App() {
           <Route path="/profile" element={<PrivateRoute><Profile /></PrivateRoute>} />
 
           {/* admin Route */}
+          <Route path="/admin/deliverylist" element={<AdminRoute><DeliveryList /></AdminRoute>} />
+          <Route path="/admin/delivery/:id/edit" element={<AdminRoute><DeliveryEdit /></AdminRoute>} />
           <Route path="/admin/orderlist" element={<AdminRoute><OrderList /></AdminRoute>} />
           <Route path="/admin/productlist" element={<AdminRoute><ProductList /></AdminRoute>} />
           <Route path="/admin/productlist/:pageNumber" element={<AdminRoute><ProductList /></AdminRoute>} />

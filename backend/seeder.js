@@ -6,6 +6,8 @@ import products from './data/products.js';
 import User from './models/userModel.js';
 import Product from './models/productModel.js';
 import Order from './models/orderModel.js';
+import Ups from './models/upsModel.js';
+import upsData from './data/ups.js';
 import connectDB from './config/db.js';
 
 dotenv.config();
@@ -17,6 +19,7 @@ const importData = async () => {
     await Order.deleteMany();
     await Product.deleteMany();
     await User.deleteMany();
+    await Ups.deleteMany();
 
     const createdUsers = await User.insertMany(users);
 
@@ -27,6 +30,7 @@ const importData = async () => {
     });
 
     await Product.insertMany(sampleProducts);
+    await Ups.insertMany(upsData);
 
     console.log('Data Imported!'.green.inverse);
     process.exit();
