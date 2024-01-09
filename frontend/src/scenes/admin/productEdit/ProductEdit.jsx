@@ -15,11 +15,17 @@ const ProductEdit = () => {
 
   const [name, setName] = useState("");
   const [price, setPrice] = useState(0);
-  const [image, setImage] = useState("");
+  const [mainImage, setMainImage] = useState("");
   const [brand, setBrand] = useState("");
   const [category, setCategory] = useState("");
   const [countInStock, setCountInStock] = useState(0);
   const [description, setDescription] = useState("");
+  const [size, setSize] = useState("");
+  const [length, setLength] = useState("");
+  const [width, setWidth] = useState("");
+  const [height, setHeight] = useState("");
+
+  console.log(length, width, height);
 
   const {
     data: product,
@@ -28,7 +34,7 @@ const ProductEdit = () => {
     error,
   } = useGetProductDetailsQuery(productId);
 
-  console.log(product);
+  // console.log(product);
 
   const [updateProduct, { isLoading: loadingUpdate }] =
     useUpdateProductMutation();
@@ -42,26 +48,36 @@ const ProductEdit = () => {
     if (product) {
       setName(product.name);
       setPrice(product.price);
-      setImage(product.image);
+      setMainImage(product.mainImage);
       setBrand(product.brand);
       setCategory(product.category);
       setCountInStock(product.countInStock);
       setDescription(product.description);
+      setSize(product.size);
+      setLength(product.packageSize.L);
+      setWidth(product.packageSize.W);
+      setHeight(product.packageSize.H);
     }
   }, [product]);
 
+
   const submitHandler = async (e) => {
     e.preventDefault();
+    console.log(e);
     try {
       await updateProduct({
         productId,
         name,
         price,
-        image,
+        mainImage,
         brand,
         category,
         description,
         countInStock,
+        size,
+        length,
+        width,
+        height
       });
       toast.success("Product updated");
       refetch();
@@ -77,7 +93,7 @@ const ProductEdit = () => {
     try {
       const res = await uploadProductImage(formData).unwrap();
       toast.success(res.message);
-      setImage(res.image);
+      setMainImage(res.image);
     } catch (err) {
       toast.error(err?.data?.message || err.error);
     }
@@ -111,8 +127,8 @@ const ProductEdit = () => {
               <TextField
                 label="Image URL"
                 variant="outlined"
-                value={image}
-                onChange={(e) => setImage(e.target.value)}
+                value={mainImage}
+                onChange={(e) => setMainImage(e.target.value)}
                 margin="normal"
                 fullWidth
               />
@@ -180,6 +196,38 @@ const ProductEdit = () => {
                 variant="outlined"
                 value={description}
                 onChange={(e) => setDescription(e.target.value)}
+                margin="normal"
+                fullWidth
+              />
+              <TextField
+                label="Taille"
+                variant="outlined"
+                value={size}
+                onChange={(e) => setSize(e.target.value)}
+                margin="normal"
+                fullWidth
+              />
+              <TextField
+                label="Longueur du colis"
+                variant="outlined"
+                value={length}
+                onChange={(e) => setLength(e.target.value)}
+                margin="normal"
+                fullWidth
+              />
+              <TextField
+                label="Largeur du colis"
+                variant="outlined"
+                value={width}
+                onChange={(e) => setWidth(e.target.value)}
+                margin="normal"
+                fullWidth
+              />
+              <TextField
+                label="Hauteur du colis"
+                variant="outlined"
+                value={height}
+                onChange={(e) => setHeight(e.target.value)}
                 margin="normal"
                 fullWidth
               />

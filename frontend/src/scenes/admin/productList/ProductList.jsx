@@ -78,16 +78,6 @@ const ProductList = () => {
         </Grid>
       </Grid>
 
-      {/* {loadingCreate && <Loader />}
-      {isLoading ? (
-        <Loader />
-      ) : error ? (
-        <Message severity="error">{error}</Message>
-      ) : ( */}
-
-      {/* {loadingCreate && <Loader />}
-{loadingDelete && <Loader />} */}
-
       {isAnyLoading ? (
         <Loader />
       ) : error ? (
@@ -103,6 +93,8 @@ const ProductList = () => {
                   <TableCell>PRIX</TableCell>
                   <TableCell>CATÉGORIE</TableCell>
                   <TableCell>MARQUE</TableCell>
+                  <TableCell>TAILLE</TableCell>
+                  <TableCell>DIMENSIONS</TableCell>
                   <TableCell></TableCell>
                 </TableRow>
               </TableHead>
@@ -114,6 +106,8 @@ const ProductList = () => {
                     <TableCell>{product.price} €</TableCell>
                     <TableCell>{product.category}</TableCell>
                     <TableCell>{product.brand}</TableCell>
+                    <TableCell>{product.size}</TableCell>
+                    <TableCell>{product.packageSize.L} x {product.packageSize.W} x {product.packageSize.H}</TableCell>
                     <TableCell>
                       <Link to={`/admin/product/${product._id}/edit`} style={{ marginRight: '10px' }}>
                         <Button variant="outlined">

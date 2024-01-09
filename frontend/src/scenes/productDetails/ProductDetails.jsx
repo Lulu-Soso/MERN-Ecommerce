@@ -382,8 +382,8 @@ const ProductDetails = () => {
             {value === "description" && (
               <Box>
                 <Typography>{product.description}</Typography>
-                <Typography>Taille: {product.packageSize.size}</Typography>
-                <Typography>Dimensions: (L x l x H) {product.packageSize.dimensions.L} cm x {product.packageSize.dimensions.W} cm x {product.packageSize.dimensions.H} cm </Typography>
+                <Typography>Taille du colis : {product.size}</Typography>
+                <Typography>Dimensions du colis (L x l x H) : {product.packageSize.L} cm x {product.packageSize.W} cm x {product.packageSize.H} cm </Typography>
               </Box>
             )}
             {value === "reviews" && (
