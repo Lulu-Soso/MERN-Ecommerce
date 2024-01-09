@@ -1,4 +1,5 @@
 import { Link } from "react-router-dom";
+import { useSelector } from "react-redux"
 import {
   Box,
   Grid,
@@ -11,6 +12,10 @@ import {
   TableBody,
   Paper,
   Button,
+  FormControl,
+  RadioGroup,
+  FormControlLabel,
+  Radio
 } from "@mui/material";
 import EditIcon from "@mui/icons-material/Edit";
 import AddIcon from "@mui/icons-material/Add";
@@ -19,19 +24,33 @@ import {
   useGetUpsOptionsQuery,
   useCreateUpsOptionMutation,
   useDeleteUpsOptionMutation,
-} from "../../../slices/upsApiSlice"; // Assurez-vous que le chemin est correct
+} from "../../../slices/upsApiSlice";
 import Message from "../../../components/Message";
 import Loader from "../../../components/Loader";
 import { toast } from "react-toastify";
+import { useDispatch } from 'react-redux';
+
+import { toggleFreeShipping } from "../../../slices/cartSlice"
+
+const labelTranslations = {
+  "Very Small": "Très Petit",
+  Small: "Petit",
+  Medium: "Moyen",
+  Large: "Grand",
+  "Very Large": "Très Grand",
+};
 
 const DeliveryList = () => {
-  // Utilisez useGetUpsOptionsQuery pour obtenir les options UPS
   const {
     data: ups,
     isLoading: upsLoading,
     error: upsError,
     refetch,
   } = useGetUpsOptionsQuery();
+
+  const dispatch = useDispatch()
+
+  const freeShippingEnabled = useSelector((state) => state.cart.freeShippingEnabled);
 
   const [createUpsOption, { isLoading: upsCreate }] =
     useCreateUpsOptionMutation();
@@ -40,6 +59,16 @@ const DeliveryList = () => {
     useDeleteUpsOptionMutation();
 
   const isAnyLoading = upsLoading || upsCreate || loadingDelete;
+
+  const enableFreeShipping = () => {
+    if (toggleFreeShipping) {
+      dispatch(toggleFreeShipping());
+    }
+  };
+
+  const disableFreeShipping = () => {
+    dispatch(toggleFreeShipping()); 
+  };
 
   const createUpsOptionHandler = async () => {
     if (
@@ -71,6 +100,33 @@ const DeliveryList = () => {
       <Grid container justifyContent="center" spacing={3}>
         <Grid item xs={12}>
           <Typography variant="h4" align="center">
+            Offre Livraison
+          </Typography>
+          <Box>
+            <FormControl component="fieldset">
+              <RadioGroup>
+                <FormControlLabel
+                  control={<Radio />}
+                  label="Livraison gratuite à partir de 100 €"
+                  checked={freeShippingEnabled}
+                  onChange={enableFreeShipping}
+                />
+              </RadioGroup>
+            </FormControl>
+            {freeShippingEnabled && (
+              <Button
+                variant="outlined"
+                color="secondary"
+                onClick={disableFreeShipping}
+              >
+                Désactiver l'offre
+              </Button>
+            )}
+          </Box>
+        </Grid>
+
+        <Grid item xs={12}>
+          <Typography variant="h4" align="center">
             Tarifs UPS
           </Typography>
         </Grid>
@@ -81,7 +137,7 @@ const DeliveryList = () => {
             color="primary"
             onClick={createUpsOptionHandler}
           >
-            Créer une option UPS
+            Créer un champ UPS
           </Button>
         </Grid>
       </Grid>
@@ -90,48 +146,48 @@ const DeliveryList = () => {
       ) : upsError ? (
         <Message severity="error">{upsError}</Message>
       ) : (
-          <TableContainer component={Paper}>
-            <Table>
-              <TableHead>
-                <TableRow>
-                  <TableCell>Label</TableCell>
-                  <TableCell>France</TableCell>
-                  <TableCell>European Union</TableCell>
-                  <TableCell>United Kingdom</TableCell>
-                  <TableCell>United States</TableCell>
-                  <TableCell></TableCell>
-                </TableRow>
-              </TableHead>
-              <TableBody>
-                {ups?.map((option) => (
-                  <TableRow key={option._id}>
-                    <TableCell>{option.label}</TableCell>
-                    <TableCell>{option.fees.france}</TableCell>
-                    <TableCell>{option.fees.europeanUnion}</TableCell>
-                    <TableCell>{option.fees.unitedKingdom}</TableCell>
-                    <TableCell>{option.fees.unitedStates}</TableCell>
-                    <TableCell>
-                      <Link
-                        to={`/admin/delivery/${option._id}/edit`}
-                        style={{ marginRight: "10px" }}
-                      >
-                        <Button variant="outlined">
-                          <EditIcon />
-                        </Button>
-                      </Link>
-                      <Button
-                        variant="outlined"
-                        color="error"
-                        onClick={() => deleteHandler(option._id)}
-                      >
-                        <DeleteIcon />
+        <TableContainer component={Paper}>
+          <Table>
+            <TableHead>
+              <TableRow>
+                <TableCell>Label</TableCell>
+                <TableCell>France</TableCell>
+                <TableCell>European Union</TableCell>
+                <TableCell>United Kingdom</TableCell>
+                <TableCell>United States</TableCell>
+                <TableCell></TableCell>
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              {ups?.map((option) => (
+                <TableRow key={option._id}>
+                  <TableCell>{labelTranslations[option.label]}</TableCell>
+                  <TableCell>{option.fees.france} € TTC</TableCell>
+                  <TableCell>{option.fees.europeanUnion} € TTC</TableCell>
+                  <TableCell>{option.fees.unitedKingdom} € TTC</TableCell>
+                  <TableCell>{option.fees.unitedStates} € TTC</TableCell>
+                  <TableCell>
+                    <Link
+                      to={`/admin/delivery/${option._id}/edit`}
+                      style={{ marginRight: "10px" }}
+                    >
+                      <Button variant="outlined">
+                        <EditIcon />
                       </Button>
-                    </TableCell>
-                  </TableRow>
-                ))}
-              </TableBody>
-            </Table>
-          </TableContainer>
+                    </Link>
+                    <Button
+                      variant="outlined"
+                      color="error"
+                      onClick={() => deleteHandler(option._id)}
+                    >
+                      <DeleteIcon />
+                    </Button>
+                  </TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        </TableContainer>
       )}
     </Box>
   );

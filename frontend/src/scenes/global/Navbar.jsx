@@ -200,7 +200,7 @@ const Navbar = () => {
                       component={Link}
                       to="/admin/deliverylist"
                     >
-                      Livreurs
+                      Livraison
                     </MenuItem>
                     <MenuItem
                       style={{ color: "red" }}

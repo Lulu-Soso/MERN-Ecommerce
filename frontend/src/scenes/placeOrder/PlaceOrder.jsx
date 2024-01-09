@@ -20,7 +20,7 @@ import Message from "../../components/Message";
 import CheckoutSteps from "../../components/CheckoutSteps";
 import Loader from "../../components/Loader";
 import { useCreateOrderMutation } from "../../slices/ordersApiSlice";
-import { saveShippingPrice, clearCartItems } from "../../slices/cartSlice";
+import { clearCartItems } from "../../slices/cartSlice";
 
 const PlaceOrder = () => {
   const navigate = useNavigate();
@@ -45,43 +45,38 @@ const PlaceOrder = () => {
   const [deliveryMethod, setDeliveryMethod] = useState("");
   const [deliveryOptions, setDeliveryOptions] = useState([
     { id: 1, name: "Gratuit", price: 0 },
-    { id: 2, name: "Standard", price: 5 },
-    { id: 3, name: "Express", price: 10 },
-    { id: 4, name: "Overnight", price: 20 },
+    { id: 2, name: "Ups", price: 10 },
   ]);
 
   const handleDeliveryChange = (event) => {
     setDeliveryMethod(event.target.value);
+    // Mettez à jour le prix de livraison en fonction de l'option choisie
     const selectedOption = deliveryOptions.find(
       (option) => option.id.toString() === event.target.value
     );
     if (selectedOption) {
-      dispatch(saveShippingPrice(selectedOption.price));
+      // dispatch(updateShippingPrice(selectedOption.price));
     }
   };
-  
 
   const placeOrderHandler = async () => {
     try {
-      const totalPrice = cart.itemsPrice + cart.shippingPrice + cart.taxPrice;
-      const orderData = {
+      const res = await createOrder({
         orderItems: cart.cartItems,
         shippingAddress: cart.shippingAddress,
         paymentMethod: cart.paymentMethod,
         itemsPrice: cart.itemsPrice,
         shippingPrice: cart.shippingPrice,
         taxPrice: cart.taxPrice,
-        totalPrice,
-      };
-  
-      const res = await createOrder(orderData).unwrap();
+        totalPrice: cart.totalPrice,
+      }).unwrap();
+
       dispatch(clearCartItems());
       navigate(`/order/${res._id}`);
     } catch (err) {
-      toast.error(err.data.message || err.error);
+      toast.error(err);
     }
   };
-  
 
   return (
     <Box width="80%" m="80px auto">
@@ -151,7 +146,7 @@ const PlaceOrder = () => {
 
                     <ListItem>
                       <Box>
-                        <Typography variant="h6">Delivery Options</Typography>
+                        <Typography variant="h6">Mode de livraison</Typography>
                         <FormControl component="fieldset">
                           <RadioGroup
                             aria-label="delivery-method"
@@ -201,8 +196,7 @@ const PlaceOrder = () => {
               </Box>
               <Box my={2}>
                 <Typography>
-                  {/* <strong>Total: </strong>${cart.totalPrice} */}
-                  <strong>Total: </strong>${cart.itemsPrice + cart.shippingPrice + cart.taxPrice}
+                  <strong>Total: </strong>${cart.totalPrice}
                 </Typography>
               </Box>
 

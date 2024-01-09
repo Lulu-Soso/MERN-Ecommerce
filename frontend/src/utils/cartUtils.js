@@ -1,6 +1,6 @@
 // Configuration des constantes pour faciliter la maintenance et les ajustements
-const FREE_SHIPPING_THRESHOLD = 100;
-const SHIPPING_COST = 10;
+// const FREE_SHIPPING_THRESHOLD = 100;
+// const SHIPPING_COST = 10;
 const TAX_RATE = 0.15;
 
 // Fonction pour arrondir et formater les nombres
@@ -16,7 +16,7 @@ export const updateCart = (state) => {
   );
 
   // Calcul du prix de la livraison
-  state.shippingPrice = addDecimals(state.itemsPrice > FREE_SHIPPING_THRESHOLD ? 0 : SHIPPING_COST);
+  // state.shippingPrice = addDecimals(state.itemsPrice > FREE_SHIPPING_THRESHOLD ? 0 : SHIPPING_COST);
 
   // Calcul du prix des taxes
   state.taxPrice = addDecimals(

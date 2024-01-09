@@ -1,18 +1,8 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { updateCart } from "../utils/cartUtils";
 
-// Définir les frais de livraison UPS
-// const initializeUpsDeliveryFees = () => {
-//   const savedUpsDeliveryFees = localStorage.getItem('upsDeliveryFees');
-//   return savedUpsDeliveryFees ? JSON.parse(savedUpsDeliveryFees) : {
-//     tresPetit: { france: 0, ue: 0, royaumeUni: 0, etatsUnis: 0 },
-//     petit: { france: 0, ue: 0, royaumeUni: 0, etatsUnis: 0 },
-//     moyen: { france: 0, ue: 0, royaumeUni: 0, etatsUnis: 0 },
-//     grand: { france: 0, ue: 0, royaumeUni: 0, etatsUnis: 0 },
-//     tresGrand: { france: 0, ue: 0, royaumeUni: 0, etatsUnis: 0 }
-//   };
-// };
-
+// const FREE_SHIPPING_THRESHOLD = 100;
+const SHIPPING_COST = 10;
 
 const initialState = localStorage.getItem("cart")
   ? JSON.parse(localStorage.getItem("cart"))
@@ -23,7 +13,7 @@ const initialState = localStorage.getItem("cart")
       shippingAddress: {},
       paymentMethod: "Paypal",
       shippingPrice: 0,
-      // upsDelivery: initializeUpsDeliveryFees(), 
+      freeShippingEnabled: false,
     };
 
 const cartSlice = createSlice({
@@ -71,13 +61,18 @@ const cartSlice = createSlice({
       state.cartItems = [];
       localStorage.setItem('cart', JSON.stringify(state));
     },
-    // saveUpsDeliveryOption: (state, action) => {
-    //   const { size, region, priceDelivery } = action.payload;
-    //   if (state.upsDelivery[size]) {
-    //     state.upsDelivery[size][region] = priceDelivery;
-    //     localStorage.setItem('upsDeliveryFees', JSON.stringify(state.upsDelivery));
-    //   }
-    // },       
+    toggleFreeShipping: (state) => {
+      state.freeShippingEnabled = !state.freeShippingEnabled;
+      localStorage.setItem('cart', JSON.stringify(state));
+
+      if (state.freeShippingEnabled) {
+        state.shippingPrice = 0;
+      } else {
+        state.shippingPrice = SHIPPING_COST;
+      }
+    
+      return updateCart(state);
+    }      
   },
 });
 
@@ -90,7 +85,7 @@ export const {
   savePaymentMethod,
   saveShippingPrice,
   clearCartItems,
-  saveUpsDeliveryOption
+  toggleFreeShipping
 } = cartSlice.actions;
 
 export default cartSlice.reducer;
