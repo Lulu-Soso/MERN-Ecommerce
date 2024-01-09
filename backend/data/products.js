@@ -1,3 +1,11 @@
+const PACKAGE_SIZES = {
+  XSMALL: "Très petit",
+  SMALL: "Petit",
+  MEDIUM: "Moyen",
+  LARGE: "Grand",
+  XLARGE: "Très grand",
+};
+
 const products = [
   {
     name: "Airpods Wireless Bluetooth Headphones",
@@ -15,6 +23,14 @@ const products = [
     countInStock: 10,
     rating: 4.5,
     numReviews: 12,
+    packageSize: {
+      size: PACKAGE_SIZES.XSMALL,
+      dimensions: {
+        L: 10,
+        W: 5,
+        H: 3,
+      },
+    }
   },
   {
     name: "iPhone 13 Pro 256GB Memory",
@@ -32,6 +48,14 @@ const products = [
     countInStock: 7,
     rating: 4.0,
     numReviews: 8,
+    packageSize: {
+      size: PACKAGE_SIZES.SMALL,
+      dimensions: {
+        L: 10,
+        W: 5,
+        H: 3,
+      },
+    },
   },
   {
     name: "Cannon EOS 80D DSLR Camera",
@@ -49,6 +73,14 @@ const products = [
     countInStock: 5,
     rating: 3,
     numReviews: 12,
+    packageSize: {
+      size: PACKAGE_SIZES.MEDIUM,
+      dimensions: {
+        L: 10,
+        W: 5,
+        H: 3,
+      },
+    }
   },
   {
     name: "Sony Playstation 5",
@@ -66,6 +98,14 @@ const products = [
     countInStock: 11,
     rating: 5,
     numReviews: 12,
+    packageSize: {
+      size: PACKAGE_SIZES.LARGE,
+      dimensions: {
+        L: 10,
+        W: 5,
+        H: 3,
+      },
+    },
   },
   {
     name: "Logitech G-Series Gaming Mouse",
@@ -83,6 +123,14 @@ const products = [
     countInStock: 7,
     rating: 3.5,
     numReviews: 10,
+    packageSize: {
+      size: PACKAGE_SIZES.SMALL,
+      dimensions: {
+        L: 10,
+        W: 5,
+        H: 3,
+      },
+    }
   },
   {
     name: "Amazon Echo Dot 3rd Generation",
@@ -100,6 +148,14 @@ const products = [
     countInStock: 0,
     rating: 4,
     numReviews: 12,
+    packageSize: {
+      size: PACKAGE_SIZES.MEDIUM,
+      dimensions: {
+        L: 10,
+        W: 5,
+        H: 3,
+      },
+    }
   },
 ];
 

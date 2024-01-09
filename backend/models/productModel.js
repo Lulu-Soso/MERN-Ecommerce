@@ -16,6 +16,17 @@ const reviewSchema = mongoose.Schema(
   }
 );
 
+const packageSizeSchema = mongoose.Schema(
+  {
+    size: { type: String, required: true },
+    dimensions: {
+      L: { type: Number, required: true },
+      W: { type: Number, required: true },
+      H: { type: Number, required: true },
+    },
+  }
+);
+
 const productSchema = mongoose.Schema(
   {
     user: {
@@ -67,6 +78,10 @@ const productSchema = mongoose.Schema(
       type: Number,
       required: true,
       default: 0,
+    },
+    packageSize: {
+      type: packageSizeSchema,
+      required: true,
     },
   },
   {

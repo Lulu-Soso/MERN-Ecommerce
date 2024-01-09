@@ -227,7 +227,7 @@ const ProductDetails = () => {
                   height: "auto",
                   objectFit: "contain",
                   transition: "opacity 0.5s ease",
-                  borderRadius: "10px"
+                  borderRadius: "10px",
                 }}
               />
               {cadrageVisible && <Box sx={cadrageStyle} />}
@@ -245,7 +245,7 @@ const ProductDetails = () => {
                       margin: "0 1%",
                       border:
                         imgSrc === hoveredImage ? "2px solid black" : "none",
-                        borderRadius: "10px"
+                      borderRadius: "10px",
                     }}
                     onMouseEnter={() => handleThumbnailHover(imgSrc)}
                   />
@@ -270,7 +270,7 @@ const ProductDetails = () => {
                     // border: "1px solid rgba(128, 128, 128, 0.3) 1px",
                     zIndex: 0,
                     backgroundImage: `url(${selectedImage})`,
-                    borderRadius: "10px"
+                    borderRadius: "10px",
                   }}
                 />
               )}
@@ -379,7 +379,13 @@ const ProductDetails = () => {
             </Tabs>
           </Box>
           <Box display="flex" flexWrap="wrap" gap="15px">
-            {value === "description" && <div>{product.description}</div>}
+            {value === "description" && (
+              <Box>
+                <Typography>{product.description}</Typography>
+                <Typography>Taille: {product.packageSize.size}</Typography>
+                <Typography>Dimensions: (L x l x H) {product.packageSize.dimensions.L} cm x {product.packageSize.dimensions.W} cm x {product.packageSize.dimensions.H} cm </Typography>
+              </Box>
+            )}
             {value === "reviews" && (
               <Box width="40%">
                 <Box>

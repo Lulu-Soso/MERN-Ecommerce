@@ -12,9 +12,9 @@ const initialState = localStorage.getItem("cart")
       cartItems: [],
       shippingAddress: {},
       paymentMethod: "Paypal",
-      shippingPrice: 0,
+      shippingPrice: 10,
       isFreeShipping: false,
-      freeShippingThreshold: 100,
+      freeShippingThreshold: 150,
     };
 
 const cartSlice = createSlice({
@@ -66,18 +66,19 @@ const cartSlice = createSlice({
       state.isFreeShipping = !state.isFreeShipping;
 
       // Mettre à jour le totalPrice en fonction de l'offre de livraison gratuite et du seuil
-      if (state.isFreeShipping) {
-        // Prix total gratuit
-        state.totalPrice = 0;
-      } else {
+      // if (state.isFreeShipping === true) {
+      //   // Prix total gratuit
+      //   state.totalPrice = 0;
+      // } else {
         // Calcul du prix total en fonction du seuil de livraison gratuite
-        if (state.totalPrice >= state.freeShippingThreshold) {
+        if (state.isFreeShipping && state.totalPrice >= state.freeShippingThreshold) {
           state.shippingPrice = 0;
-        } else {
-          // Calcul du prix d'expédition normal (ajoutez votre logique ici)
-          // state.shippingPrice = ... ;
+        // } else {
+        //   // Calcul du prix d'expédition normal (ajoutez votre logique ici)
+        //   // state.shippingPrice = ... ;
+        //   state.shippingPrice = 10;
         }
-      }
+      
 
       // Mettez à jour le localStorage
       localStorage.setItem("cart", JSON.stringify(state));
@@ -87,9 +88,9 @@ const cartSlice = createSlice({
       state.freeShippingThreshold = action.payload;
 
       // Mettre à jour le totalPrice en fonction du nouveau seuil de livraison gratuite
-      if (!state.isFreeShipping && state.totalPrice < state.freeShippingThreshold) {
+      if (state.isFreeShipping && state.totalPrice > state.freeShippingThreshold) {
         // Calcul du prix d'expédition normal (ajoutez votre logique ici)
-        // state.shippingPrice = ... ;
+        state.shippingPrice = 0 ;
       }
 
       // Mettez à jour le localStorage
