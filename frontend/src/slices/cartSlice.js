@@ -2,7 +2,7 @@ import { createSlice } from "@reduxjs/toolkit";
 import { updateCart } from "../utils/cartUtils";
 
 // const FREE_SHIPPING_THRESHOLD = 100;
-const SHIPPING_COST = 10;
+// const SHIPPING_COST = 10;
 
 const initialState = localStorage.getItem("cart")
   ? JSON.parse(localStorage.getItem("cart"))
@@ -13,7 +13,8 @@ const initialState = localStorage.getItem("cart")
       shippingAddress: {},
       paymentMethod: "Paypal",
       shippingPrice: 0,
-      freeShippingEnabled: false,
+      isFreeShipping: false,
+      freeShippingThreshold: 100,
     };
 
 const cartSlice = createSlice({
@@ -53,26 +54,47 @@ const cartSlice = createSlice({
       state.paymentMethod = action.payload;
       localStorage.setItem('cart', JSON.stringify(state));
     },
-    saveShippingPrice: (state, action) => {
-      state.shippingPrice = action.payload;
-      localStorage.setItem('cart', JSON.stringify(state));
-    },
+    // saveShippingPrice: (state, action) => {
+    //   state.shippingPrice = action.payload;
+    //   localStorage.setItem('cart', JSON.stringify(state));
+    // },
     clearCartItems: (state, action) => {
       state.cartItems = [];
       localStorage.setItem('cart', JSON.stringify(state));
     },
-    toggleFreeShipping: (state) => {
-      state.freeShippingEnabled = !state.freeShippingEnabled;
-      localStorage.setItem('cart', JSON.stringify(state));
+    setIsFreeShipping: (state) => {
+      state.isFreeShipping = !state.isFreeShipping;
 
-      if (state.freeShippingEnabled) {
-        state.shippingPrice = 0;
+      // Mettre à jour le totalPrice en fonction de l'offre de livraison gratuite et du seuil
+      if (state.isFreeShipping) {
+        // Prix total gratuit
+        state.totalPrice = 0;
       } else {
-        state.shippingPrice = SHIPPING_COST;
+        // Calcul du prix total en fonction du seuil de livraison gratuite
+        if (state.totalPrice >= state.freeShippingThreshold) {
+          state.shippingPrice = 0;
+        } else {
+          // Calcul du prix d'expédition normal (ajoutez votre logique ici)
+          // state.shippingPrice = ... ;
+        }
       }
-    
-      return updateCart(state);
-    }      
+
+      // Mettez à jour le localStorage
+      localStorage.setItem("cart", JSON.stringify(state));
+    },
+
+    setFreeShippingThreshold: (state, action) => {
+      state.freeShippingThreshold = action.payload;
+
+      // Mettre à jour le totalPrice en fonction du nouveau seuil de livraison gratuite
+      if (!state.isFreeShipping && state.totalPrice < state.freeShippingThreshold) {
+        // Calcul du prix d'expédition normal (ajoutez votre logique ici)
+        // state.shippingPrice = ... ;
+      }
+
+      // Mettez à jour le localStorage
+      localStorage.setItem("cart", JSON.stringify(state));
+    },     
   },
 });
 
@@ -83,9 +105,10 @@ export const {
   removeFromCart,
   saveShippingAddress,
   savePaymentMethod,
-  saveShippingPrice,
+  // saveShippingPrice,
   clearCartItems,
-  toggleFreeShipping
+  setIsFreeShipping,
+  setFreeShippingThreshold
 } = cartSlice.actions;
 
 export default cartSlice.reducer;

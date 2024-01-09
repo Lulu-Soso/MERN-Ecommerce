@@ -30,7 +30,7 @@ import Loader from "../../../components/Loader";
 import { toast } from "react-toastify";
 import { useDispatch } from 'react-redux';
 
-import { toggleFreeShipping } from "../../../slices/cartSlice"
+import { setIsFreeShipping } from "../../../slices/cartSlice"
 
 const labelTranslations = {
   "Very Small": "Très Petit",
@@ -50,7 +50,7 @@ const DeliveryList = () => {
 
   const dispatch = useDispatch()
 
-  const freeShippingEnabled = useSelector((state) => state.cart.freeShippingEnabled);
+  const isFreeShipping = useSelector((state) => state.cart.isFreeShipping);
 
   const [createUpsOption, { isLoading: upsCreate }] =
     useCreateUpsOptionMutation();
@@ -61,13 +61,13 @@ const DeliveryList = () => {
   const isAnyLoading = upsLoading || upsCreate || loadingDelete;
 
   const enableFreeShipping = () => {
-    if (toggleFreeShipping) {
-      dispatch(toggleFreeShipping());
+    if (setIsFreeShipping) {
+      dispatch(setIsFreeShipping());
     }
   };
 
   const disableFreeShipping = () => {
-    dispatch(toggleFreeShipping()); 
+    dispatch(setIsFreeShipping()); 
   };
 
   const createUpsOptionHandler = async () => {
@@ -108,12 +108,12 @@ const DeliveryList = () => {
                 <FormControlLabel
                   control={<Radio />}
                   label="Livraison gratuite à partir de 100 €"
-                  checked={freeShippingEnabled}
+                  checked={isFreeShipping}
                   onChange={enableFreeShipping}
                 />
               </RadioGroup>
             </FormControl>
-            {freeShippingEnabled && (
+            {isFreeShipping && (
               <Button
                 variant="outlined"
                 color="secondary"
