@@ -17,7 +17,7 @@ import AddIcon from "@mui/icons-material/Add";
 import DeleteIcon from "@mui/icons-material/Delete";
 import Message from "../../../components/Message";
 import Loader from "../../../components/Loader";
-import Paginate from '../../../components/Paginate';
+import Paginate from "../../../components/Paginate";
 import {
   useGetProductsQuery,
   useCreateProductMutation,
@@ -26,8 +26,10 @@ import {
 import { toast } from "react-toastify";
 
 const ProductList = () => {
-  const { pageNumber } = useParams()
-  const { data, isLoading, error, refetch } = useGetProductsQuery({ pageNumber });
+  const { pageNumber } = useParams();
+  const { data, isLoading, error, refetch } = useGetProductsQuery({
+    pageNumber,
+  });
 
   const [createProduct, { isLoading: loadingCreate }] =
     useCreateProductMutation();
@@ -61,7 +63,8 @@ const ProductList = () => {
   };
 
   return (
-    <Box width="80%" m="80px auto">
+    // <Box width="80%" m="80px auto">
+    <Grid m="80px auto">
       <Grid container alignItems="center" justifyContent="space-between">
         <Grid item>
           <Typography variant="h4">Produits</Typography>
@@ -88,7 +91,11 @@ const ProductList = () => {
             <Table aria-label="simple table">
               <TableHead>
                 <TableRow>
-                  <TableCell>ID</TableCell>
+                  {/* <TableCell>ID</TableCell> */}
+                  <TableCell>IMAGE</TableCell>
+                  <TableCell>Vignette 1</TableCell>
+                  <TableCell>Vignette 2</TableCell>
+                  <TableCell>Vignette 3</TableCell>
                   <TableCell>NOM</TableCell>
                   <TableCell>PRIX</TableCell>
                   <TableCell>CATÉGORIE</TableCell>
@@ -101,26 +108,62 @@ const ProductList = () => {
               <TableBody>
                 {data?.products.map((product) => (
                   <TableRow key={product._id}>
-                    <TableCell>{product._id}</TableCell>
+                    {/* <TableCell>{product._id}</TableCell> */}
+                    <TableCell>
+                      <img
+                        src={product.mainImage}
+                        alt={product.name}
+                        style={{ maxWidth: "80px", height: "80px" }}
+                      />
+                    </TableCell>
+                    <TableCell>
+                      <img
+                        src={product.thumbnailImages[0]}
+                        alt={product.name}
+                        style={{ maxWidth: "80px", height: "80px" }}
+                      />
+                    </TableCell>
+                    <TableCell>
+                      <img
+                        src={product.thumbnailImages[1]}
+                        alt={product.name}
+                        style={{ maxWidth: "80px", height: "80px" }}
+                      />
+                    </TableCell>
+                    <TableCell>
+                      <img
+                        src={product.thumbnailImages[2]}
+                        alt={product.name}
+                        style={{ maxWidth: "80px", height: "80px" }}
+                      />
+                    </TableCell>
                     <TableCell>{product.name}</TableCell>
                     <TableCell>{product.price} €</TableCell>
                     <TableCell>{product.category}</TableCell>
                     <TableCell>{product.brand}</TableCell>
                     <TableCell>{product.size}</TableCell>
-                    <TableCell>{product.packageSize.L} x {product.packageSize.W} x {product.packageSize.H}</TableCell>
                     <TableCell>
-                      <Link to={`/admin/product/${product._id}/edit`} style={{ marginRight: '10px' }}>
-                        <Button variant="outlined">
-                          <EditIcon />
+                      {product.packageSize.L} x {product.packageSize.W} x{" "}
+                      {product.packageSize.H}
+                    </TableCell>
+                    <TableCell>
+                      <Box display="flex">
+                        <Link
+                          to={`/admin/product/${product._id}/edit`}
+                          style={{ marginRight: "10px" }}
+                        >
+                          <Button variant="outlined">
+                            <EditIcon />
+                          </Button>
+                        </Link>
+                        <Button
+                          variant="outlined"
+                          color="error"
+                          onClick={() => deleteHandler(product._id)}
+                        >
+                          <DeleteIcon />
                         </Button>
-                      </Link>
-                      <Button
-                        variant="outlined"
-                        color="error"
-                        onClick={() => deleteHandler(product._id)}
-                      >
-                        <DeleteIcon />
-                      </Button>
+                      </Box>
                     </TableCell>
                   </TableRow>
                 ))}
@@ -130,7 +173,9 @@ const ProductList = () => {
           <Paginate pages={data.pages} page={data.page} isAdmin={true} />
         </>
       )}
-    </Box>
+    {/* </Box> */}
+    </Grid>
+    
   );
 };
 

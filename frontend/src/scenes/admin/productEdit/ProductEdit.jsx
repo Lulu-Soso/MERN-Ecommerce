@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { Box, TextField, Button, Grid, Typography } from "@mui/material";
 import Message from "../../../components/Message";
@@ -16,6 +16,9 @@ const ProductEdit = () => {
   const [name, setName] = useState("");
   const [price, setPrice] = useState(0);
   const [mainImage, setMainImage] = useState("");
+  const [thumbnail1, setThumbnail1] = useState("");
+  const [thumbnail2, setThumbnail2] = useState("");
+  const [thumbnail3, setThumbnail3] = useState("");
   const [brand, setBrand] = useState("");
   const [category, setCategory] = useState("");
   const [countInStock, setCountInStock] = useState(0);
@@ -34,8 +37,6 @@ const ProductEdit = () => {
     error,
   } = useGetProductDetailsQuery(productId);
 
-  // console.log(product);
-
   const [updateProduct, { isLoading: loadingUpdate }] =
     useUpdateProductMutation();
   const [uploadProductImage, { isLoading: loadingUpload }] =
@@ -49,6 +50,9 @@ const ProductEdit = () => {
       setName(product.name);
       setPrice(product.price);
       setMainImage(product.mainImage);
+      setThumbnail1(product.thumbnailImages[0]);
+      setThumbnail2(product.thumbnailImages[1]);
+      setThumbnail3(product.thumbnailImages[2]);
       setBrand(product.brand);
       setCategory(product.category);
       setCountInStock(product.countInStock);
@@ -60,16 +64,17 @@ const ProductEdit = () => {
     }
   }, [product]);
 
-
   const submitHandler = async (e) => {
     e.preventDefault();
-    console.log(e);
     try {
       await updateProduct({
         productId,
         name,
         price,
         mainImage,
+        thumbnail1,
+        thumbnail2,
+        thumbnail3,
         brand,
         category,
         description,
@@ -77,7 +82,7 @@ const ProductEdit = () => {
         size,
         length,
         width,
-        height
+        height,
       });
       toast.success("Product updated");
       refetch();
@@ -87,13 +92,24 @@ const ProductEdit = () => {
     }
   };
 
-  const uploadFileHandler = async (e) => {
+  const uploadFileHandler = async (e, fieldName) => {
     const formData = new FormData();
     formData.append("image", e.target.files[0]);
     try {
       const res = await uploadProductImage(formData).unwrap();
       toast.success(res.message);
-      setMainImage(res.image);
+      if (fieldName === "mainImage") {
+        setMainImage(res.image);
+      } else if (fieldName === "thumbnail1") {
+        // Utilisez le bon champ pour la première image miniature
+        setThumbnail1(res.image);
+      } else if (fieldName === "thumbnail2") {
+        // Utilisez le bon champ pour la première image miniature
+        setThumbnail2(res.image);
+      } else if (fieldName === "thumbnail3") {
+        // Utilisez le bon champ pour la première image miniature
+        setThumbnail3(res.image);
+      }
     } catch (err) {
       toast.error(err?.data?.message || err.error);
     }
@@ -113,10 +129,6 @@ const ProductEdit = () => {
           <Typography variant="h4">Modifier le Produit</Typography>
         </Grid>
 
-        {/* {isAnyLoading && <Loader />}
-        {error ? (
-          <Message severity="error">{error}</Message>
-        ) : ( */}
         {isAnyLoading ? (
           <Loader />
         ) : error ? (
@@ -124,31 +136,134 @@ const ProductEdit = () => {
         ) : (
           <Grid item xs={12}>
             <form onSubmit={submitHandler}>
-              <TextField
-                label="Image URL"
-                variant="outlined"
-                value={mainImage}
-                onChange={(e) => setMainImage(e.target.value)}
-                margin="normal"
-                fullWidth
-              />
-              <input
-                accept="image/*"
-                style={{ display: "none" }}
-                id="raised-button-file"
-                multiple
-                type="file"
-                onChange={uploadFileHandler}
-              />
-              <label htmlFor="raised-button-file">
-                <Button
-                  variant="contained"
-                  component="span"
-                  style={{ margin: "1rem 0" }}
-                >
-                  Télécharger une image
-                </Button>
-              </label>
+              <Box>
+                <img
+                  src={mainImage}
+                  alt={name}
+                  style={{ maxWidth: "100px", margin: "1rem 0" }}
+                />
+                <TextField
+                  label="Image URL"
+                  variant="outlined"
+                  value={mainImage}
+                  onChange={(e) => setMainImage(e.target.value)}
+                  margin="normal"
+                  fullWidth
+                />
+                <input
+                  accept="image/*"
+                  style={{ display: "none" }}
+                  id="raised-button-file-mainImage"
+                  multiple
+                  type="file"
+                  onChange={(e) => uploadFileHandler(e, "mainImage")}
+                />
+                <label htmlFor="raised-button-file-mainImage">
+                  <Button
+                    variant="contained"
+                    component="span"
+                    style={{ margin: "1rem 0" }}
+                  >
+                    Télécharger une image principale
+                  </Button>
+                </label>
+              </Box>
+              <Box>
+                <img
+                  src={thumbnail1}
+                  alt={name}
+                  style={{ maxWidth: "100px", margin: "1rem 0" }}
+                />
+                <TextField
+                  label="Image URL"
+                  variant="outlined"
+                  value={thumbnail1}
+                  onChange={(e) => setThumbnail1(e.target.value)}
+                  margin="normal"
+                  fullWidth
+                />
+                <input
+                  accept="image/*"
+                  style={{ display: "none" }}
+                  id="raised-button-file-thumbnail1"
+                  multiple
+                  type="file"
+                  onChange={(e) => uploadFileHandler(e, "thumbnail1")}
+                />
+                <label htmlFor="raised-button-file-thumbnail1">
+                  <Button
+                    variant="contained"
+                    component="span"
+                    style={{ margin: "1rem 0" }}
+                  >
+                    Télécharger une image miniature 1
+                  </Button>
+                </label>
+              </Box>
+              <Box>
+                <img
+                  src={thumbnail2}
+                  alt={name}
+                  style={{ maxWidth: "100px", margin: "1rem 0" }}
+                />
+                <TextField
+                  label="Image URL"
+                  variant="outlined"
+                  value={thumbnail2}
+                  onChange={(e) => setThumbnail2(e.target.value)}
+                  margin="normal"
+                  fullWidth
+                />
+                <input
+                  accept="image/*"
+                  style={{ display: "none" }}
+                  id="raised-button-file-thumbnail2"
+                  multiple
+                  type="file"
+                  onChange={(e) => uploadFileHandler(e, "thumbnail2")}
+                />
+                <label htmlFor="raised-button-file-thumbnail2">
+                  <Button
+                    variant="contained"
+                    component="span"
+                    style={{ margin: "1rem 0" }}
+                  >
+                    Télécharger une image miniature 2
+                  </Button>
+                </label>
+              </Box>
+              <Box>
+                <img
+                  src={thumbnail3}
+                  alt={name}
+                  style={{ maxWidth: "100px", margin: "1rem 0" }}
+                />
+                <TextField
+                  label="Image URL"
+                  variant="outlined"
+                  value={thumbnail3}
+                  onChange={(e) => setThumbnail3(e.target.value)}
+                  margin="normal"
+                  fullWidth
+                />
+                <input
+                  accept="image/*"
+                  style={{ display: "none" }}
+                  id="raised-button-file-thumbnail3"
+                  multiple
+                  type="file"
+                  onChange={(e) => uploadFileHandler(e, "thumbnail3")}
+                />
+                <label htmlFor="raised-button-file-thumbnail3">
+                  <Button
+                    variant="contained"
+                    component="span"
+                    style={{ margin: "1rem 0" }}
+                  >
+                    Télécharger une image miniature 3
+                  </Button>
+                </label>
+              </Box>
               <TextField
                 label="Nom"
                 variant="outlined"
