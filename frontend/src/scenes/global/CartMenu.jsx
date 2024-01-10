@@ -198,7 +198,7 @@ const CartMenu = () => {
                     m: "20px 0",
                   }}
                 >
-                  <Typography fontWeight="bold">SOUS-TOTAL :</Typography>
+                  <Typography fontWeight="bold">SOUS-TOTAL : {cartItems.reduce((acc, item) => acc + item.qty, 0)} articles</Typography>
                   <Typography fontWeight="bold">
                     {cartItems
                       .reduce((acc, item) => acc + item.qty * item.price, 0)

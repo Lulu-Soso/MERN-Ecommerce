@@ -26,8 +26,9 @@ export const updateCart = (state) => {
   // Calcul du prix total
   state.totalPrice = (
     Number(state.itemsPrice) +
-    Number(state.shippingPrice) +
-    Number(state.taxPrice)
+    Number(state.shippingPrice)
+    // Number(state.shippingPrice) +
+    // Number(state.taxPrice)
   ).toFixed(2);
 
   // Mise à jour du localStorage

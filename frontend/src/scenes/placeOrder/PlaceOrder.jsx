@@ -23,10 +23,10 @@ import { useCreateOrderMutation } from "../../slices/ordersApiSlice";
 import { clearCartItems } from "../../slices/cartSlice";
 
 const PlaceOrder = () => {
-  const navigate = useNavigate();
-
+  const cartItems = useSelector((state) => state.cart.cartItems);
   const cart = useSelector((state) => state.cart);
   const [createOrder, { isLoading, error }] = useCreateOrderMutation();
+  const navigate = useNavigate();
 
   useEffect(() => {
     if (!cart.shippingAddress.address) {
@@ -84,38 +84,62 @@ const PlaceOrder = () => {
       <Grid container spacing={2}>
         <Grid item xs={12} md={8}>
           <List>
-            <ListItem>
+            <ListItem
+              sx={{ padding: "30px 0", borderBottom: "1px solid grey" }}
+            >
               <Grid container spacing={2}>
-                <Grid item xs={12} md={3}>
-                  <Typography>
-                    <strong>Adresse de livraison : </strong>
-                  </Typography>
+                <Grid item xs={12} md={4}>
+                  <Box sx={{ display: "flex" }}>
+                    <Typography sx={{ marginRight: "10px" }}>
+                      <strong>1 - </strong>
+                    </Typography>
+                    <Typography>
+                      <strong>Adresse de livraison : </strong>
+                    </Typography>
+                  </Box>
                 </Grid>
-                <Grid item xs={12} md={9}>
+                <Grid item xs={12} md={8}>
+                  <Typography>{cart.shippingAddress.address}</Typography>
                   <Typography>
-                    {`${cart.shippingAddress.address}, ${cart.shippingAddress.city} 
-                 ${cart.shippingAddress.postalCode}, ${cart.shippingAddress.country}`}
+                    {cart.shippingAddress.postalCode},{" "}
+                    {cart.shippingAddress.city}
                   </Typography>
+                  <Typography>{cart.shippingAddress.country}</Typography>
                 </Grid>
               </Grid>
             </ListItem>
-
-            <ListItem>
+            <ListItem
+              sx={{ padding: "30px 0", borderBottom: "1px solid grey" }}
+            >
               <Grid container spacing={2}>
-                <Grid item xs={12} md={3}>
-                  <Typography>
-                    <strong>Mode de paiement : </strong>
-                  </Typography>
+                <Grid item xs={12} md={4}>
+                  <Box sx={{ display: "flex" }}>
+                    <Typography sx={{ marginRight: "10px" }}>
+                      <strong>2 -</strong>
+                    </Typography>
+                    <Typography>
+                      <strong>Mode de paiement : </strong>
+                    </Typography>
+                  </Box>
                 </Grid>
-                <Grid item xs={12} md={9}>
+                <Grid item xs={12} md={8}>
                   <Typography>{cart.paymentMethod}</Typography>
                 </Grid>
               </Grid>
             </ListItem>
 
-            <ListItem>
+            <ListItem
+              sx={{ padding: "30px 0"}}
+            >
               <Box>
-                <Typography variant="h6">Order Items</Typography>
+                <Box sx={{ display: "flex" }}>
+                  <Typography sx={{ marginRight: "10px" }}>
+                    <strong>3 -</strong>
+                  </Typography>
+                  <Typography>
+                    <strong>Vérification et validation de la commande </strong>
+                  </Typography>
+                </Box>
                 {cart.cartItems.length === 0 ? (
                   <Message>Votre panier est vide</Message>
                 ) : (
@@ -176,27 +200,58 @@ const PlaceOrder = () => {
         <Grid item xs={12} md={4}>
           <Card>
             <CardContent>
-              <Typography variant="h6" m={2}>
-                Résumé de la commande
-              </Typography>
-              <Box my={2}>
-                <Typography>
-                  <strong>Items: </strong>${cart.itemsPrice}
+              <Box sx={{ padding: "5px 0", borderBottom: "1px solid grey" }}>
+                <Typography variant="h6">
+                  <strong>Récapitulatif de commande</strong>
                 </Typography>
+                <Box
+                  my={2}
+                  sx={{ display: "flex", justifyContent: "space-between" }}
+                >
+                  <Typography>
+                    Sous-total (
+                    {cartItems.reduce((acc, item) => acc + item.qty, 0)}{" "}
+                    articles):
+                  </Typography>
+                  <Typography>{cart.itemsPrice} €</Typography>
+                </Box>
+                <Box
+                  my={2}
+                  sx={{ display: "flex", justifyContent: "space-between" }}
+                >
+                  <Typography>Livraison:</Typography>
+                  <Typography>{cart.shippingPrice} €</Typography>
+                </Box>
               </Box>
-              <Box my={2}>
-                <Typography>
-                  <strong>Shipping: </strong>${cart.shippingPrice}
-                </Typography>
+              <Box sx={{ padding: "5px 0", borderBottom: "1px solid grey" }}>
+                <Box
+                  my={2}
+                  sx={{
+                    display: "flex",
+                    justifyContent: "space-between",
+                    color: "red",
+                  }}
+                >
+                  <Typography variant="h6">
+                    <strong>Montant total: </strong>
+                  </Typography>
+                  <Typography variant="h6">{cart.totalPrice} €</Typography>
+                </Box>
+                <Box my={2}>
+                  <Typography>
+                    Le total de la commande inclut la TVA. Voir les détails.
+                    {/* ${cart.taxPrice} */}
+                  </Typography>
+                </Box>
               </Box>
-              <Box my={2}>
+              <Box sx={{ padding: "5px 0" }}>
                 <Typography>
-                  <strong>Tax: </strong>${cart.taxPrice}
-                </Typography>
-              </Box>
-              <Box my={2}>
-                <Typography>
-                  <strong>Total: </strong>${cart.totalPrice}
+                  En validant votre commande, vous consentez à respecter les
+                  "Conditions générales de vente" de Prea. Nous vous
+                  encourageons à prendre connaissance de notre "Politique de
+                  Protection des Données Personnelles", notre "Politique sur les
+                  Cookies", ainsi que notre "Politique sur les Publicités
+                  personnalisées en fonction de vos centres d'intérêt".
                 </Typography>
               </Box>
 
