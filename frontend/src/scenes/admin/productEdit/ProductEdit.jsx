@@ -101,13 +101,10 @@ const ProductEdit = () => {
       if (fieldName === "mainImage") {
         setMainImage(res.image);
       } else if (fieldName === "thumbnail1") {
-        // Utilisez le bon champ pour la première image miniature
         setThumbnail1(res.image);
       } else if (fieldName === "thumbnail2") {
-        // Utilisez le bon champ pour la première image miniature
         setThumbnail2(res.image);
       } else if (fieldName === "thumbnail3") {
-        // Utilisez le bon champ pour la première image miniature
         setThumbnail3(res.image);
       }
     } catch (err) {

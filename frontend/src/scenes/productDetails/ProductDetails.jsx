@@ -147,11 +147,40 @@ const ProductDetails = () => {
     setCadrageVisible(false);
   };
 
+  // const getAbsoluteImageUrl = (relativeImageUrl) => {
+  //   // Replace with your base URL where images are served from
+  //   const baseUrl = "http://localhost:3000/uploads/";
+  //   return baseUrl + relativeImageUrl;
+  // };
+
+  const getAbsoluteImageUrl = (relativeImageUrl) => {
+    // Utilisez la variable d'environnement pour construire l'URL de base
+    const baseUrl = process.env.REACT_APP_UPLOADS_URL || "";
+    return baseUrl + relativeImageUrl;
+  };
+  
+
+  useEffect(() => {
+    if (product) {
+      // Get the absolute URL of the main image
+      const absoluteMainImage = getAbsoluteImageUrl(product.mainImage);
+      setSelectedImage(absoluteMainImage);
+
+      // Get the absolute URLs of the thumbnails
+      const absoluteThumbnails = product.thumbnailImages.map((img) =>
+        getAbsoluteImageUrl(img)
+      );
+      setThumbnails([absoluteMainImage, ...absoluteThumbnails]);
+      setHoveredImage(absoluteMainImage);
+    }
+  }, [product]);
+
   useEffect(() => {
     if (zoomRef.current && selectedImage) {
       zoomRef.current.style.backgroundImage = `url(${selectedImage})`;
     }
   }, [selectedImage]);
+  
 
   if (isProductLoading || isProductsLoading) {
     return <Loader />;

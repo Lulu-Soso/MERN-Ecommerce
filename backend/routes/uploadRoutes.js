@@ -33,15 +33,35 @@ function fileFilter(req, file, cb) {
 const upload = multer({ storage, fileFilter });
 const uploadSingleImage = upload.single('image');
 
+// router.post('/', (req, res) => {
+//   uploadSingleImage(req, res, function (err) {
+//     if (err) {
+//       res.status(400).send({ message: err.message });
+//     }
+
+//     res.status(200).send({
+//       message: 'Image uploaded successfully',
+//       image: `/${req.file.path}`,
+//     });
+//   });
+// });
+
 router.post('/', (req, res) => {
   uploadSingleImage(req, res, function (err) {
     if (err) {
       res.status(400).send({ message: err.message });
     }
 
+    // Assuming your base URL for serving images is "http://localhost:3000/uploads/"
+    const baseUrl = "http://localhost:3000/uploads/";
+    // const baseUrl = process.env.REACT_APP_UPLOADS_URL || "http://localhost:3000/uploads/";
+
+    // Construct the absolute URL of the uploaded image
+    const absoluteImageUrl = baseUrl + req.file.filename;
+
     res.status(200).send({
       message: 'Image uploaded successfully',
-      image: `/${req.file.path}`,
+      image: absoluteImageUrl, // Send the absolute URL to your React frontend
     });
   });
 });
