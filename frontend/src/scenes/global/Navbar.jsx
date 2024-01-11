@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useLocation } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import {
   Badge,
@@ -25,8 +25,15 @@ import SearchBox from "../../components/SearchBox.jsx";
 const Navbar = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  const location = useLocation();
   const { cartItems } = useSelector((state) => state.cart);
   const { userInfo } = useSelector((state) => state.auth);
+
+  const isPlaceOrderRoute =
+    location.pathname === "/shipping" ||
+    location.pathname === "/payment" ||
+    location.pathname === "/placeorder";
+    // location.pathname.startsWith("/order/");
 
   const [anchorEl, setAnchorEl] = useState(null); // État pour l'ancrage du menu
   const [scrolled, setScrolled] = useState(false);
@@ -93,15 +100,16 @@ const Navbar = () => {
             alignItems: "center",
           }}
         >
-          <IconButton 
-          onClick={() => dispatch(setIsSidebarOpen(true))}
-          sx={{ color: "black" }}>
+          <IconButton
+            onClick={() => dispatch(setIsSidebarOpen(true))}
+            sx={{ color: "black" }}
+          >
             <MenuOutlined />
           </IconButton>
           <span
             style={{
               height: "24px",
-              width: "1px", 
+              width: "1px",
               backgroundColor: "#ddd",
               margin: "0 10px",
             }}
@@ -118,125 +126,147 @@ const Navbar = () => {
           </Box>
         </Box>
 
-        <Box width="40%">
-          <SearchBox />
-        </Box>
-
-        <Box
-          width="30%"
-          display="flex"
-          justifyContent="end"
-          columnGap="20px"
-          zIndex="2"
-        >
-          <Badge
-            badgeContent={cartItems.reduce((a, c) => a + c.qty, 0)}
-            color="secondary"
-            invisible={cartItems.length === 0}
-            sx={{
-              "& .MuiBadge-badge": {
-                right: 5,
-                top: 5,
-                padding: "5px",
-                height: "18px",
-                minWidth: "13px",
-              },
-            }}
-          >
-            <IconButton
-              onClick={() => dispatch(setIsCartOpen(true))}
-              sx={{ color: "black" }}
-            >
-              <ShoppingBagOutlined />
-              <Typography>Panier</Typography>
-            </IconButton>
-          </Badge>
-
-          {/* Combined User and Admin Menu */}
-          {userInfo ? (
-            <Box>
-              <Button
-                aria-controls="user-admin-menu"
-                aria-haspopup="true"
-                endIcon={<ArrowDropDown />}
-                onClick={handleClick}
-              >
-                <Box>
-                  {userInfo.name}
-                  {userInfo.isAdmin && (
-                    <span style={{ color: "red" }}>{" ***admin*** "}</span>
-                  )}
-                </Box>
-              </Button>
-              <Menu
-                id="user-admin-menu"
-                anchorEl={anchorEl}
-                keepMounted
-                open={Boolean(anchorEl)}
-                onClose={handleClose}
-                anchorOrigin={{
-                  vertical: "bottom",
-                  horizontal: "right",
-                }}
-                transformOrigin={{
-                  vertical: "top",
-                  horizontal: "right",
-                }}
-              >
-                {/* User Profile Link */}
-                <MenuItem onClick={handleClose} component={Link} to="/profile">
-                  Profile
-                </MenuItem>
-                {/* Logout Link */}
-                <MenuItem onClick={logoutHandler}>Logout</MenuItem>
-
-                {/* Admin Links (only if the user is an admin) */}
-                {userInfo.isAdmin && (
-                  <>
-                    <MenuItem>*** ADMIN ***</MenuItem>
-                    <MenuItem
-                      style={{ color: "red" }}
-                      onClick={handleClose}
-                      component={Link}
-                      to="/admin/deliverylist"
-                    >
-                      Livraison
-                    </MenuItem>
-                    <MenuItem
-                      style={{ color: "red" }}
-                      onClick={handleClose}
-                      component={Link}
-                      to="/admin/productlist"
-                    >
-                      Products
-                    </MenuItem>
-                    <MenuItem
-                      style={{ color: "red" }}
-                      onClick={handleClose}
-                      component={Link}
-                      to="/admin/orderlist"
-                    >
-                      Orders
-                    </MenuItem>
-                    <MenuItem
-                      style={{ color: "red" }}
-                      onClick={handleClose}
-                      component={Link}
-                      to="/admin/userlist"
-                    >
-                      Users
-                    </MenuItem>
-                  </>
-                )}
-              </Menu>
+        {isPlaceOrderRoute ? (
+          <>
+            <Box width="40%" textAlign="center">
+              <Typography>
+                Passer la commande ({cartItems.reduce((acc, item) => acc + item.qty, 0)}{" "}
+                articles)
+              </Typography>
             </Box>
-          ) : (
-            <IconButton component={Link} to="/login" sx={{ color: "black" }}>
-              <PersonOutline />
-              <Typography>Identifiez-vous</Typography>
-            </IconButton>
-          )}
-        </Box>
+            <Box width="30%" textAlign="center"></Box>
+          </>
+        ) : (
+          <>
+            <Box width="40%">
+              <SearchBox />
+            </Box>
+
+            <Box
+              width="30%"
+              display="flex"
+              justifyContent="end"
+              columnGap="20px"
+              zIndex="2"
+            >
+              <Badge
+                badgeContent={cartItems.reduce((a, c) => a + c.qty, 0)}
+                color="secondary"
+                invisible={cartItems.length === 0}
+                sx={{
+                  "& .MuiBadge-badge": {
+                    right: 5,
+                    top: 5,
+                    padding: "5px",
+                    height: "18px",
+                    minWidth: "13px",
+                  },
+                }}
+              >
+                <IconButton
+                  onClick={() => dispatch(setIsCartOpen(true))}
+                  sx={{ color: "black" }}
+                >
+                  <ShoppingBagOutlined />
+                  <Typography>Panier</Typography>
+                </IconButton>
+              </Badge>
+
+              {/* Combined User and Admin Menu */}
+              {userInfo ? (
+                <Box>
+                  <Button
+                    aria-controls="user-admin-menu"
+                    aria-haspopup="true"
+                    endIcon={<ArrowDropDown />}
+                    onClick={handleClick}
+                  >
+                    <Box>
+                      {userInfo.name}
+                      {userInfo.isAdmin && (
+                        <span style={{ color: "red" }}>{" ***admin*** "}</span>
+                      )}
+                    </Box>
+                  </Button>
+                  <Menu
+                    id="user-admin-menu"
+                    anchorEl={anchorEl}
+                    keepMounted
+                    open={Boolean(anchorEl)}
+                    onClose={handleClose}
+                    anchorOrigin={{
+                      vertical: "bottom",
+                      horizontal: "right",
+                    }}
+                    transformOrigin={{
+                      vertical: "top",
+                      horizontal: "right",
+                    }}
+                  >
+                    {/* User Profile Link */}
+                    <MenuItem
+                      onClick={handleClose}
+                      component={Link}
+                      to="/profile"
+                    >
+                      Profile
+                    </MenuItem>
+                    {/* Logout Link */}
+                    <MenuItem onClick={logoutHandler}>Logout</MenuItem>
+
+                    {/* Admin Links (only if the user is an admin) */}
+                    {userInfo.isAdmin && (
+                      <>
+                        <MenuItem>*** ADMIN ***</MenuItem>
+                        <MenuItem
+                          style={{ color: "red" }}
+                          onClick={handleClose}
+                          component={Link}
+                          to="/admin/deliverylist"
+                        >
+                          Livraison
+                        </MenuItem>
+                        <MenuItem
+                          style={{ color: "red" }}
+                          onClick={handleClose}
+                          component={Link}
+                          to="/admin/productlist"
+                        >
+                          Products
+                        </MenuItem>
+                        <MenuItem
+                          style={{ color: "red" }}
+                          onClick={handleClose}
+                          component={Link}
+                          to="/admin/orderlist"
+                        >
+                          Orders
+                        </MenuItem>
+                        <MenuItem
+                          style={{ color: "red" }}
+                          onClick={handleClose}
+                          component={Link}
+                          to="/admin/userlist"
+                        >
+                          Users
+                        </MenuItem>
+                      </>
+                    )}
+                  </Menu>
+                </Box>
+              ) : (
+                <IconButton
+                  component={Link}
+                  to="/login"
+                  sx={{ color: "black" }}
+                >
+                  <PersonOutline />
+                  <Typography>Identifiez-vous</Typography>
+                </IconButton>
+              )}
+            </Box>
+          </>
+        )}
       </Box>
     </Box>
   );

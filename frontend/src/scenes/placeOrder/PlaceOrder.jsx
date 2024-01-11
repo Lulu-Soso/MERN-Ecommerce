@@ -17,7 +17,7 @@ import {
 } from "@mui/material";
 import { useDispatch, useSelector } from "react-redux";
 import Message from "../../components/Message";
-import CheckoutSteps from "../../components/CheckoutSteps";
+// import CheckoutSteps from "../../components/CheckoutSteps";
 import Loader from "../../components/Loader";
 import { useCreateOrderMutation } from "../../slices/ordersApiSlice";
 import { clearCartItems } from "../../slices/cartSlice";
@@ -80,7 +80,7 @@ const PlaceOrder = () => {
 
   return (
     <Box width="80%" m="80px auto">
-      <CheckoutSteps step1 step2 step3 step4 />
+      {/* <CheckoutSteps step1 step2 step3 step4 /> */}
       <Grid container spacing={2}>
         <Grid item xs={12} md={8}>
           <List>

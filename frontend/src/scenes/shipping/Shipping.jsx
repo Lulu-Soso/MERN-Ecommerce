@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { TextField, Button, Typography, Grid, Box } from "@mui/material";
 import FormContainer from "../../components/FormContainer";
 import { saveShippingAddress } from "../../slices/cartSlice";
-import CheckoutSteps from "../../components/CheckoutSteps";
+// import CheckoutSteps from "../../components/CheckoutSteps";
 
 const Shipping = () => {
   const cart = useSelector((state) => state.cart);
@@ -28,7 +28,7 @@ const Shipping = () => {
 
   return (
     <Box width="80%" m="80px auto">
-      <CheckoutSteps step1 step2 />
+      {/* <CheckoutSteps step1 step2 /> */}
       <FormContainer>
         <Typography variant="h4" sx={{ mt: 3, mb: 2 }}>
           Shipping
