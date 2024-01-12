@@ -161,6 +161,7 @@ const DeliveryList = () => {
             <TableBody>
               {ups?.map((option) => (
                 <TableRow key={option._id}>
+                  {/* <TableCell>{labelTranslations[option.label]}</TableCell> */}
                   <TableCell>{labelTranslations[option.label]}</TableCell>
                   <TableCell>{option.fees.france} € TTC</TableCell>
                   <TableCell>{option.fees.europeanUnion} € TTC</TableCell>

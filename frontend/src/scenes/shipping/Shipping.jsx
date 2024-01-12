@@ -1,10 +1,19 @@
 import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { TextField, Button, Typography, Grid, Box } from "@mui/material";
+import {
+  TextField,
+  Button,
+  Typography,
+  Grid,
+  Box,
+  FormControl,
+  InputLabel,
+  Select,
+  MenuItem,
+} from "@mui/material";
 import FormContainer from "../../components/FormContainer";
-import { saveShippingAddress } from "../../slices/cartSlice";
-// import CheckoutSteps from "../../components/CheckoutSteps";
+import { saveShippingAddress, updateLocation, calculateShippingPrice } from "../../slices/cartSlice";
 
 const Shipping = () => {
   const cart = useSelector((state) => state.cart);
@@ -15,23 +24,28 @@ const Shipping = () => {
   const [postalCode, setPostalCode] = useState(
     shippingAddress?.postalCode || ""
   );
-  const [country, setCountry] = useState(shippingAddress?.country || "");
+  const [location, setLocation] = useState(shippingAddress?.location || "");
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
   const submitHandler = (e) => {
     e.preventDefault();
-    dispatch(saveShippingAddress({ address, city, postalCode, country }));
-    navigate('/payment');
+    dispatch(saveShippingAddress({ address, city, postalCode, location }));
+    dispatch(updateLocation(location));
+    dispatch(calculateShippingPrice());
+
+    navigate("/payment");
   };
+
+  // const countries = ["France", "Union-Européenne", "Royaume-Uni", "Etats-Unis"];
+  const countries = ["france", "europeanUnion", "unitedKingdom", "unitedStates"];
 
   return (
     <Box width="80%" m="80px auto">
-      {/* <CheckoutSteps step1 step2 /> */}
       <FormContainer>
         <Typography variant="h4" sx={{ mt: 3, mb: 2 }}>
-          Shipping
+          Adresse de livraison
         </Typography>
         <form onSubmit={submitHandler}>
           <Grid container spacing={2}>
@@ -39,7 +53,7 @@ const Shipping = () => {
               <TextField
                 required
                 fullWidth
-                label="Address"
+                label="Adresse postale"
                 value={address}
                 onChange={(e) => setAddress(e.target.value)}
               />
@@ -48,7 +62,7 @@ const Shipping = () => {
               <TextField
                 required
                 fullWidth
-                label="City"
+                label="Ville"
                 value={city}
                 onChange={(e) => setCity(e.target.value)}
               />
@@ -57,19 +71,27 @@ const Shipping = () => {
               <TextField
                 required
                 fullWidth
-                label="Postal Code"
+                label="Code postal"
                 value={postalCode}
                 onChange={(e) => setPostalCode(e.target.value)}
               />
             </Grid>
             <Grid item xs={12}>
-              <TextField
-                required
-                fullWidth
-                label="Country"
-                value={country}
-                onChange={(e) => setCountry(e.target.value)}
-              />
+              <InputLabel id="country-label">Région</InputLabel>
+              <FormControl fullWidth>
+                <Select
+                  labelId="country-label"
+                  id="country"
+                  value={location}
+                  onChange={(e) => setLocation(e.target.value)}
+                >
+                  {countries.map((countryOption) => (
+                    <MenuItem key={countryOption} value={countryOption}>
+                      {countryOption}
+                    </MenuItem>
+                  ))}
+                </Select>
+              </FormControl>
             </Grid>
           </Grid>
           <Button

@@ -1,11 +1,3 @@
-const PACKAGE_SIZES = {
-  XSMALL: "Très petit",
-  SMALL: "Petit",
-  MEDIUM: "Moyen",
-  LARGE: "Grand",
-  XLARGE: "Très grand",
-};
-
 const products = [
   {
     name: "Airpods Wireless Bluetooth Headphones",
@@ -23,7 +15,7 @@ const products = [
     countInStock: 10,
     rating: 4.5,
     numReviews: 12,
-    size: PACKAGE_SIZES.XSMALL,
+    size: "XSMALL",
     packageSize: {
         L: 10,
         W: 5,
@@ -46,7 +38,7 @@ const products = [
     countInStock: 7,
     rating: 4.0,
     numReviews: 8,
-    size: PACKAGE_SIZES.SMALL,
+    size: "SMALL",
     packageSize: {
         L: 10,
         W: 5,
@@ -69,7 +61,7 @@ const products = [
     countInStock: 5,
     rating: 3,
     numReviews: 12,
-    size: PACKAGE_SIZES.MEDIUM,
+    size: "MEDIUM",
     packageSize: {
         L: 10,
         W: 5,
@@ -92,7 +84,7 @@ const products = [
     countInStock: 11,
     rating: 5,
     numReviews: 12,
-    size: PACKAGE_SIZES.LARGE,
+    size: "LARGE",
     packageSize: {
         L: 10,
         W: 5,
@@ -115,7 +107,7 @@ const products = [
     countInStock: 7,
     rating: 3.5,
     numReviews: 10,
-    size: PACKAGE_SIZES.SMALL,
+    size: "SMALL",
     packageSize: {
         L: 10,
         W: 5,
@@ -138,7 +130,7 @@ const products = [
     countInStock: 0,
     rating: 4,
     numReviews: 12,
-    size: PACKAGE_SIZES.MEDIUM,
+    size: "MEDIUM",
     packageSize: {
         L: 10,
         W: 5,
