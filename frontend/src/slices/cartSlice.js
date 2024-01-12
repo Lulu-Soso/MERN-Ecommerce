@@ -12,7 +12,7 @@ const initialState = localStorage.getItem("cart")
       cartItems: [],
       shippingAddress: {},
       paymentMethod: "Paypal",
-      shippingPrice: 10,
+      shippingPrice: 0,
       isFreeShipping: false,
       freeShippingThreshold: 150,
       location: "",
@@ -90,10 +90,36 @@ const cartSlice = createSlice({
     },
 
     removeFromCart: (state, action) => {
-      state.cartItems = state.cartItems.filter((x) => x._id !== action.payload);
-
-      return updateCart(state);
+      const removedItemId = action.payload;
+      const removedItem = state.cartItems.find((x) => x._id === removedItemId);
+    
+      if (removedItem) {
+        state.cartItems = state.cartItems.filter((x) => x._id !== removedItemId);
+    
+        // Mettez à jour le coût de livraison en fonction des articles restants dans le panier
+        const { shippingFees, location } = state;
+        let totalShippingPrice = 0;
+    
+        state.cartItems.forEach((item) => {
+          const { size, qty } = item;
+    
+          if (size && location) {
+            const shippingFee = shippingFees.find((fee) => fee.size === size);
+            if (shippingFee && shippingFee.fees[location]) {
+              const shippingRate = shippingFee.fees[location];
+              const quantity = parseInt(qty, 10);
+              totalShippingPrice += shippingRate * quantity;
+            }
+          }
+        });
+    
+        // Mettez à jour la shippingPrice dans l'état global
+        state.shippingPrice = totalShippingPrice;
+    
+        return updateCart(state);
+      }
     },
+    
     saveShippingAddress: (state, action) => {
       state.shippingAddress = action.payload;
       localStorage.setItem("cart", JSON.stringify(state));
@@ -184,7 +210,8 @@ const cartSlice = createSlice({
     
       // Mettez à jour la shippingPrice dans l'état global
       state.shippingPrice = totalShippingPrice;
-      localStorage.setItem("cart", JSON.stringify(state));
+      // localStorage.setItem("cart", JSON.stringify(state));
+      return updateCart(state);
     },
     
     
