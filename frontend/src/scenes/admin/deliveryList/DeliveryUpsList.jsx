@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import { useSelector, useDispatch } from "react-redux";
+import { useSelector } from "react-redux"
 import {
   Box,
   Grid,
@@ -20,29 +20,37 @@ import {
 import EditIcon from "@mui/icons-material/Edit";
 import AddIcon from "@mui/icons-material/Add";
 import DeleteIcon from "@mui/icons-material/Delete";
-import Message from "../../../components/Message";
-import Loader from "../../../components/Loader";
-import { toast } from "react-toastify";
-
 import {
+  useGetUpsOptionsQuery,
   useCreateUpsOptionMutation,
   useDeleteUpsOptionMutation,
 } from "../../../slices/upsApiSlice";
-import { setIsFreeShipping } from "../../../slices/cartSlice";
+import Message from "../../../components/Message";
+import Loader from "../../../components/Loader";
+import { toast } from "react-toastify";
+import { useDispatch } from 'react-redux';
+
+import { setIsFreeShipping } from "../../../slices/cartSlice"
 
 const labelTranslations = {
-  "XSMALL": "XSMALL (Très Petit)",
-  "SMALL": "SMALL (Petit)",
-  "MEDIUM": "MOYEN (Moyen)",
-  "LARGE": "LARGE (Grand)",
-  "XLARGE": "XLARGE (Très grand)",
+  "Very Small": "Très Petit",
+  Small: "Petit",
+  Medium: "Moyen",
+  Large: "Grand",
+  "Very Large": "Très Grand",
 };
 
 const DeliveryList = () => {
-  const dispatch = useDispatch();
+  const {
+    data: ups,
+    isLoading: upsLoading,
+    error: upsError,
+    refetch,
+  } = useGetUpsOptionsQuery();
+
+  const dispatch = useDispatch()
 
   const isFreeShipping = useSelector((state) => state.cart.isFreeShipping);
-  const shippingFees = useSelector((state) => state.cart.shippingFees);
 
   const [createUpsOption, { isLoading: upsCreate }] =
     useCreateUpsOptionMutation();
@@ -50,14 +58,16 @@ const DeliveryList = () => {
   const [deleteUpsOption, { isLoading: loadingDelete }] =
     useDeleteUpsOptionMutation();
 
-  const isAnyLoading = upsCreate || loadingDelete;
+  const isAnyLoading = upsLoading || upsCreate || loadingDelete;
 
   const enableFreeShipping = () => {
-    dispatch(setIsFreeShipping());
+    if (setIsFreeShipping) {
+      dispatch(setIsFreeShipping());
+    }
   };
 
   const disableFreeShipping = () => {
-    dispatch(setIsFreeShipping());
+    dispatch(setIsFreeShipping()); 
   };
 
   const createUpsOptionHandler = async () => {
@@ -66,7 +76,7 @@ const DeliveryList = () => {
     ) {
       try {
         await createUpsOption();
-        toast.success("Nouvelle option UPS créée");
+        refetch();
       } catch (err) {
         toast.error(err?.data?.message || err.error);
       }
@@ -77,7 +87,8 @@ const DeliveryList = () => {
     if (window.confirm("Êtes-vous sûr ?")) {
       try {
         await deleteUpsOption(id);
-        toast.success("Option UPS supprimée");
+        toast.success("Product deleted");
+        refetch();
       } catch (err) {
         toast.error(err?.data?.message || err.error);
       }
@@ -132,30 +143,33 @@ const DeliveryList = () => {
       </Grid>
       {isAnyLoading ? (
         <Loader />
+      ) : upsError ? (
+        <Message severity="error">{upsError}</Message>
       ) : (
         <TableContainer component={Paper}>
           <Table>
             <TableHead>
               <TableRow>
-                <TableCell>Taille</TableCell>
+                <TableCell>Label</TableCell>
                 <TableCell>France</TableCell>
-                <TableCell>Union-Européenne</TableCell>
-                <TableCell>Royaume-Uni</TableCell>
-                <TableCell>Etats-Unis</TableCell>
+                <TableCell>European Union</TableCell>
+                <TableCell>United Kingdom</TableCell>
+                <TableCell>United States</TableCell>
                 <TableCell></TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
-              {shippingFees?.map((fee) => (
-                <TableRow key={fee.size}>
-                  <TableCell>{labelTranslations[fee.size]}</TableCell>
-                  <TableCell>{fee.fees.france} € TTC</TableCell>
-                  <TableCell>{fee.fees.europeanUnion} € TTC</TableCell>
-                  <TableCell>{fee.fees.unitedKingdom} € TTC</TableCell>
-                  <TableCell>{fee.fees.unitedStates} € TTC</TableCell>
+              {ups?.map((option) => (
+                <TableRow key={option._id}>
+                  {/* <TableCell>{labelTranslations[option.label]}</TableCell> */}
+                  <TableCell>{labelTranslations[option.label]}</TableCell>
+                  <TableCell>{option.fees.france} € TTC</TableCell>
+                  <TableCell>{option.fees.europeanUnion} € TTC</TableCell>
+                  <TableCell>{option.fees.unitedKingdom} € TTC</TableCell>
+                  <TableCell>{option.fees.unitedStates} € TTC</TableCell>
                   <TableCell>
                     <Link
-                      to={`/admin/delivery/${fee.size}/edit`}
+                      to={`/admin/delivery/${option._id}/edit`}
                       style={{ marginRight: "10px" }}
                     >
                       <Button variant="outlined">
@@ -165,7 +179,7 @@ const DeliveryList = () => {
                     <Button
                       variant="outlined"
                       color="error"
-                      onClick={() => deleteHandler(fee.size)}
+                      onClick={() => deleteHandler(option._id)}
                     >
                       <DeleteIcon />
                     </Button>

@@ -92,17 +92,19 @@ const cartSlice = createSlice({
     removeFromCart: (state, action) => {
       const removedItemId = action.payload;
       const removedItem = state.cartItems.find((x) => x._id === removedItemId);
-    
+
       if (removedItem) {
-        state.cartItems = state.cartItems.filter((x) => x._id !== removedItemId);
-    
+        state.cartItems = state.cartItems.filter(
+          (x) => x._id !== removedItemId
+        );
+
         // Mettez à jour le coût de livraison en fonction des articles restants dans le panier
         const { shippingFees, location } = state;
         let totalShippingPrice = 0;
-    
+
         state.cartItems.forEach((item) => {
           const { size, qty } = item;
-    
+
           if (size && location) {
             const shippingFee = shippingFees.find((fee) => fee.size === size);
             if (shippingFee && shippingFee.fees[location]) {
@@ -112,14 +114,14 @@ const cartSlice = createSlice({
             }
           }
         });
-    
+
         // Mettez à jour la shippingPrice dans l'état global
         state.shippingPrice = totalShippingPrice;
-    
+
         return updateCart(state);
       }
     },
-    
+
     saveShippingAddress: (state, action) => {
       state.shippingAddress = action.payload;
       localStorage.setItem("cart", JSON.stringify(state));
@@ -128,35 +130,12 @@ const cartSlice = createSlice({
       state.paymentMethod = action.payload;
       localStorage.setItem("cart", JSON.stringify(state));
     },
-    // saveShippingPrice: (state, action) => {
-    //   state.shippingPrice = action.payload;
-    //   localStorage.setItem('cart', JSON.stringify(state));
-    // },
     clearCartItems: (state, action) => {
       state.cartItems = [];
       localStorage.setItem("cart", JSON.stringify(state));
     },
     setIsFreeShipping: (state) => {
       state.isFreeShipping = !state.isFreeShipping;
-
-      // Mettre à jour le totalPrice en fonction de l'offre de livraison gratuite et du seuil
-      // if (state.isFreeShipping === true) {
-      //   // Prix total gratuit
-      //   state.totalPrice = 0;
-      // } else {
-      // Calcul du prix total en fonction du seuil de livraison gratuite
-      if (
-        state.isFreeShipping &&
-        state.totalPrice >= state.freeShippingThreshold
-      ) {
-        state.shippingPrice = 0;
-        // } else {
-        //   // Calcul du prix d'expédition normal (ajoutez votre logique ici)
-        //   // state.shippingPrice = ... ;
-        //   state.shippingPrice = 10;
-      }
-
-      // Mettez à jour le localStorage
       localStorage.setItem("cart", JSON.stringify(state));
     },
 
@@ -181,40 +160,43 @@ const cartSlice = createSlice({
     },
 
     calculateShippingPrice: (state) => {
-      // console.log("Calcul des frais d'expédition en cours...");
-      const { cartItems, shippingFees, location } = state;
-      // console.log("cartItems:", cartItems);
-      // console.log("shippingFees:", shippingFees);
-      // console.log("location:", location);
-    
-      let totalShippingPrice = 0;
-    
-      // Parcourez les articles du panier
-      cartItems.forEach((item) => {
-        const { size, qty } = item;
-    
-        if (size && location) {
-          // Recherchez la taille correspondante dans le tableau shippingFees
-          const shippingFee = shippingFees.find((fee) => fee.size === size);
-          if (shippingFee && shippingFee.fees[location]) {
-            const shippingRate = shippingFee.fees[location];
-    
-            // Assurez-vous que qty est converti en nombre
-            const quantity = parseInt(qty, 10); // Vous pouvez utiliser parseFloat si les quantités peuvent être des décimales
-    
-            // Effectuez le calcul avec qty converti en nombre
-            totalShippingPrice += shippingRate * quantity;
+      if (
+        state.isFreeShipping &&
+        state.totalPrice >= state.freeShippingThreshold
+      ) {
+        // Si l'offre de livraison gratuite est activée et que le montant total atteint le seuil
+        state.shippingPrice = 0;
+      } else {
+        const { cartItems, shippingFees, location } = state;
+        let totalShippingPrice = 0;
+
+        // Parcourez les articles du panier
+        cartItems.forEach((item) => {
+          const { size, qty } = item;
+
+          if (size && location) {
+            // Recherchez la taille correspondante dans le tableau shippingFees
+            const shippingFee = shippingFees.find((fee) => fee.size === size);
+            if (shippingFee && shippingFee.fees[location]) {
+              const shippingRate = shippingFee.fees[location];
+              const quantity = parseInt(qty, 10);
+              totalShippingPrice += shippingRate * quantity;
+            }
           }
-        }
-      });
-    
-      // Mettez à jour la shippingPrice dans l'état global
-      state.shippingPrice = totalShippingPrice;
+        });
+
+        // Mettez à jour la shippingPrice dans l'état global
+        state.shippingPrice = totalShippingPrice;
+      }
+
       // localStorage.setItem("cart", JSON.stringify(state));
       return updateCart(state);
     },
-    
-    
+
+    updateShippingFees: (state, action) => {
+      state.shippingFees = action.payload;
+      localStorage.setItem("cart", JSON.stringify(state));
+    },
   },
 });
 
@@ -225,12 +207,12 @@ export const {
   removeFromCart,
   saveShippingAddress,
   savePaymentMethod,
-  // saveShippingPrice,
   clearCartItems,
   setIsFreeShipping,
   setFreeShippingThreshold,
   updateLocation,
   calculateShippingPrice,
+  updateShippingFees,
 } = cartSlice.actions;
 
 export default cartSlice.reducer;
