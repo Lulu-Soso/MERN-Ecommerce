@@ -14,11 +14,14 @@ const initialState = localStorage.getItem("cart")
       paymentMethod: "Paypal",
       shippingPrice: 0,
       isFreeShipping: false,
-      freeShippingThreshold: 150,
+      price50: 50,
+      price100: 100,
+      price150: 150,
       location: "",
       shippingFees: [
         {
           size: "XSMALL",
+          volume: "max 10 000 cm3",
           fees: {
             france: 5.76,
             europeanUnion: 12.6,
@@ -28,6 +31,7 @@ const initialState = localStorage.getItem("cart")
         },
         {
           size: "SMALL",
+          volume: "max 25 000 cm3",
           fees: {
             france: 9.48,
             europeanUnion: 15.84,
@@ -37,6 +41,7 @@ const initialState = localStorage.getItem("cart")
         },
         {
           size: "MEDIUM",
+          volume: "max 50 000 cm3",
           fees: {
             france: 13.44,
             europeanUnion: 20.28,
@@ -46,6 +51,7 @@ const initialState = localStorage.getItem("cart")
         },
         {
           size: "LARGE",
+          volume: "max 75 000 cm3",
           fees: {
             france: 17.04,
             europeanUnion: 29.16,
@@ -55,6 +61,7 @@ const initialState = localStorage.getItem("cart")
         },
         {
           size: "XLARGE",
+          volume: "max 100 000 cm3",
           fees: {
             france: 19.8,
             europeanUnion: 39.12,
@@ -139,21 +146,6 @@ const cartSlice = createSlice({
       localStorage.setItem("cart", JSON.stringify(state));
     },
 
-    setFreeShippingThreshold: (state, action) => {
-      state.freeShippingThreshold = action.payload;
-
-      // Mettre à jour le totalPrice en fonction du nouveau seuil de livraison gratuite
-      if (
-        state.isFreeShipping &&
-        state.totalPrice > state.freeShippingThreshold
-      ) {
-        // Calcul du prix d'expédition normal (ajoutez votre logique ici)
-        state.shippingPrice = 0;
-      }
-
-      // Mettez à jour le localStorage
-      localStorage.setItem("cart", JSON.stringify(state));
-    },
     updateLocation: (state, action) => {
       state.location = action.payload;
       updateCart(state);
@@ -161,12 +153,24 @@ const cartSlice = createSlice({
 
     calculateShippingPrice: (state) => {
       if (
-        state.isFreeShipping &&
-        state.totalPrice >= state.freeShippingThreshold
+        state.isFreeShipping && state.price50 &&
+        state.totalPrice >= state.price50
       ) {
-        // Si l'offre de livraison gratuite est activée et que le montant total atteint le seuil
         state.shippingPrice = 0;
-      } else {
+      } 
+      if (
+        state.isFreeShipping && state.price100 &&
+        state.totalPrice >= state.price100
+      ) {
+        state.shippingPrice = 0;
+      }
+      if (
+        state.isFreeShipping && state.price150 &&
+        state.totalPrice >= state.price150
+      ) {
+        state.shippingPrice = 0;
+      }
+      else {
         const { cartItems, shippingFees, location } = state;
         let totalShippingPrice = 0;
 
@@ -209,7 +213,6 @@ export const {
   savePaymentMethod,
   clearCartItems,
   setIsFreeShipping,
-  setFreeShippingThreshold,
   updateLocation,
   calculateShippingPrice,
   updateShippingFees,

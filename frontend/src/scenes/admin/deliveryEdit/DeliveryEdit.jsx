@@ -19,6 +19,7 @@ const DeliveryEdit = () => {
   const { id: upsId } = useParams();
 
   const [size, setSize] = useState("");
+  const [volume, setVolume] = useState("");
   const [franceFee, setFranceFee] = useState("");
   const [europeanUnionFee, setEuropeanUnionFee] = useState("");
   const [unitedKingdomFee, setUnitedKingdomFee] = useState("");
@@ -36,6 +37,7 @@ const DeliveryEdit = () => {
       const fee = shippingFees.find((fee) => fee.size === upsId);
       if (fee) {
         setSize(fee.size);
+        setVolume(fee.volume);
         setFranceFee(fee.fees.france.toString());
         setEuropeanUnionFee(fee.fees.europeanUnion.toString());
         setUnitedKingdomFee(fee.fees.unitedKingdom.toString());
@@ -52,6 +54,7 @@ const DeliveryEdit = () => {
         fee.size === upsId
           ? {
               size: fee.size,
+              volume: fee.volume,
               fees: {
                 france: parseFloat(franceFee),
                 europeanUnion: parseFloat(europeanUnionFee),
@@ -95,6 +98,15 @@ const DeliveryEdit = () => {
                 value={labelTranslations[size]}
                 disabled
                 // onChange={(e) => setSize(e.target.value)}
+                margin="normal"
+                fullWidth
+              />
+              <TextField
+                label="Taille"
+                variant="outlined"
+                value={volume}
+                disabled
+                // onChange={(e) => setVolume(e.target.value)}
                 margin="normal"
                 fullWidth
               />
