@@ -16,8 +16,6 @@ import { shades } from "../../theme";
 import { useNavigate } from "react-router-dom";
 import { setIsCartOpen } from "../../slices/cartSlice";
 import { addToCart, removeFromCart } from "../../slices/cartSlice";
-// import { calculateShippingPrice } from "../../slices/cartSlice";
-
 
 const CartMenu = () => {
   const navigate = useNavigate();
@@ -34,12 +32,10 @@ const CartMenu = () => {
 
   const addToCartHandler = async (product, qty) => {
     dispatch(addToCart({ ...product, qty }));
-    // dispatch(calculateShippingPrice()); // Appel de la fonction calculateShippingPrice
   };
   
   const removeFromCartHandler = async (id) => {
     dispatch(removeFromCart(id));
-    // dispatch(calculateShippingPrice()); // Appel de la fonction calculateShippingPrice
   };
   
 

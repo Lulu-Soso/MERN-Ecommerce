@@ -28,7 +28,11 @@ import {
   useCreateUpsOptionMutation,
   useDeleteUpsOptionMutation,
 } from "../../../slices/upsApiSlice";
-import { setIsFreeShipping } from "../../../slices/cartSlice";
+import {
+  setIsFreeShipping,
+  setPriceOption,
+  removePriceOption,
+} from "../../../slices/cartSlice";
 import { useEffect, useState } from "react";
 
 const labelTranslations = {
@@ -41,16 +45,12 @@ const labelTranslations = {
 
 const DeliveryList = () => {
   const dispatch = useDispatch();
-  const [selectedOffer, setSelectedOffer] = useState(
-    localStorage.getItem("selectedOffer") || null
-  );
 
   const isFreeShipping = useSelector((state) => state.cart.isFreeShipping);
   const shippingFees = useSelector((state) => state.cart.shippingFees);
-  const price50 = useSelector((state) => state.cart.price50);
-  const price100 = useSelector((state) => state.cart.price100);
-  const price150 = useSelector((state) => state.cart.price150);
+  const priceOption = useSelector((state) => state.cart.priceOption);
 
+  const [selectedOffer, setSelectedOffer] = useState(priceOption);
   const [createUpsOption, { isLoading: upsCreate }] =
     useCreateUpsOptionMutation();
 
@@ -62,12 +62,14 @@ const DeliveryList = () => {
   const enableFreeShipping = (offerPrice) => {
     setSelectedOffer(offerPrice);
     dispatch(setIsFreeShipping());
+    dispatch(setPriceOption(offerPrice));
     localStorage.setItem("selectedOffer", offerPrice); // Stockez la valeur dans le localStorage
   };
 
   const disableFreeShipping = () => {
     setSelectedOffer(null);
     dispatch(setIsFreeShipping());
+    dispatch(removePriceOption());
     localStorage.removeItem("selectedOffer"); // Supprimez la valeur du localStorage
   };
 
@@ -105,8 +107,17 @@ const DeliveryList = () => {
 
   return (
     <Box width="80%" m="80px auto">
-      <Grid container justifyContent="space-around" spacing={3}>
-        <Box>
+      <Grid
+        container
+        justifyContent="space-around"
+        spacing={3}
+        sx={{
+          borderBottom: "1px solid grey",
+          padding: "20px 0",
+          margin: "20px 0",
+        }}
+      >
+        <Grid>
           <Box>
             <Box>
               <FormControl component="fieldset">
@@ -114,7 +125,9 @@ const DeliveryList = () => {
                   <FormControlLabel
                     control={<Radio />}
                     label="Livraison gratuite à partir de 50 €"
-                    checked={selectedOffer === 50 && isFreeShipping && price50}
+                    checked={
+                      selectedOffer === 50 && isFreeShipping && priceOption
+                    }
                     onChange={() => enableFreeShipping(50)}
                   />
                 </RadioGroup>
@@ -132,8 +145,8 @@ const DeliveryList = () => {
               )}
             </Box>
           </Box>
-        </Box>
-        <Box>
+        </Grid>
+        <Grid>
           <Box>
             <Box>
               <FormControl component="fieldset">
@@ -142,7 +155,7 @@ const DeliveryList = () => {
                     control={<Radio />}
                     label="Livraison gratuite à partir de 100 €"
                     checked={
-                      selectedOffer === 100 && isFreeShipping && price100
+                      selectedOffer === 100 && isFreeShipping && priceOption
                     }
                     onChange={() => enableFreeShipping(100)}
                   />
@@ -161,8 +174,8 @@ const DeliveryList = () => {
               )}
             </Box>
           </Box>
-        </Box>
-        <Box>
+        </Grid>
+        <Grid>
           <Box>
             <Box>
               <FormControl component="fieldset">
@@ -171,7 +184,7 @@ const DeliveryList = () => {
                     control={<Radio />}
                     label="Livraison gratuite à partir de 150 €"
                     checked={
-                      selectedOffer === 150 && isFreeShipping && price150
+                      selectedOffer === 150 && isFreeShipping && priceOption
                     }
                     onChange={() => enableFreeShipping(150)}
                   />
@@ -190,23 +203,23 @@ const DeliveryList = () => {
               )}
             </Box>
           </Box>
-        </Box>
+        </Grid>
+      </Grid>
 
-        <Grid item xs={12}>
-          <Typography variant="h4" align="center">
-            Tarifs UPS
-          </Typography>
-        </Grid>
-        <Grid item>
-          <Button
-            startIcon={<AddIcon />}
-            variant="contained"
-            color="primary"
-            onClick={createUpsOptionHandler}
-          >
-            Créer un champ UPS
-          </Button>
-        </Grid>
+      <Grid item xs={12}>
+        <Typography variant="h4" align="center">
+          Tarifs UPS
+        </Typography>
+      </Grid>
+      <Grid item>
+        <Button
+          startIcon={<AddIcon />}
+          variant="contained"
+          color="primary"
+          onClick={createUpsOptionHandler}
+        >
+          Créer un champ UPS
+        </Button>
       </Grid>
       {isAnyLoading ? (
         <Loader />

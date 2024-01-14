@@ -224,8 +224,6 @@ const ProductDetails = () => {
     }
   };
 
-  console.log(product.size);
-
   return (
     <Box width="80%" m="80px auto">
       {isProductLoading ? (

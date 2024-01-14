@@ -77,6 +77,11 @@ const productSchema = mongoose.Schema(
       W: { type: Number, required: true },
       H: { type: Number, required: true },
     },
+    weight: {
+      type: Number,
+      required: true,
+      default: 0,
+    }
   },
   {
     timestamps: true,

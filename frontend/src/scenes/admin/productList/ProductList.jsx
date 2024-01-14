@@ -98,10 +98,12 @@ const ProductList = () => {
                   <TableCell>Vignette 3</TableCell>
                   <TableCell>NOM</TableCell>
                   <TableCell>PRIX</TableCell>
+                  <TableCell>QUANTITE</TableCell>
                   <TableCell>CATÉGORIE</TableCell>
                   <TableCell>MARQUE</TableCell>
                   <TableCell>TAILLE</TableCell>
                   <TableCell>DIMENSIONS</TableCell>
+                  <TableCell>POIDS</TableCell>
                   <TableCell></TableCell>
                 </TableRow>
               </TableHead>
@@ -139,6 +141,7 @@ const ProductList = () => {
                     </TableCell>
                     <TableCell>{product.name}</TableCell>
                     <TableCell>{product.price} €</TableCell>
+                    <TableCell>{product.countInStock}</TableCell>
                     <TableCell>{product.category}</TableCell>
                     <TableCell>{product.brand}</TableCell>
                     <TableCell>{product.size}</TableCell>
@@ -146,6 +149,7 @@ const ProductList = () => {
                       {product.packageSize.L} x {product.packageSize.W} x{" "}
                       {product.packageSize.H}
                     </TableCell>
+                    <TableCell>{product.weight} kg</TableCell>
                     <TableCell>
                       <Box display="flex">
                         <Link
