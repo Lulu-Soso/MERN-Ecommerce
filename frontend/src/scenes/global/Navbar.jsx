@@ -222,6 +222,14 @@ const Navbar = () => {
                           style={{ color: "red" }}
                           onClick={handleClose}
                           component={Link}
+                          to="/dashboard"
+                        >
+                          Tableau de bord
+                        </MenuItem>
+                        <MenuItem
+                          style={{ color: "red" }}
+                          onClick={handleClose}
+                          component={Link}
                           to="/admin/deliverylist"
                         >
                           Livraison

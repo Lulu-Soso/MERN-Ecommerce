@@ -8,6 +8,7 @@ import {
   Select,
   MenuItem,
   Slide,
+  useTheme,
 } from "@mui/material";
 import { useSelector, useDispatch } from "react-redux";
 import CloseIcon from "@mui/icons-material/Close";
@@ -20,6 +21,7 @@ import { addToCart, removeFromCart } from "../../slices/cartSlice";
 const CartMenu = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  const theme = useTheme();
 
   const isCartOpen = useSelector((state) => state.cart.isCartOpen);
 
@@ -33,11 +35,10 @@ const CartMenu = () => {
   const addToCartHandler = async (product, qty) => {
     dispatch(addToCart({ ...product, qty }));
   };
-  
+
   const removeFromCartHandler = async (id) => {
     dispatch(removeFromCart(id));
   };
-  
 
   const checkoutHandler = () => {
     navigate("/login?redirect=/shipping");
@@ -54,7 +55,7 @@ const CartMenu = () => {
     <>
       {isCartOpen && (
         <Box
-        onClick={handleCloseCart}
+          onClick={handleCloseCart}
           backgroundColor="rgba(0, 0, 0, 0.4)"
           position="fixed"
           zIndex={9}
@@ -72,8 +73,13 @@ const CartMenu = () => {
           bottom="0"
           width="max(400px, 30%)"
           height="100%"
-          backgroundColor="white"
+          // backgroundColor="white"
           zIndex={10}
+          sx={{
+            color: theme.palette.secondary[200],
+            backgroundColor: theme.palette.background.alt,
+            boxSixing: "border-box",
+          }}
         >
           <Box padding="30px" overflow="auto" height="100%">
             <Box
@@ -84,9 +90,7 @@ const CartMenu = () => {
                 mb: "15px",
               }}
             >
-              <Typography variant="h3">
-                PANIER d'ACHAT
-              </Typography>
+              <Typography variant="h3">PANIER d'ACHAT</Typography>
               <IconButton onClick={() => dispatch(setIsCartOpen(false))}>
                 <CloseIcon />
               </IconButton>
@@ -199,11 +203,16 @@ const CartMenu = () => {
                     m: "20px 0",
                   }}
                 >
-                  <Typography fontWeight="bold">SOUS-TOTAL : {cartItems.reduce((acc, item) => acc + item.qty, 0)} articles</Typography>
+                  <Typography fontWeight="bold">
+                    SOUS-TOTAL :{" "}
+                    {cartItems.reduce((acc, item) => acc + item.qty, 0)}{" "}
+                    articles
+                  </Typography>
                   <Typography fontWeight="bold">
                     {cartItems
                       .reduce((acc, item) => acc + item.qty * item.price, 0)
-                      .toFixed(2)} €
+                      .toFixed(2)}{" "}
+                    €
                   </Typography>
                 </Box>
 
@@ -220,7 +229,7 @@ const CartMenu = () => {
                   disabled={cartItems.length === 0}
                 >
                   Passer la commande (
-                {cartItems.reduce((acc, item) => acc + item.qty, 0)} articles)
+                  {cartItems.reduce((acc, item) => acc + item.qty, 0)} articles)
                 </Button>
               </Box>
             )}
