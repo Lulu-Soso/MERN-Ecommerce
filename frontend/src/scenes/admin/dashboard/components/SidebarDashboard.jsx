@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import {
   Box,
   Divider,
@@ -28,14 +28,13 @@ import {
   TrendingUpOutlined,
   PieChartOutlined,
 } from "@mui/icons-material";
-import { useEffect, useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import FlexBetween from "../../../../components/FlexBetween";
-// import profileImage from "assets/profile.jpeg";
 
-const navItems = [
+const navItemsFr = [
   {
-    text: "Dashboard",
+    text: "Tableau de bord",
+    path: "dashboard", // Chemin en anglais
     icon: <HomeOutlined />,
   },
   {
@@ -43,51 +42,66 @@ const navItems = [
     icon: null,
   },
   {
-    text: "Products",
+    text: "Produits",
+    path: "products", // Chemin en anglais
     icon: <ShoppingCartOutlined />,
   },
   {
-    text: "Customers",
+    text: "Livraison UPS",
+    path: "ups-delivery", // Chemin en anglais
+    icon: <ShoppingCartOutlined />,
+  },
+  {
+    text: "Clients",
+    path: "customers", // Chemin en anglais
     icon: <Groups2Outlined />,
   },
   {
     text: "Transactions",
+    path: "transactions", // Chemin en anglais
     icon: <ReceiptLongOutlined />,
   },
   {
-    text: "Geography",
+    text: "Géographie",
+    path: "geography", // Chemin en anglais
     icon: <PublicOutlined />,
   },
   {
-    text: "Sales",
+    text: "Ventes",
     icon: null,
   },
   {
-    text: "Overview",
+    text: "Vue d'ensemble",
+    path: "sales/overview", // Chemin en anglais
     icon: <PointOfSaleOutlined />,
   },
   {
-    text: "Daily",
+    text: "Journalier",
+    path: "sales/daily", // Chemin en anglais
     icon: <TodayOutlined />,
   },
   {
-    text: "Monthly",
+    text: "Mensuel",
+    path: "sales/monthly", // Chemin en anglais
     icon: <CalendarMonthOutlined />,
   },
   {
-    text: "Breakdown",
+    text: "Répartition",
+    path: "sales/breakdown", // Chemin en anglais
     icon: <PieChartOutlined />,
   },
   {
-    text: "Management",
+    text: "Gestion",
     icon: null,
   },
   {
-    text: "Admin",
+    text: "Administration",
+    path: "management/admin", // Chemin en anglais
     icon: <AdminPanelSettingsOutlined />,
   },
   {
     text: "Performance",
+    path: "management/performance", // Chemin en anglais
     icon: <TrendingUpOutlined />,
   },
 ];
@@ -132,9 +146,9 @@ const SidebarDashboard = ({
               <FlexBetween color={theme.palette.secondary.main}>
                 <Box display="flex" alignItems="center" gap="0.5rem">
                   <Link to="/">
-                  <Typography variant="h4" fontWeight="bold">
-                    Prea e-commerce
-                  </Typography>
+                    <Typography variant="h4" fontWeight="bold">
+                      Prea e-commerce
+                    </Typography>
                   </Link>
                 </Box>
                 {!isNonMobile && (
@@ -145,7 +159,7 @@ const SidebarDashboard = ({
               </FlexBetween>
             </Box>
             <List>
-              {navItems.map(({ text, icon }) => {
+              {navItemsFr.map(({ text, path, icon }) => {
                 if (!icon) {
                   return (
                     <Typography key={text} sx={{ m: "2.25rem 0 1rem 3rem" }}>
@@ -153,22 +167,20 @@ const SidebarDashboard = ({
                     </Typography>
                   );
                 }
-                const lcText = text.toLowerCase();
-
                 return (
                   <ListItem key={text} disablePadding>
                     <ListItemButton
                       onClick={() => {
-                        navigate(`/${lcText}`);
-                        setActive(lcText);
+                        navigate(`/${path}`); // Utilisez la propriété path pour la navigation
+                        setActive(path); // Utilisez path pour définir l'élément actif
                       }}
                       sx={{
                         backgroundColor:
-                          active === lcText
+                          active === path
                             ? theme.palette.secondary[300]
                             : "transparent",
                         color:
-                          active === lcText
+                          active === path
                             ? theme.palette.primary[600]
                             : theme.palette.secondary[100],
                       }}
@@ -177,7 +189,7 @@ const SidebarDashboard = ({
                         sx={{
                           ml: "2rem",
                           color:
-                            active === lcText
+                            active === path
                               ? theme.palette.primary[600]
                               : theme.palette.secondary[200],
                         }}
@@ -185,7 +197,7 @@ const SidebarDashboard = ({
                         {icon}
                       </ListItemIcon>
                       <ListItemText primary={text} />
-                      {active === lcText && (
+                      {active === path && (
                         <ChevronRightOutlined sx={{ ml: "auto" }} />
                       )}
                     </ListItemButton>

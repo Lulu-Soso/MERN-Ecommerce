@@ -59,6 +59,9 @@ function App() {
           <Route element={<LayoutDashboard />}>
             <Route path="/dashboard" element={<AdminRoute><Dashboard /></AdminRoute>} />
             <Route path="/products" element={<AdminRoute><ProductList /></AdminRoute>} />
+            <Route path="/product/:id/edit" element={<AdminRoute><ProductEdit /></AdminRoute>} />
+            <Route path="/ups-delivery" element={<AdminRoute><DeliveryList /></AdminRoute>} />
+            <Route path="/ups-delivery/:id/edit" element={<AdminRoute><DeliveryEdit /></AdminRoute>} />
             <Route path="/customers" element={<AdminRoute><Customers /></AdminRoute>} />
           </Route>
 
@@ -78,13 +81,9 @@ function App() {
             <Route path="/order/:id" element={<PrivateRoute><Order /></PrivateRoute>} />
             <Route path="/profile" element={<PrivateRoute><Profile /></PrivateRoute>} />
 
-            {/* admin Route */}            
-            <Route path="/admin/deliverylist" element={<AdminRoute><DeliveryList /></AdminRoute>} />
-            <Route path="/admin/delivery/:id/edit" element={<AdminRoute><DeliveryEdit /></AdminRoute>} />
+            {/* admin Route */}  
             <Route path="/admin/orderlist" element={<AdminRoute><OrderList /></AdminRoute>} />
             <Route path="/admin/productlist" element={<AdminRoute><ProductList /></AdminRoute>} />
-            <Route path="/admin/productlist/:pageNumber" element={<AdminRoute><ProductList /></AdminRoute>} />
-            <Route path="/admin/product/:id/edit" element={<AdminRoute><ProductEdit /></AdminRoute>} />
             <Route path="/admin/userlist" element={<AdminRoute><UserList /></AdminRoute>} />
             <Route path="/admin/user/:id/edit" element={<AdminRoute><UserEdit /></AdminRoute>} />
           </Route>

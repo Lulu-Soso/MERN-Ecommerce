@@ -69,7 +69,7 @@ const DeliveryEdit = () => {
       dispatch(updateShippingFees(updatedShippingFees));
 
       toast.success("Option de livraison mise à jour");
-      navigate("/admin/deliverylist");
+      navigate("/deliverylist");
     } catch (err) {
       toast.error(err?.data?.message || err.error);
     }
@@ -79,7 +79,7 @@ const DeliveryEdit = () => {
     <Box width="80%" m="80px auto">
       <Grid container spacing={3}>
         <Grid item xs={12}>
-          <Link to="/admin/deliverylist" style={{ textDecoration: "none" }}>
+          <Link to="/deliverylist" style={{ textDecoration: "none" }}>
             <Button variant="contained" color="primary">
               Retourner
             </Button>

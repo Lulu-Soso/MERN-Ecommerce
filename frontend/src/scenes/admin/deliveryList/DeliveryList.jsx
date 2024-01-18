@@ -248,7 +248,7 @@ const DeliveryList = () => {
                   <TableCell>{fee.fees.unitedStates} € TTC</TableCell>
                   <TableCell>
                     <Link
-                      to={`/admin/delivery/${fee.size}/edit`}
+                      to={`/ups-delivery/${fee.size}/edit`}
                       style={{ marginRight: "10px" }}
                     >
                       <Button variant="outlined">

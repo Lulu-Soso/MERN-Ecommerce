@@ -86,7 +86,7 @@ const ProductEdit = () => {
       });
       toast.success("Product updated");
       refetch();
-      navigate("/admin/productlist");
+      navigate("/products");
     } catch (err) {
       toast.error(err?.data?.message || err.error);
     }
@@ -116,7 +116,7 @@ const ProductEdit = () => {
     <Box width="80%" m="80px auto">
       <Grid container spacing={3}>
         <Grid item xs={12}>
-          <Link to="/admin/productlist" style={{ textDecoration: "none" }}>
+          <Link to="/products" style={{ textDecoration: "none" }}>
             <Button variant="contained" color="primary">
               Retourner
             </Button>

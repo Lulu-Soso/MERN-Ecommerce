@@ -153,7 +153,7 @@ const ProductList = () => {
                     <TableCell>
                       <Box display="flex">
                         <Link
-                          to={`/admin/product/${product._id}/edit`}
+                          to={`/product/${product._id}/edit`}
                           style={{ marginRight: "10px" }}
                         >
                           <Button variant="outlined">
