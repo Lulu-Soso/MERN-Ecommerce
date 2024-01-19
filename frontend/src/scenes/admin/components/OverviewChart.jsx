@@ -4,38 +4,59 @@ import { useTheme } from "@mui/material";
 import { useGetOrdersQuery } from "../../../slices/ordersApiSlice";
 
 const OverviewChart = ({ isDashboard = false, view }) => {
-  const theme = useTheme();
-  const { data: orders, isLoading } = useGetOrdersQuery();
+    const theme = useTheme();
+    const { data: orders, isLoading } = useGetOrdersQuery();
+  
+    const [totalSalesLine, totalUnitsLine] = useMemo(() => {
+        if (!orders || orders.length === 0) {
+          return [
+            { id: "totalSales", data: [] },
+            { id: "totalUnits", data: [] }
+          ];
+        }
+      
+        // Agrégation des données par mois
+        const aggregatedSalesData = orders.reduce((acc, order) => {
+          const month = new Date(order.createdAt).toLocaleString('default', { month: 'long' });
+          const monthTotal = acc.find(entry => entry.x === month);
 
-  console.log(orders);
+          if (monthTotal) {
+            monthTotal.y += order.totalPrice;
+          } else {
+            acc.push({ x: month, y: order.totalPrice });
+          }
 
-  const totalSalesLine = useMemo(() => {
-    if (!orders) return { id: "", data: [] };
+          return acc;
+        }, []);
 
-    const salesByMonth = {};
-    orders.forEach(order => {
-      const month = new Date(order.createdAt).toLocaleString('default', { month: 'short' });
-      salesByMonth[month] = (salesByMonth[month] || 0) + order.totalPrice;
-    });
+        const aggregatedUnitsData = orders.reduce((acc, order) => {
+          const month = new Date(order.createdAt).toLocaleString('default', { month: 'long' });
+          const monthTotal = acc.find(entry => entry.x === month);
 
-    const data = Object.keys(salesByMonth).map(month => ({
-      x: month, 
-      y: salesByMonth[month]
-    }));
+          if (monthTotal) {
+            monthTotal.y += order.orderItems.reduce((sum, item) => sum + item.quantity, 0);
+          } else {
+            acc.push({ x: month, y: order.orderItems.reduce((sum, item) => sum + item.quantity, 0) });
+          }
 
-    return {
-      id: "totalSales",
-      color: theme.palette.secondary.main,
-      data
-    };
-  }, [orders, theme.palette.secondary.main]);
+          return acc;
+        }, []);
 
-  if (isLoading) return <div>Loading...</div>;
-  if (!orders) return <div>No data available</div>;
-
-  return (
-    <ResponsiveLine
-    data={[totalSalesLine]}
+        return [
+          { id: "totalSales", color: theme.palette.secondary.main, data: aggregatedSalesData },
+          { id: "totalUnits", color: theme.palette.secondary[600], data: aggregatedUnitsData }
+        ];
+      
+      }, [orders, theme.palette]);
+  
+    if (isLoading) return <div>Loading...</div>;
+    if (!orders) return <div>No data available</div>;
+  
+    const chartData = view === "sales" ? [totalSalesLine] : [totalUnitsLine];
+  
+    return (
+      <ResponsiveLine
+        data={chartData}
       theme={{
         axis: {
           domain: {
