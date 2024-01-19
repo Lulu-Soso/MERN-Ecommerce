@@ -25,3 +25,5 @@ npm i axios
 npm i react-toastify
 
 npm i @paypal/react-paypal-js
+
+npm i @nivo/core @nivo/bar @nivo/geo @nivo/pie @nivo/line

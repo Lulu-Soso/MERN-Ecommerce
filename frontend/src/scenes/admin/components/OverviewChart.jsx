@@ -15,7 +15,7 @@ const OverviewChart = ({ isDashboard = false, view }) => {
           ];
         }
       
-        // Agrégation des données par mois
+        // Agrégation des données par mois pour les ventes
         const aggregatedSalesData = orders.reduce((acc, order) => {
           const month = new Date(order.createdAt).toLocaleString('default', { month: 'long' });
           const monthTotal = acc.find(entry => entry.x === month);
@@ -29,22 +29,23 @@ const OverviewChart = ({ isDashboard = false, view }) => {
           return acc;
         }, []);
 
+        // Agrégation des données par mois pour les unités
         const aggregatedUnitsData = orders.reduce((acc, order) => {
           const month = new Date(order.createdAt).toLocaleString('default', { month: 'long' });
           const monthTotal = acc.find(entry => entry.x === month);
 
           if (monthTotal) {
-            monthTotal.y += order.orderItems.reduce((sum, item) => sum + item.quantity, 0);
+            monthTotal.y += order.orderItems.reduce((sum, item) => sum + item.qty, 0); // Utilisation de la propriété qty
           } else {
-            acc.push({ x: month, y: order.orderItems.reduce((sum, item) => sum + item.quantity, 0) });
+            acc.push({ x: month, y: order.orderItems.reduce((sum, item) => sum + item.qty, 0) });
           }
 
           return acc;
         }, []);
 
         return [
-          { id: "totalSales", color: theme.palette.secondary.main, data: aggregatedSalesData },
-          { id: "totalUnits", color: theme.palette.secondary[600], data: aggregatedUnitsData }
+          { id: "totalPrice", color: theme.palette.secondary.main, data: aggregatedSalesData },
+          { id: "orderItems", color: theme.palette.secondary[600], data: aggregatedUnitsData }
         ];
       
       }, [orders, theme.palette]);
@@ -113,7 +114,7 @@ const OverviewChart = ({ isDashboard = false, view }) => {
         tickSize: 5,
         tickPadding: 5,
         tickRotation: 0,
-        legend: isDashboard ? "" : "Month",
+        legend: isDashboard ? "" : "Mois",
         legendOffset: 36,
         legendPosition: "middle",
       }}
@@ -125,7 +126,7 @@ const OverviewChart = ({ isDashboard = false, view }) => {
         tickRotation: 0,
         legend: isDashboard
           ? ""
-          : `Total ${view === "sales" ? "Revenue" : "Units"} for Year`,
+          : `Total ${view === "sales" ? "Chiffre d'affaires" : "Nombre d'unités"} pour l'année`,
         legendOffset: -60,
         legendPosition: "middle",
       }}
