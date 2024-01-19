@@ -29,11 +29,7 @@ import DeliveryEdit from "./scenes/admin/deliveryEdit/DeliveryEdit";
 import Dashboard from "./scenes/admin/dashboard/Dashboard";
 import LayoutDashboard from "./scenes/admin/layoutDashboard/LayoutDashboard";
 import Customers from "./scenes/admin/customers/Customers";
-
-// import Navbar from "./scenes/global/Navbar";
-// import Footer from "./scenes/global/Footer";
-// import Sidebar from "./scenes/global/Sidebar";
-// import CartMenu from "./scenes/global/CartMenu";
+import Overview from "./scenes/admin/overview/Overview";
 
 const ScrollToTop = () => {
   const { pathname } = useLocation();
@@ -63,6 +59,7 @@ function App() {
             <Route path="/ups-delivery" element={<AdminRoute><DeliveryList /></AdminRoute>} />
             <Route path="/ups-delivery/:id/edit" element={<AdminRoute><DeliveryEdit /></AdminRoute>} />
             <Route path="/customers" element={<AdminRoute><Customers /></AdminRoute>} />
+            <Route path="/sales/overview" element={<AdminRoute><Overview /></AdminRoute>} />
           </Route>
 
           <Route element={<Layout />}>

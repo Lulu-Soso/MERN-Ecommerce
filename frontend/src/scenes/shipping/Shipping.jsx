@@ -24,15 +24,16 @@ const Shipping = () => {
   const [postalCode, setPostalCode] = useState(
     shippingAddress?.postalCode || ""
   );
-  const [location, setLocation] = useState(shippingAddress?.location || "");
+  // const [location, setLocation] = useState(shippingAddress?.location || "");
+  const [country, setCountry] = useState(shippingAddress?.country || "");
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
   const submitHandler = (e) => {
     e.preventDefault();
-    dispatch(saveShippingAddress({ address, city, postalCode, location }));
-    dispatch(updateLocation(location));
+    dispatch(saveShippingAddress({ address, city, postalCode, country }));
+    dispatch(updateLocation(country));
     dispatch(calculateShippingPrice());
 
     navigate("/payment");
@@ -82,8 +83,8 @@ const Shipping = () => {
                 <Select
                   labelId="country-label"
                   id="country"
-                  value={location}
-                  onChange={(e) => setLocation(e.target.value)}
+                  value={country}
+                  onChange={(e) => setCountry(e.target.value)}
                 >
                   {countries.map((countryOption) => (
                     <MenuItem key={countryOption} value={countryOption}>
