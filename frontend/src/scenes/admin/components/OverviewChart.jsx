@@ -9,43 +9,49 @@ const OverviewChart = ({ isDashboard = false, view }) => {
   
     const [totalSalesLine, totalUnitsLine] = useMemo(() => {
         if (!orders || orders.length === 0) {
-          return [
-            { id: "totalSales", data: [] },
-            { id: "totalUnits", data: [] }
-          ];
-        }
+            return [[], []]; // Retourne des tableaux vides pour totalSalesLine et totalUnitsLine
+          }
       
-        // Agrégation des données par mois pour les ventes
-        const aggregatedSalesData = orders.reduce((acc, order) => {
-          const month = new Date(order.createdAt).toLocaleString('default', { month: 'long' });
-          const monthTotal = acc.find(entry => entry.x === month);
+        // Création d'un tableau de mois distincts
+        const months = [...new Set(orders.map(order => new Date(order.createdAt).toLocaleString('default', { month: 'long' })))];
 
-          if (monthTotal) {
-            monthTotal.y += order.totalPrice;
-          } else {
-            acc.push({ x: month, y: order.totalPrice });
-          }
+        // Tri des mois par ordre chronologique
+        months.sort((a, b) => {
+          const dateA = new Date(`01 ${a}`);
+          const dateB = new Date(`01 ${b}`);
+          return dateA - dateB;
+        });
 
-          return acc;
-        }, []);
+        // Création des données pour les ventes
+        const salesData = [];
+        let totalSales = 0;
 
-        // Agrégation des données par mois pour les unités
-        const aggregatedUnitsData = orders.reduce((acc, order) => {
-          const month = new Date(order.createdAt).toLocaleString('default', { month: 'long' });
-          const monthTotal = acc.find(entry => entry.x === month);
+        // Création des données pour les unités
+        const unitsData = [];
+        let totalUnits = 0;
 
-          if (monthTotal) {
-            monthTotal.y += order.orderItems.reduce((sum, item) => sum + item.qty, 0); // Utilisation de la propriété qty
-          } else {
-            acc.push({ x: month, y: order.orderItems.reduce((sum, item) => sum + item.qty, 0) });
-          }
+        months.forEach(month => {
+          // Calcul de la somme totale des ventes pour ce mois
+          const salesForMonth = orders
+            .filter(order => new Date(order.createdAt).toLocaleString('default', { month: 'long' }) === month)
+            .reduce((acc, order) => acc + order.totalPrice, 0);
 
-          return acc;
-        }, []);
+          totalSales += salesForMonth;
+
+          // Calcul de la somme totale des unités vendues pour ce mois
+          const unitsForMonth = orders
+            .filter(order => new Date(order.createdAt).toLocaleString('default', { month: 'long' }) === month)
+            .reduce((acc, order) => acc + order.orderItems.reduce((sum, item) => sum + item.qty, 0), 0);
+
+          totalUnits += unitsForMonth;
+
+          salesData.push({ x: month, y: totalSales });
+          unitsData.push({ x: month, y: totalUnits });
+        });
 
         return [
-          { id: "totalPrice", color: theme.palette.secondary.main, data: aggregatedSalesData },
-          { id: "orderItems", color: theme.palette.secondary[600], data: aggregatedUnitsData }
+          { id: "totalPrice", color: theme.palette.secondary.main, data: salesData },
+          { id: "orderItems", color: theme.palette.secondary[600], data: unitsData }
         ];
       
       }, [orders, theme.palette]);
