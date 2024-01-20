@@ -31,6 +31,7 @@ import LayoutDashboard from "./scenes/admin/layoutDashboard/LayoutDashboard";
 import Customers from "./scenes/admin/customers/Customers";
 import Overview from "./scenes/admin/overview/Overview";
 import Daily from "./scenes/admin/daily/Daily";
+import Monthly from "./scenes/admin/monthly/Monthly";
 
 const ScrollToTop = () => {
   const { pathname } = useLocation();
@@ -62,6 +63,7 @@ function App() {
             <Route path="/customers" element={<AdminRoute><Customers /></AdminRoute>} />
             <Route path="/sales/overview" element={<AdminRoute><Overview /></AdminRoute>} />
             <Route path="/sales/daily" element={<AdminRoute><Daily /></AdminRoute>} />
+            <Route path="/sales/monthly" element={<AdminRoute><Monthly /></AdminRoute>} />
           </Route>
 
           <Route element={<Layout />}>
