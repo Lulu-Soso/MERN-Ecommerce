@@ -1,14 +1,12 @@
 import React from "react";
 import { ResponsivePie } from "@nivo/pie";
 import { Box, Typography, useTheme } from "@mui/material";
-import { useGetOrdersQuery } from "../../../slices/ordersApiSlice";
-// import { useGetOverallStatsQuery } from "../../../slices/overallStatsApiSlice";
+import { useGetOverallStatsQuery } from "../../../slices/overallStatsApiSlice";
 
 const BreakdownChart = ({ isDashboard = false }) => {
-//   const { data, isLoading } = useGetOverallStatsQuery();
-  const { data, isLoading } = useGetOrdersQuery();
+  const { data, isLoading } = useGetOverallStatsQuery();
   const theme = useTheme();
-
+ 
   console.log(data);
 
   if (!data || isLoading) return "Loading...";
@@ -19,7 +17,7 @@ const BreakdownChart = ({ isDashboard = false }) => {
     theme.palette.secondary[300],
     theme.palette.secondary[500],
   ];
-  const formattedData = Object.entries(DataTransferItem).map(
+  const formattedData = Object.entries(data[0].salesByCategory).map(
     ([category, sales], i) => ({
       id: category,
       label: category,

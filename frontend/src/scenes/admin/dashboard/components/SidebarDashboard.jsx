@@ -87,7 +87,8 @@ const navItemsFr = [
   },
   {
     text: "Répartition",
-    path: "sales/breakdown", // Chemin en anglais
+    // path: "sales/breakdown", // Chemin en anglais
+    path: "overallstats", // Chemin en anglais
     icon: <PieChartOutlined />,
   },
   {
