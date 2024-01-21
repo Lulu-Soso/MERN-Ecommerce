@@ -8,6 +8,8 @@ import Product from './models/productModel.js';
 import Order from './models/orderModel.js';
 import Ups from './models/upsModel.js';
 import upsData from './data/ups.js';
+import overallStats from './data/overallStats.js';
+import OverallStats from './models/overallStatsModel.js';
 import connectDB from './config/db.js';
 
 dotenv.config();
@@ -20,6 +22,7 @@ const importData = async () => {
     await Product.deleteMany();
     await User.deleteMany();
     await Ups.deleteMany();
+    await OverallStats.deleteMany();
 
     const createdUsers = await User.insertMany(users);
 
@@ -31,6 +34,7 @@ const importData = async () => {
 
     await Product.insertMany(sampleProducts);
     await Ups.insertMany(upsData);
+    await OverallStats.insertMany(overallStats);
 
     console.log('Data Imported!'.green.inverse);
     process.exit();
@@ -45,6 +49,8 @@ const destroyData = async () => {
     await Order.deleteMany();
     await Product.deleteMany();
     await User.deleteMany();
+    await Ups.deleteMany();
+    await OverallStats.deleteMany();
 
     console.log('Data Destroyed!'.red.inverse);
     process.exit();
