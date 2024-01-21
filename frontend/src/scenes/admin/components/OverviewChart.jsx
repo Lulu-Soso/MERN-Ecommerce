@@ -6,7 +6,7 @@ import { useGetOrdersQuery } from "../../../slices/ordersApiSlice";
 const OverviewChart = ({ isDashboard = false, view }) => {
     const theme = useTheme();
     const { data: orders, isLoading } = useGetOrdersQuery();
-  
+
     const [totalSalesLine, totalUnitsLine] = useMemo(() => {
         if (!orders || orders.length === 0) {
             return [[], []]; // Retourne des tableaux vides pour totalSalesLine et totalUnitsLine
@@ -57,7 +57,8 @@ const OverviewChart = ({ isDashboard = false, view }) => {
       }, [orders, theme.palette]);
   
     if (isLoading) return <div>Loading...</div>;
-    if (!orders) return <div>No data available</div>;
+     // Vérifiez si orders est vide ou null
+    if (!orders || orders.length === 0) return <div>No data available</div>;
   
     const chartData = view === "sales" ? [totalSalesLine] : [totalUnitsLine];
   
