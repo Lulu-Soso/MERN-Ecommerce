@@ -66,7 +66,8 @@ function App() {
             <Route path="/sales/daily" element={<AdminRoute><Daily /></AdminRoute>} />
             <Route path="/sales/monthly" element={<AdminRoute><Monthly /></AdminRoute>} />
             {/* <Route path="/sales/breakdown" element={<AdminRoute><Breakdown /></AdminRoute>} /> */}
-            <Route path="/overallstats" element={<AdminRoute><Breakdown /></AdminRoute>} />
+            {/* <Route path="/overallstats" element={<AdminRoute><Breakdown /></AdminRoute>} />
+            <Route path="/overallstats/:id" element={<AdminRoute><Breakdown /></AdminRoute>} /> */}
           </Route>
 
           <Route element={<Layout />}>
@@ -84,6 +85,8 @@ function App() {
             <Route path="/placeorder" element={<PrivateRoute><PlaceOrder /></PrivateRoute>} />
             <Route path="/order/:id" element={<PrivateRoute><Order /></PrivateRoute>} />
             <Route path="/profile" element={<PrivateRoute><Profile /></PrivateRoute>} />
+            <Route path="/overallstats" element={<PrivateRoute><Breakdown /></PrivateRoute>} />
+            <Route path="/overallstats/:id" element={<PrivateRoute><Breakdown /></PrivateRoute>} />
 
             {/* admin Route */}  
             <Route path="/admin/orderlist" element={<AdminRoute><OrderList /></AdminRoute>} />

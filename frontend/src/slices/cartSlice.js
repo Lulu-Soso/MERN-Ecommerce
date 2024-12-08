@@ -164,34 +164,47 @@ const cartSlice = createSlice({
 
     calculateShippingPrice: (state) => {
       if (
-        state.isFreeShipping && state.priceOption &&
+        state.isFreeShipping &&
+        state.priceOption &&
         state.totalPrice >= state.priceOption
       ) {
         state.shippingPrice = 0;
-      }
-      else {
+      } else {
         const { cartItems, shippingFees, location } = state;
+    
+        if (!shippingFees || !location) {
+          console.error("Shipping fees or location is missing.");
+          state.shippingPrice = 0;
+          return updateCart(state);
+        }
+    
         let totalShippingPrice = 0;
-
-        // Parcourez les articles du panier
+    
+        // Calculate total shipping price with safe checks
         cartItems.forEach((item) => {
           const { size, qty } = item;
-
-          if (size && location) {
-            // Recherchez la taille correspondante dans le tableau shippingFees
-            const shippingFee = shippingFees.find((fee) => fee.size === size);
-            if (shippingFee && shippingFee.fees[location]) {
-              const shippingRate = shippingFee.fees[location];
-              const quantity = parseInt(qty, 10);
-              totalShippingPrice += shippingRate * quantity;
-            }
+    
+          if (!size || !qty || !location) {
+            console.warn("Invalid item size, quantity, or location:", item);
+            return; // Skip invalid items
+          }
+    
+          const shippingFee = shippingFees.find((fee) => fee.size === size);
+    
+          if (shippingFee && shippingFee.fees[location]) {
+            const shippingRate = shippingFee.fees[location];
+            const quantity = parseInt(qty, 10) || 0;
+            totalShippingPrice += shippingRate * quantity;
+          } else {
+            console.warn("No shipping fee found for size:", size, "and location:", location);
           }
         });
+    
         state.shippingPrice = totalShippingPrice;
       }
-      // localStorage.setItem("cart", JSON.stringify(state));
+    
       return updateCart(state);
-    },
+    },    
 
     updateShippingFees: (state, action) => {
       state.shippingFees = action.payload;

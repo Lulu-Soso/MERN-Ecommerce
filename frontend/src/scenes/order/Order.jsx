@@ -21,6 +21,7 @@ import {
   useGetPaypalClientIdQuery,
   usePayOrderMutation,
 } from "../../slices/ordersApiSlice";
+import { useUpdateOverallStatsMutation } from "../../slices/overallStatsApiSlice";
 
 const Order = () => {
   const { id: orderId } = useParams();
@@ -31,6 +32,9 @@ const Order = () => {
     isLoading,
     error,
   } = useGetOrderDetailsQuery(orderId);
+
+  // const [updateOverallStats] = useUpdateOverallStatsMutation();
+  const { data: updateOverallStats } = useUpdateOverallStatsMutation();
 
   const [payOrder, { isLoading: loadingPay }] = usePayOrderMutation();
 
@@ -71,6 +75,27 @@ const Order = () => {
     return actions.order.capture().then(async function (details) {
       try {
         await payOrder({ orderId, details });
+        console.log(details);
+
+      // Extrayez les informations nécessaires de 'details' pour la mise à jour des statistiques globales
+        const { payer, purchase_units } = details;
+        const totalPaid = purchase_units[0].amount.value;
+
+        console.log("Total Paid:", totalPaid);
+
+        // Appelez la fonction updateOverallStats avec les informations appropriées
+        await updateOverallStats({
+          id: '65b2e55143f94a3f7c3f52a2', // Remplacez par l'ID réel de votre overallStats
+          // month: 'January', // Remplacez par le mois correspondant à la commande
+          // date: '2021-01-02', // Remplacez par la date correspondant à la commande
+          salesIncrement: 100, // Utilisez le montant total payé
+          unitsIncrement: 50, // Utilisez le nombre total d'articles dans la commande
+          // category: 'shoes', // Remplacez par la catégorie appropriée
+        });
+
+        console.log("OverallStats updated successfully");
+
+
         refetch();
         toast.success("Order is paid");
       } catch (err) {

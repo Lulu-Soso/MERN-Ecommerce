@@ -10,9 +10,19 @@ export const overallStatsApiSlice = apiSlice.injectEndpoints({
       providesTags: ["OverallStats"],
       keepUnusedDataFor: 5,
     }),
+    updateOverallStats: builder.mutation({
+      query: (data) => ({
+        url: `${OVERALLSTATS_URL}/${data.overallStatsId}`,
+        method: 'PUT',
+        body: data,
+      }),
+      providesTags: ["OverallStats"],
+      keepUnusedDataFor: 5,
+    }),
   }),
 });
 
 export const {
   useGetOverallStatsQuery,
+  useUpdateOverallStatsMutation,
 } = overallStatsApiSlice;

@@ -20,12 +20,15 @@ import Message from "../../components/Message";
 // import CheckoutSteps from "../../components/CheckoutSteps";
 import Loader from "../../components/Loader";
 import { useCreateOrderMutation } from "../../slices/ordersApiSlice";
+// import { useUpdateOverallStatsMutation } from "../../slices/overallStatsApiSlice";
 import { clearCartItems } from "../../slices/cartSlice";
+// import { updateOverallStat } from ""
 
 const PlaceOrder = () => {
   const cartItems = useSelector((state) => state.cart.cartItems);
   const cart = useSelector((state) => state.cart);
   const [createOrder, { isLoading, error }] = useCreateOrderMutation();
+  // const [updateOverallStats] = useUpdateOverallStatsMutation();
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -70,7 +73,14 @@ const PlaceOrder = () => {
         taxPrice: cart.taxPrice,
         totalPrice: cart.totalPrice,
       }).unwrap();
-
+  
+      // Mettez à jour les statistiques globales avec les détails de la commande
+      // await updateOverallStats({
+      //   year: new Date().getFullYear(), // Obtenez l'année actuelle
+      //   cartItems: cart.cartItems,
+      //   totalPrice: cart.totalPrice,
+      // });
+  
       dispatch(clearCartItems());
       navigate(`/order/${res._id}`);
     } catch (err) {
